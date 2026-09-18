@@ -751,6 +751,28 @@ a.commit-wrap:hover .commit-time{color:var(--fg)}
   .footer{min-height:620px}
 }
 
+/* Narrow/coarse-pointer layouts: never overlay the document with the footer.
+   Some Android browsers report a CSS viewport slightly wider than the physical
+   content area, so max-width:720px alone is not a reliable mobile boundary. */
+@media (max-width:900px), (hover:none){
+  #page{margin-bottom:0}
+  .footer{
+    position:relative;
+    left:auto;
+    right:auto;
+    bottom:auto;
+    height:auto;
+    min-height:100svh;
+    min-height:100dvh;
+    overflow:hidden;
+  }
+  .footer-inner{
+    min-height:100svh;
+    min-height:100dvh;
+    height:auto;
+  }
+}
+
 /* Hover-only effects should never be required for touch devices. */
 @media (hover:none){
   .about-portrait:hover img{filter:grayscale(.25) contrast(1.05);transform:none}
@@ -912,7 +934,7 @@ a.commit-wrap:hover .commit-time{color:var(--fg)}
     if (hasGsap) gsap.registerPlugin(ScrollTrigger);
 
     let lenis = null;
-    if (!reduce && hasGsap && window.Lenis) {
+    if (!reduce && fine && hasGsap && window.Lenis) {
       lenis = new Lenis({autoRaf:false,lerp:.1,wheelMultiplier:1,anchors:true});
       lenis.on('scroll',ScrollTrigger.update);
       gsap.ticker.add(time => lenis.raf(time * 1000));
@@ -951,7 +973,7 @@ a.commit-wrap:hover .commit-time{color:var(--fg)}
         bg.style.transform='scale('+scale.toFixed(4)+') translateY('+shift+'vh)';
       }
 
-      if(!reduce && hasGsap && !footerFired && p>.85){
+      if(!reduce && fine && hasGsap && !footerFired && p>.85){
         footerFired=true;
         gsap.from('.footer-inner > *',{opacity:0,y:14,duration:1,ease:'power3.out',stagger:.08});
       }
