@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Yash — Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@200;300;400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#050403;
+  --fg:#f2ede4;
+  --fg-2:#a8a196;
+  --fg-3:#5c564d;
+  --line:rgba(242,237,228,.10);
+  --line-2:rgba(242,237,228,.22);
+  --accent:#ff5a1c;
+  --accent-soft:#ffb07a;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --pad:clamp(1.25rem,3vw,3rem);
+  --max:1440px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+html{-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%;background:var(--bg)}
+body{
+  background:var(--bg);color:var(--fg);
+  font-family:'Lexend',system-ui,-apple-system,sans-serif;
+  font-weight:400;font-size:16px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+a,button{color:inherit;text-decoration:none;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
+button{font:inherit;background:none;border:0;padding:0}
+.commit-row,.magnet{user-select:none;-webkit-user-select:none}
+@media (hover:hover) and (pointer:fine){a,button,.commit-row{cursor:pointer}}
+:focus{outline:none}
+:focus-visible{outline:2px solid var(--accent);outline-offset:6px}
+
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto !important}
+.lenis.lenis-stopped{overflow:hidden}
+
+.bg{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:url("bg.jpg");
+  background-size:cover;
+  background-position:center 45%;
+  background-repeat:no-repeat;
+  will-change:transform;
+}
+.bg::after{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 50% 55%, transparent 15%, rgba(5,4,3,.35) 55%, rgba(5,4,3,.85) 100%),
+    linear-gradient(to bottom, rgba(5,4,3,.35), transparent 25%, transparent 70%, rgba(5,4,3,.7));
+}
+@media (max-width:720px){.bg{background-position:center 40%}}
+
+.grain{
+  position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:.05;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  background-size:160px 160px;
+}
+
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px var(--pad);
+  transition:transform .55s var(--ease),padding .55s var(--ease),
+             background .55s var(--ease),border-color .55s var(--ease);
+  border-bottom:1px solid transparent;
+}
+.nav.is-shrunk{
+  padding:12px calc(var(--pad) * .75);
+  background:rgba(5,4,3,.72);
+  backdrop-filter:blur(16px) saturate(1.2);
+  -webkit-backdrop-filter:blur(16px) saturate(1.2);
+  border-bottom-color:var(--line);
+}
+.nav.is-hidden{transform:translateY(-110%)}
+.nav-logo{font-weight:700;font-size:.95rem;letter-spacing:.02em}
+.nav-logo em{
+  font-family:'Instrument Serif',serif;font-style:italic;
+  font-weight:400;color:var(--accent);margin-left:4px;font-size:1.05rem;
+}
+.nav-links{display:flex;gap:34px}
+.nav-links a{
+  font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--fg-2);position:relative;padding-bottom:3px;
+  transition:color .35s var(--ease);font-weight:400;
+}
+.nav-links a::after{
+  content:'';position:absolute;left:0;bottom:0;width:100%;height:1px;
+  background:currentColor;transform:scaleX(0);transform-origin:right;
+  transition:transform .5s var(--ease);
+}
+.nav-links a:hover{color:var(--fg)}
+.nav-links a:hover::after{transform:scaleX(1);transform-origin:left}
+.nav-progress{position:absolute;left:0;bottom:-1px;width:100%;height:1px}
+.nav-progress i{display:block;height:100%;background:var(--accent);transform:scaleX(0);transform-origin:left}
+
+#page{position:relative;z-index:2;margin-bottom:100vh}
+
+.hero{
+  position:relative;height:100svh;
+  display:flex;flex-direction:column;
+  padding:0 var(--pad) 36px;pointer-events:none;
+}
+.hero a,.hero .magnet{pointer-events:auto}
+.hero-top{
+  display:flex;justify-content:space-between;align-items:baseline;
+  padding-top:96px;
+  font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--fg-2);font-weight:400;
+}
+.hero-top em{
+  font-family:'Instrument Serif',serif;font-style:italic;
+  font-size:1rem;letter-spacing:0;text-transform:none;
+  color:var(--accent-soft);font-weight:400;
+}
+.hero-spacer{flex:1}
+.name{
+  font-weight:800;
+  font-size:clamp(4rem,24vw,20rem);
+  letter-spacing:-.065em;line-height:.85;
+  margin:0;padding:0;text-transform:uppercase;
+  display:flex;justify-content:center;
+  text-shadow:
+    0 0 60px rgba(255,90,28,.45),
+    0 0 140px rgba(255,60,10,.2),
+    0 4px 30px rgba(0,0,0,.9);
+}
+.name .ltr{display:block;font-weight:800}
+.hero-name-sub{
+  display:flex;justify-content:center;margin-top:.9rem;
+  font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--fg-2);font-weight:400;
+  text-shadow:0 2px 12px rgba(0,0,0,.8);
+}
+.m{display:inline-block;overflow:hidden;padding-bottom:.12em;margin-bottom:-.12em;vertical-align:bottom}
+.hero-foot{
+  display:grid;grid-template-columns:1fr auto;align-items:end;
+  gap:2rem;border-top:1px solid var(--line-2);
+  padding-top:1.2rem;margin-top:2rem;
+}
+.hero-note{
+  max-width:38ch;font-size:.95rem;color:var(--fg-2);line-height:1.55;font-weight:300;
+  text-shadow:0 2px 14px rgba(0,0,0,.9);
+}
+.hero-note em{font-family:'Instrument Serif',serif;font-style:italic;color:var(--fg);font-size:1.1rem}
+.hero-marker{
+  display:flex;align-items:center;gap:.75rem;
+  font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--fg-2);font-weight:400;
+  text-shadow:0 2px 14px rgba(0,0,0,.9);
+}
+.hero-marker .arrow{display:inline-block;color:var(--accent);animation:drop 2.4s var(--ease) infinite}
+@keyframes drop{0%,100%{transform:translateY(-2px);opacity:.6}50%{transform:translateY(4px);opacity:1}}
+
+.section{
+  position:relative;z-index:2;max-width:var(--max);
+  margin:0 auto clamp(3rem,7vw,6rem);
+  padding:clamp(4rem,8vw,7rem) clamp(1.5rem,4vw,3.5rem);
+  background:rgba(5,4,3,.88);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border:1px solid var(--line);border-radius:2px;
+}
+.section-head{
+  display:grid;grid-template-columns:auto 1fr auto;
+  align-items:baseline;gap:1.5rem;
+  margin-bottom:clamp(2.5rem,6vw,5rem);
+  padding-bottom:1.5rem;border-bottom:1px solid var(--line);
+}
+.section-num{
+  font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--accent);font-weight:500;font-variant-numeric:tabular-nums;
+}
+.section-title{
+  font-size:clamp(1.6rem,3vw,2.4rem);
+  letter-spacing:-.02em;font-weight:500;margin:0;color:var(--fg);
+}
+.section-title em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--accent-soft)}
+.section-meta{
+  font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--fg-3);font-weight:400;
+}
+
+/* LAST COMMIT */
+.commit-wrap{
+  display:block;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  padding:clamp(1.6rem,3.4vw,2.4rem) 0;
+  transition:padding .5s var(--ease),border-color .4s var(--ease);
+}
+.commit-row{
+  display:grid;
+  grid-template-columns:3rem 1fr auto;
+  align-items:start;
+  gap:clamp(1rem,2.5vw,2rem);
+  transition:padding .5s var(--ease);
+}
+a.commit-wrap:hover{padding-left:.75rem}
+a.commit-wrap:hover .commit-message{color:var(--accent)}
+a.commit-wrap:hover .commit-arrow{color:var(--accent);transform:translate(2px,-2px)}
+a.commit-wrap:hover .commit-time{color:var(--fg)}
+
+.commit-arrow{
+  font-size:1.1rem;
+  color:var(--fg-3);
+  font-weight:500;
+  padding-top:.35rem;
+  transition:color .4s var(--ease),transform .4s var(--ease);
+  display:inline-block;
+}
+.commit-body{min-width:0}
+.commit-label{
+  font-size:.6rem;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--accent);font-weight:500;
+  display:block;margin-bottom:.6rem;
+}
+.commit-message{
+  font-size:clamp(1.4rem,3vw,2.4rem);
+  font-weight:400;letter-spacing:-.03em;line-height:1.15;
+  color:var(--fg);
+  display:block;
+  transition:color .4s var(--ease);
+  word-break:break-word;
+}
+.commit-repo{
+  font-size:.78rem;font-weight:300;
+  color:var(--fg-3);
+  display:block;margin-top:.7rem;
+}
+.commit-repo b{font-weight:400;color:var(--fg-2)}
+.commit-side{
+  text-align:right;
+  padding-top:.35rem;
+  white-space:nowrap;
+}
+.commit-time{
+  font-size:.78rem;
+  color:var(--fg-2);
+  font-weight:400;
+  display:block;
+  transition:color .4s var(--ease);
+  font-variant-numeric:tabular-nums;
+}
+.commit-date{
+  font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--fg-3);
+  display:block;margin-top:.4rem;
+  font-variant-numeric:tabular-nums;
+}
+.commit-state{
+  font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--fg-3);font-weight:400;
+  padding:1rem 0;
+}
+
+/* ABOUT */
+.about-grid{display:grid;grid-template-columns:4fr 8fr;gap:clamp(2rem,6vw,6rem);align-items:start}
+.about-portrait{
+  aspect-ratio:3/4;border-radius:2px;overflow:hidden;
+  border:1px solid var(--line);
+  background:#0b0908;position:relative;
+}
+.about-portrait img{
+  width:100%;height:100%;
+  object-fit:cover;object-position:center;
+  display:block;
+  filter:grayscale(.25) contrast(1.05);
+  transition:filter .6s var(--ease),transform 1.2s var(--ease);
+}
+.about-portrait:hover img{filter:grayscale(0) contrast(1.05);transform:scale(1.03)}
+.about-portrait::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(circle at 40% 30%, rgba(255,90,28,.14), transparent 55%),
+    linear-gradient(160deg, transparent 45%, rgba(5,4,3,.55) 100%);
+}
+.about-copy p{
+  font-size:clamp(1.15rem,1.7vw,1.5rem);
+  line-height:1.5;color:var(--fg);max-width:40ch;margin:0;font-weight:300;
+}
+.about-copy p em{font-family:'Instrument Serif',serif;font-style:italic;color:var(--accent-soft)}
+.about-copy p + p{margin-top:1.4em;color:var(--fg-2);font-size:1rem;font-weight:300}
+
+/* CONTACT */
+.contact-section{padding:clamp(5rem,10vw,9rem) clamp(1.5rem,4vw,3.5rem)}
+.contact-head{
+  font-weight:200;font-size:clamp(2.8rem,9vw,8rem);
+  letter-spacing:-.05em;line-height:.9;margin:0 0 3rem;text-transform:uppercase;
+}
+.contact-head em{
+  font-family:'Instrument Serif',serif;font-style:italic;
+  font-weight:400;text-transform:none;letter-spacing:-.02em;
+  color:var(--accent);display:inline-block;transform:translateY(-.05em);
+}
+.contact-bottom{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  gap:2rem;flex-wrap:wrap;padding-top:2rem;border-top:1px solid var(--line);
+}
+.contact-note{
+  font-size:.9rem;color:var(--fg-2);max-width:38ch;font-weight:300;
+}
+.magnet{
+  display:inline-flex;align-items:center;gap:.7rem;
+  padding:1.15rem 2rem;border:1px solid var(--line-2);border-radius:2px;
+  font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;font-weight:500;
+  transition:background .35s var(--ease),color .35s var(--ease),border-color .35s var(--ease);
+}
+.magnet:hover{background:var(--accent);border-color:var(--accent);color:#050403}
+.magnet i{font-style:normal;transition:transform .4s var(--ease)}
+.magnet:hover i{transform:translate(3px,-3px)}
+
+/* FOOTER */
+.footer{
+  position:fixed;left:0;right:0;bottom:0;height:100vh;z-index:1;
+  background:
+    radial-gradient(ellipse at 50% 100%, rgba(255,90,28,.14), transparent 55%),
+    rgba(7,5,4,.96);
+  border-top:1px solid var(--line-2);overflow:hidden;
+}
+.footer-inner{
+  height:100%;display:flex;flex-direction:column;justify-content:space-between;
+  padding:52px var(--pad) 28px;
+}
+.marquee{
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  padding:16px 0;overflow:hidden;margin:0 calc(var(--pad) * -1);
+}
+.marquee-track{display:flex;width:max-content;animation:marquee 38s linear infinite}
+.marquee-track span{
+  white-space:nowrap;font-weight:600;
+  font-size:.82rem;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--fg-3);padding-right:2.5rem;
+}
+.marquee-track span em{
+  font-family:'Instrument Serif',serif;font-style:italic;
+  font-weight:400;letter-spacing:0;text-transform:none;
+  color:var(--accent-soft);padding:0 .5rem;font-size:1rem;
+}
+@keyframes marquee{to{transform:translateX(-50%)}}
+.foot-mid{padding:1.5rem 0}
+.foot-head{
+  font-weight:200;font-size:clamp(2.4rem,7vw,6rem);
+  letter-spacing:-.055em;line-height:.88;text-transform:uppercase;margin:0;
+}
+.foot-head em{
+  font-family:'Instrument Serif',serif;font-style:italic;
+  font-weight:400;letter-spacing:-.02em;text-transform:none;
+  color:var(--accent);display:inline-block;transform:translateY(-.06em);
+}
+.foot-bottom{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  gap:2rem;flex-wrap:wrap;padding-top:1.4rem;border-top:1px solid var(--line);
+}
+.cols{display:flex;gap:clamp(2rem,6vw,5rem);flex-wrap:wrap}
+.cols h3{
+  font-size:.6rem;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--fg-3);font-weight:500;margin:0 0 1rem;
+}
+.cols ul{list-style:none;margin:0;padding:0;display:grid;gap:.55rem}
+.cols a{
+  font-size:.85rem;color:var(--fg-2);font-weight:300;
+  display:inline-flex;align-items:center;gap:.4rem;
+  transition:color .3s var(--ease);
+}
+.cols a i{
+  font-style:normal;opacity:0;transform:translateX(-6px);
+  color:var(--accent);
+  transition:opacity .35s var(--ease),transform .35s var(--ease);
+}
+.cols a:hover{color:var(--fg)}
+.cols a:hover i{opacity:1;transform:translateX(0)}
+.foot-meta{
+  display:grid;gap:.55rem;
+  font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--fg-3);text-align:right;font-weight:400;
+}
+.foot-meta b{color:var(--fg-2);font-weight:500;font-variant-numeric:tabular-nums}
+.live{
+  display:inline-block;width:6px;height:6px;border-radius:50%;
+  background:var(--accent);margin-right:6px;vertical-align:middle;
+  animation:pulse 2.4s var(--ease) infinite;
+}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+@media (max-width:900px){
+  .about-grid{grid-template-columns:1fr}
+  .about-portrait{max-width:300px}
+}
+@media (max-width:720px){
+  .nav-links{gap:20px}
+  .hero{padding:0 var(--pad) 28px}
+  .hero-top{padding-top:78px}
+  .hero-foot{grid-template-columns:1fr;gap:1.2rem}
+  .section{margin-bottom:2rem;padding:3rem 1.5rem}
+  .section-head{grid-template-columns:1fr;gap:.6rem}
+  .section-meta{display:none}
+  .commit-row{grid-template-columns:2rem 1fr;row-gap:.6rem}
+  .commit-side{grid-column:2;text-align:left;padding-top:0}
+  a.commit-wrap:hover{padding-left:0}
+  #page{margin-bottom:0}
+  .footer{position:relative;height:auto;min-height:100svh}
+  .footer-inner{padding:44px var(--pad) 26px}
+  .marquee{margin:0 calc(var(--pad) * -1)}
+  .foot-bottom{flex-direction:column;align-items:flex-start}
+  .foot-meta{text-align:left}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto !important}
+  *,*::before,*::after{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+  }
+  .marquee-track{animation:none}
+  .live,.hero-marker .arrow{animation:none}
+  .grain{opacity:.03}
+}
+</style>
+</head>
+<body>
+
+<div class="bg" id="bg" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<nav class="nav" id="nav" aria-label="Primary">
+  <a class="nav-logo" href="#top">YASH<em>©</em></a>
+  <div class="nav-links">
+    <a href="#work">Work</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <div class="nav-progress" aria-hidden="true"><i id="navProgress"></i></div>
+</nav>
+
+<div id="page">
+
+  <header class="hero" id="top">
+    <div class="hero-top">
+      <span>01 / Approach</span>
+      <em>Portfolio 2024 — 2026</em>
+    </div>
+    <div class="hero-spacer"></div>
+    <h1 class="name" aria-label="Yash" id="heroName">
+      <span class="m"><span class="ltr">Y</span></span><span class="m"><span class="ltr">A</span></span><span class="m"><span class="ltr">S</span></span><span class="m"><span class="ltr">H</span></span>
+    </h1>
+    <div class="hero-name-sub">Developer · Building for the web</div>
+    <div class="hero-foot">
+      <p class="hero-note">
+        Interfaces built to hold up under real use. <em>Mostly frontend, occasionally systems.</em>
+      </p>
+      <div class="hero-marker">
+        <span>Fall inward</span>
+        <span class="arrow">↓</span>
+      </div>
+    </div>
+  </header>
+
+  <section class="section" id="work">
+    <div class="section-head">
+      <span class="section-num">02 / Signal</span>
+      <h2 class="section-title">Last <em>commit</em></h2>
+      <span class="section-meta">Live · aceyash-dev</span>
+    </div>
+    <div id="lastCommit" aria-live="polite">
+      <div class="commit-state">Loading latest commit…</div>
+    </div>
+  </section>
+
+  <section class="section" id="about">
+    <div class="section-head">
+      <span class="section-num">03 / Signal</span>
+      <h2 class="section-title">Behind the <em>work</em></h2>
+      <span class="section-meta">Independent developer</span>
+    </div>
+    <div class="about-grid">
+      <div class="about-portrait">
+        <img src="me.jpg" alt="Yash" loading="lazy" decoding="async">
+      </div>
+      <div class="about-copy">
+        <p>I build interfaces that are <em>fast, quiet, and considered</em> — and that hold up under real use.</p>
+        <p>Mostly frontend. Occasionally systems. Always with an eye on how it feels to move through the thing, not just how it looks standing still.</p>
+        <p>Currently open to select projects. Based remotely, working across time zones.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section contact-section" id="contact">
+    <div class="section-head">
+      <span class="section-num">04 / Return</span>
+      <h2 class="section-title">Come back <em>around</em></h2>
+      <span class="section-meta">Let's build</span>
+    </div>
+    <h3 class="contact-head">Let's build<br><em>something.</em></h3>
+    <div class="contact-bottom">
+      <p class="contact-note">
+        If you have a product, system, or piece of strange work that needs a designer-developer, I'd like to hear about it.
+      </p>
+      <a class="magnet" href="mailto:aceyash-dev@proton.me">
+        aceyash-dev@proton.me <i>↗</i>
+      </a>
+    </div>
+  </section>
+
+</div>
+
+<footer class="footer" id="footer">
+  <div class="footer-inner">
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>Build <em>·</em> Design <em>·</em> Code <em>·</em> </span>
+        <span>Build <em>·</em> Design <em>·</em> Code <em>·</em> </span>
+      </div>
+    </div>
+    <div class="foot-mid">
+      <h2 class="foot-head">Orbit <em>complete.</em></h2>
+    </div>
+    <div class="foot-bottom">
+      <div class="cols">
+        <div>
+          <h3>Sections</h3>
+          <ul>
+            <li><a href="#work">Work <i>↗</i></a></li>
+            <li><a href="#about">About <i>↗</i></a></li>
+            <li><a href="#contact">Contact <i>↗</i></a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Elsewhere</h3>
+          <ul>
+            <li><a href="https://github.com/aceyash-dev" rel="noopener" target="_blank">GitHub <i>↗</i></a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Direct</h3>
+          <ul>
+            <li><a href="mailto:aceyash-dev@proton.me">aceyash-dev@proton.me <i>↗</i></a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="foot-meta">
+        <div>Local time — <b id="clock">--:--:--</b></div>
+        <div>Status — <span class="live"></span><b>Available</b></div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+
+<script>
+(function () {
+  'use strict';
+
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  let lenis = null;
+  if (!reduce && window.Lenis) {
+    lenis = new Lenis({ autoRaf: false, lerp: 0.1, wheelMultiplier: 1, anchors: true });
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => lenis.raf(time * 1000));
+    gsap.ticker.lagSmoothing(0);
+  }
+
+  const nav = document.getElementById('nav');
+  const navProgress = document.getElementById('navProgress');
+  const bg = document.getElementById('bg');
+  let prevY = 0, accum = 0, footerFired = false;
+
+  ScrollTrigger.create({
+    start: 0, end: 'max',
+    onUpdate(self) {
+      const y = self.scroll();
+      const delta = y - prevY;
+      const p = self.progress;
+      prevY = y;
+
+      navProgress.style.transform = 'scaleX(' + p + ')';
+      nav.classList.toggle('is-shrunk', y > 60);
+
+      if (y < 160) {
+        accum = 0;
+        nav.classList.remove('is-hidden');
+      } else if (Math.abs(delta) >= 1) {
+        accum += delta;
+        if (Math.abs(accum) > 14) {
+          nav.classList.toggle('is-hidden', accum > 0);
+          accum = 0;
+        }
+      }
+
+      if (!reduce) {
+        const scale = 1 + Math.sin(p * Math.PI) * 0.06;
+        const shift = Math.sin(p * Math.PI) * -3;
+        bg.style.transform = 'scale(' + scale.toFixed(4) + ') translateY(' + shift + 'vh)';
+      }
+
+      if (!reduce && !footerFired && p > 0.85) {
+        footerFired = true;
+        gsap.from('.footer-inner > *', {
+          opacity: 0, y: 14, duration: 1, ease: 'power3.out', stagger: 0.08
+        });
+      }
+    }
+  });
+
+  const clock = document.getElementById('clock');
+  const footerEl = document.getElementById('footer');
+  if (clock && footerEl) {
+    let id = null;
+    const tick = () => {
+      clock.textContent = new Date().toLocaleTimeString('en-GB', { hour12: false });
+    };
+    tick();
+    new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        if (!id) { tick(); id = setInterval(tick, 1000); }
+      } else if (id) { clearInterval(id); id = null; }
+    }, { threshold: 0 }).observe(footerEl);
+  }
+
+  if (reduce) return;
+
+  gsap.set('.hero .ltr', { yPercent: 108 });
+  gsap.set('.nav-logo, .nav-links a', { opacity: 0, y: -10 });
+  gsap.set('.hero-top > *', { opacity: 0, y: -8 });
+  gsap.set('.hero-name-sub', { opacity: 0, y: 8 });
+  gsap.set('.hero-note, .hero-marker', { opacity: 0, y: 10 });
+
+  gsap.timeline({ defaults: { ease: 'expo.out' } })
+    .to('.nav-logo', { opacity: 1, y: 0, duration: .6 }, 0.05)
+    .to('.nav-links a', { opacity: 1, y: 0, duration: .6, stagger: .06 }, 0.12)
+    .to('.hero-top > *', { opacity: 1, y: 0, duration: .7, stagger: .08 }, 0.18)
+    .to('.hero .ltr', { yPercent: 0, duration: 1.25, stagger: .08 }, 0.28)
+    .to('.hero-name-sub', { opacity: 1, y: 0, duration: .8 }, 0.95)
+    .to('.hero-note', { opacity: 1, y: 0, duration: .8 }, 1.05)
+    .to('.hero-marker', { opacity: 1, y: 0, duration: .8 }, 1.15);
+
+  gsap.to('.hero .m', {
+    x: (i) => ((i - 1.5) / 1.5) * window.innerWidth * 0.14,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: '.hero', start: 'top top', end: 'bottom top',
+      scrub: true, invalidateOnRefresh: true
+    }
+  });
+
+  gsap.to('#heroName, .hero-name-sub', {
+    opacity: 0, ease: 'none',
+    scrollTrigger: {
+      trigger: '.hero', start: '15% top', end: 'bottom top', scrub: true
+    }
+  });
+
+  gsap.utils.toArray('.section').forEach((sec) => {
+    const head = sec.querySelector('.section-head');
+    if (head) {
+      gsap.from(head, {
+        opacity: 0, y: 8, duration: .7, ease: 'power2.out',
+        scrollTrigger: { trigger: sec, start: 'top 82%', once: true }
+      });
+    }
+  });
+
+  gsap.from('.about-copy p', {
+    opacity: 0, y: 8, duration: .7, ease: 'power2.out', stagger: .1,
+    scrollTrigger: { trigger: '.about-copy', start: 'top 82%', once: true }
+  });
+  gsap.from('.about-portrait', {
+    opacity: 0, duration: 1, ease: 'power2.out',
+    scrollTrigger: { trigger: '.about-portrait', start: 'top 82%', once: true }
+  });
+  gsap.from('.contact-head', {
+    opacity: 0, y: 12, duration: 1, ease: 'expo.out',
+    scrollTrigger: { trigger: '.contact-section', start: 'top 75%', once: true }
+  });
+
+  if (fine) {
+    const magnet = document.querySelector('.magnet');
+    if (magnet) {
+      const mxTo = gsap.quickTo(magnet, 'x', { duration: .5, ease: 'power3' });
+      const myTo = gsap.quickTo(magnet, 'y', { duration: .5, ease: 'power3' });
+
+      window.addEventListener('pointermove', (e) => {
+        const r = magnet.getBoundingClientRect();
+        const cx = r.left + r.width / 2;
+        const cy = r.top + r.height / 2;
+        const dx = e.clientX - cx;
+        const dy = e.clientY - cy;
+        const reach = Math.max(r.width, r.height) / 2 + 100;
+        if (Math.hypot(dx, dy) < reach) {
+          mxTo(dx * 0.18);
+          myTo(dy * 0.18);
+        } else {
+          mxTo(0); myTo(0);
+        }
+      }, { passive: true });
+
+      magnet.addEventListener('mouseleave', () => {
+        gsap.to(magnet, { x: 0, y: 0, duration: .6, ease: 'elastic.out(1, 0.5)' });
+      });
+    }
+  }
+
+  window.addEventListener('load', () => ScrollTrigger.refresh());
+})();
+</script>
+
+<script>
+(function () {
+  'use strict';
+
+  const mount = document.getElementById('lastCommit');
+  const fallbackUser = 'aceyash-dev';
+
+  const esc = (s = '') => String(s).replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
+  }[c]));
+
+  const fmtAbs = (d) => {
+    if (!d) return '—';
+    try {
+      return new Intl.DateTimeFormat('en-GB', {
+        day: '2-digit', month: 'short', year: 'numeric'
+      }).format(new Date(d));
+    } catch { return '—'; }
+  };
+
+  const fmtRel = (d) => {
+    if (!d) return '';
+    const diff = Date.now() - new Date(d).getTime();
+    if (diff < 0 || Number.isNaN(diff)) return '';
+    const s = Math.floor(diff / 1000);
+    if (s < 30) return 'just now';
+    if (s < 60) return s + 's ago';
+    const m = Math.floor(s / 60); if (m < 60) return m + 'm ago';
+    const h = Math.floor(m / 60); if (h < 24) return h + 'h ago';
+    const dd = Math.floor(h / 24); if (dd < 30) return dd + 'd ago';
+    const mo = Math.floor(dd / 30); if (mo < 12) return mo + 'mo ago';
+    return Math.floor(mo / 12) + 'y ago';
+  };
+
+  function renderCommit(data) {
+    const relative = fmtRel(data.date);
+    const absolute = fmtAbs(data.date);
+
+    mount.innerHTML =
+      '<a class="commit-wrap" href="' + esc(data.url || data.repoUrl) + '"' +
+      ' target="_blank" rel="noopener noreferrer">' +
+        '<div class="commit-row">' +
+          '<span class="commit-arrow">↗</span>' +
+          '<div class="commit-body">' +
+            '<span class="commit-label">Last commit</span>' +
+            '<span class="commit-message">' + esc(data.message || '—') + '</span>' +
+            '<span class="commit-repo">in <b>' + esc(data.repo || 'repository') + '</b></span>' +
+          '</div>' +
+          '<div class="commit-side">' +
+            '<span class="commit-time">' + esc(relative) + '</span>' +
+            '<span class="commit-date">' + esc(absolute) + '</span>' +
+          '</div>' +
+        '</div>' +
+      '</a>';
+
+    if (window.gsap) {
+      gsap.from('.commit-wrap', {
+        opacity: 0, y: 10, duration: .7, ease: 'power2.out'
+      });
+    }
+  }
+
+  function renderError(msg) {
+    mount.innerHTML = '<div class="commit-state">' + esc(msg) + '</div>';
+  }
+
+  /* Vercel serverless proxy — reads GITHUB_PAT from env vars */
+  async function viaProxy() {
+    const res = await fetch('/api/last-commit', { headers: { Accept: 'application/json' } });
+    if (!res.ok) throw new Error('proxy ' + res.status);
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    return data;
+  }
+
+  /* Direct public GitHub fallback — for local dev without /api */
+  async function viaDirect() {
+    const headers = { Accept: 'application/vnd.github+json' };
+    const reposRes = await fetch(
+      'https://api.github.com/users/' + encodeURIComponent(fallbackUser) +
+      '/repos?type=owner&sort=pushed&direction=desc&per_page=10',
+      { headers }
+    );
+    if (!reposRes.ok) throw new Error('GitHub ' + reposRes.status);
+    const repos = await reposRes.json();
+    const candidates = repos.filter(r => !r.fork && !r.archived);
+    for (const repo of candidates.slice(0, 5)) {
+      const cRes = await fetch(
+        'https://api.github.com/repos/' + repo.full_name + '/commits?per_page=1',
+        { headers }
+      );
+      if (!cRes.ok) continue;
+      const commits = await cRes.json();
+      if (!commits.length) continue;
+      const c = commits[0];
+      return {
+        repo: repo.name,
+        repoUrl: repo.html_url,
+        message: (c.commit.message || '').split('\n')[0],
+        date: c.commit.author?.date || c.commit.committer?.date || null,
+        url: c.html_url
+      };
+    }
+    throw new Error('No commits found');
+  }
+
+  (async function load() {
+    try {
+      const data = await viaProxy();
+      renderCommit(data);
+    } catch (proxyErr) {
+      try {
+        const data = await viaDirect();
+        renderCommit(data);
+      } catch (directErr) {
+        console.warn('proxy:', proxyErr.message);
+        console.warn('direct:', directErr.message);
+        renderError('Latest commit unavailable');
+      }
+    }
+  })();
+})();
+</script>
+</body>
+</html>
