@@ -708,8 +708,6 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
 .inline-link{color:var(--fg);border-bottom:1px solid var(--line-2);transition:color .3s var(--ease),border-color .3s var(--ease)}
 .inline-link:hover{color:var(--accent);border-color:var(--accent)}
 
-.blur-reveal{filter:blur(10px);opacity:0;transform:translateY(24px);will-change:filter,opacity,transform}
-.blur-reveal.is-visible{filter:blur(0);opacity:1;transform:none}
 @media (max-width:720px){
   .profile-grid{grid-template-columns:1fr;gap:2.5rem}
   .profile-intro h3{max-width:13ch}
@@ -872,7 +870,6 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
   }
   .marquee-track,.live,.hero-marker .arrow{animation:none}
   .grain{opacity:.03}
-  .blur-reveal{filter:none;opacity:1;transform:none}
 }
 </style>
 </head>
@@ -1080,8 +1077,10 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
         bg.style.transform='scale('+scale.toFixed(4)+') translateY('+shift+'vh)';
       }
 
-      // Robust staggered blur reveals. Set the hidden state explicitly,
-    // then let ScrollTrigger own the transition into view.
+      // One-shot reveals only. ScrollTrigger starts the animation when an
+    // element enters the viewport, then kills the trigger. Nothing here is
+    // scrubbed or tied to scroll progress, so the content never shakes on
+    // subsequent scrolling.
     if(!reduce && hasGsap){
       const revealGroups=[
         '.profile-intro > *',
@@ -1094,38 +1093,39 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
       revealGroups.forEach(selector=>{
         const els=gsap.utils.toArray(selector);
         if(!els.length)return;
-        gsap.fromTo(els,
-          {autoAlpha:0,y:24,filter:'blur(12px)'},
-          {
-            autoAlpha:1,y:0,filter:'blur(0px)',
-            duration:.9,ease:'expo.out',stagger:.09,
-            scrollTrigger:{trigger:els[0],start:'top 86%',once:true}
+        gsap.set(els,{autoAlpha:0,y:24,filter:'blur(12px)'});
+        ScrollTrigger.create({
+          trigger:els[0],
+          start:'top 86%',
+          once:true,
+          onEnter:self=>{
+            self.kill();
+            gsap.to(els,{
+              autoAlpha:1,y:0,filter:'blur(0px)',
+              duration:.85,ease:'expo.out',stagger:.08,
+              overwrite:'auto'
+            });
           }
-        );
+        });
       });
     }
 
-    // Stable pinned horizontal skills rail. ScrollTrigger owns the pinned
-    // distance and a real GSAP tween owns the horizontal translation.
-    // This avoids manually mutating transforms from onUpdate.
-    if(!reduce && fine && hasGsap){
+    // One-shot skills entrance. Do not scrub this with scroll. Once the
+    // rail enters view, it slides in and stays put.
+    if(!reduce && hasGsap){
       const rail=document.querySelector('.skills-rail');
       const track=document.querySelector('.skills-track');
       if(rail && track){
-        const getDistance=()=>Math.max(0,track.scrollWidth-rail.clientWidth);
-        gsap.to(track,{
-          x:()=>-getDistance(),
-          ease:'none',
-          scrollTrigger:{
-            trigger:rail,
-            start:'top top',
-            end:()=>'+='+Math.max(window.innerWidth*0.9,getDistance()),
-            pin:true,
-            pinSpacing:true,
-            scrub:1,
-            anticipatePin:1,
-            invalidateOnRefresh:true,
-            refreshPriority:1
+        gsap.set(track,{x:()=>Math.min(80,Math.max(24,track.scrollWidth*.04)),autoAlpha:0});
+        ScrollTrigger.create({
+          trigger:rail,
+          start:'top 88%',
+          once:true,
+          onEnter:self=>{
+            self.kill();
+            gsap.to(track,{
+              x:0,autoAlpha:1,duration:1,ease:'expo.out',overwrite:'auto'
+            });
           }
         });
       }
