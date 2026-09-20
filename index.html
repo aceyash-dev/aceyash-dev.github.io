@@ -324,12 +324,22 @@ html.lenis,html.lenis body{height:auto}
 }
 
 /* LAST COMMIT */
+.commit-list{
+  display:grid;
+  gap:.65rem;
+}
 .commit-wrap{
   display:block;
-  border-top:1px solid var(--line);
-  border-bottom:1px solid var(--line);
-  padding:clamp(1.6rem,3.4vw,2.4rem) 0;
-  transition:padding .5s var(--ease),border-color .4s var(--ease);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:clamp(1rem,2.2vw,1.45rem);
+  background:rgba(242,237,228,.025);
+  transition:transform .4s var(--ease),background .4s var(--ease),border-color .4s var(--ease);
+}
+.commit-wrap:hover{
+  transform:translateY(-2px);
+  background:rgba(242,237,228,.055);
+  border-color:var(--line-2);
 }
 .commit-row{
   display:grid;
@@ -339,7 +349,6 @@ html.lenis,html.lenis body{height:auto}
   min-width:0;
   transition:padding .5s var(--ease);
 }
-a.commit-wrap:hover{padding-left:.75rem}
 a.commit-wrap:hover .commit-message{color:var(--accent)}
 a.commit-wrap:hover .commit-arrow{color:var(--accent);transform:translate(2px,-2px)}
 a.commit-wrap:hover .commit-time{color:var(--fg)}
@@ -692,6 +701,7 @@ a.commit-wrap:hover .commit-time{color:var(--fg)}
   .section-title{font-size:clamp(1.5rem,7vw,2rem)}
   .commit-row{grid-template-columns:1.75rem minmax(0,1fr);gap:.8rem}
   .commit-side{grid-column:2;text-align:left;padding-top:0}
+  .commit-wrap{border-radius:12px;padding:1rem}
   .commit-message{font-size:clamp(1.2rem,6vw,1.65rem)}
   a.commit-wrap:hover{padding-left:0}
   .about-grid{grid-template-columns:1fr;gap:2rem}
@@ -1089,26 +1099,38 @@ a.commit-wrap:hover .commit-time{color:var(--fg)}
     return Math.floor(mo/12)+'y ago';
   };
 
-  function renderCommit(data){
-    const relative=fmtRel(data.date);
-    const absolute=fmtAbs(data.date);
-    mount.innerHTML=
-      '<a class="commit-wrap" href="'+esc(data.url||data.repoUrl)+'" target="_blank" rel="noopener noreferrer">'+
+  function renderCommit(items){
+    if(!Array.isArray(items) || !items.length){
+      renderError();
+      return;
+    }
+
+    mount.innerHTML='<div class="commit-list">'+items.map((data,index)=>{
+      const relative=fmtRel(data.date);
+      const absolute=fmtAbs(data.date);
+      const privateLabel=data.private?' · Private':'';
+      const href=data.public && data.repoUrl ? data.repoUrl : (data.url||'#');
+      const tag=data.public
+        ? '<span class="commit-repo">in <b>'+esc(data.repo||'repository')+'</b></span>'
+        : '<span class="commit-repo">Private repository</span>';
+
+      return '<a class="commit-wrap" href="'+esc(href)+'" '+(data.public?'target="_blank" rel="noopener noreferrer"':'')+' aria-label="'+esc(data.message||'Latest commit')+'">'+
         '<div class="commit-row">'+
-          '<span class="commit-arrow" aria-hidden="true">↗</span>'+
+          '<span class="commit-arrow" aria-hidden="true">'+(data.public?'↗':'•')+'</span>'+
           '<div class="commit-body">'+
-            '<span class="commit-label">Last commit</span>'+
+            '<span class="commit-label">Recent commit '+(index+1)+'</span>'+
             '<span class="commit-message">'+esc(data.message||'—')+'</span>'+
-            '<span class="commit-repo">in <b>'+esc(data.repo||'repository')+'</b></span>'+
+            tag+
           '</div>'+
           '<div class="commit-side">'+
             '<span class="commit-time">'+esc(relative)+'</span>'+
-            '<span class="commit-date">'+esc(absolute)+'</span>'+
+            '<span class="commit-date">'+esc(absolute)+esc(privateLabel)+'</span>'+
           '</div>'+
         '</div>'+
       '</a>';
+    }).join('')+'</div>';
 
-    if(window.gsap) gsap.from('.commit-wrap',{opacity:0,y:10,duration:.7,ease:'power2.out'});
+    if(window.gsap) gsap.from('.commit-wrap',{opacity:0,y:12,duration:.6,ease:'power2.out',stagger:.08});
   }
 
   function renderError(){
@@ -1116,44 +1138,58 @@ a.commit-wrap:hover .commit-time{color:var(--fg)}
   }
 
   /*
-   * Read the homepage repository directly.
+   * GitHub Pages is public/static, so browser-side requests can only read
+   * public repositories. Private repository data must never be exposed by
+   * embedding an authenticated GitHub token in this page.
    *
-   * The previous implementation first fetched the user's repositories and then
-   * queried the first few repositories. That adds another cacheable API layer
-   * and can return an older pushed repository list. For this page, the source
-   * of truth is this repository, so query its main branch directly.
+   * Fetch recent commits from the user's public repositories and keep the
+   * newest three, which gives the notification-stack presentation below.
    */
-  async function fetchLatestCommit(){
-    const url='https://api.github.com/repos/'+encodeURIComponent(fallbackUser)+'/aceyash-dev.github.io/commits?sha=main&per_page=1&_='+Date.now();
-    const res=await fetch(url,{
-      method:'GET',
-      headers:{
-        Accept:'application/vnd.github+json',
-        'Cache-Control':'no-cache',
-        Pragma:'no-cache'
-      },
-      cache:'no-store',
-      credentials:'omit'
-    });
+  async function fetchLatestCommits(){
+    const headers={Accept:'application/vnd.github+json'};
+    const bust=Date.now().toString();
 
-    if(!res.ok) throw new Error('GitHub '+res.status);
+    const reposRes=await fetch(
+      'https://api.github.com/users/'+encodeURIComponent(fallbackUser)+'/repos?type=owner&sort=pushed&direction=desc&per_page=100&_='+bust,
+      {headers,cache:'no-store',credentials:'omit'}
+    );
+    if(!reposRes.ok) throw new Error('GitHub '+reposRes.status);
 
-    const commits=await res.json();
-    const c=commits[0];
-    if(!c) throw new Error('No commits found');
+    const repos=(await reposRes.json()).filter(r=>!r.fork&&!r.archived);
+    const results=[];
 
-    return {
-      repo:'aceyash-dev.github.io',
-      repoUrl:'https://github.com/aceyash-dev/aceyash-dev.github.io',
-      message:(c.commit?.message||'').split('\n')[0],
-      date:c.commit?.author?.date||c.commit?.committer?.date||null,
-      url:c.html_url
-    };
+    for(const repo of repos){
+      if(results.length>=3) break;
+
+      try{
+        const cRes=await fetch(
+          'https://api.github.com/repos/'+repo.full_name+'/commits?sha='+encodeURIComponent(repo.default_branch||'main')+'&per_page=1&_='+Date.now(),
+          {headers,cache:'no-store',credentials:'omit'}
+        );
+        if(!cRes.ok) continue;
+
+        const commits=await cRes.json();
+        const c=commits[0];
+        if(!c) continue;
+
+        results.push({
+          repo:repo.name,
+          repoUrl:repo.html_url,
+          message:(c.commit?.message||'').split('\\n')[0],
+          date:c.commit?.author?.date||c.commit?.committer?.date||null,
+          url:c.html_url,
+          public:true
+        });
+      }catch{}
+    }
+
+    results.sort((a,b)=>new Date(b.date)-new Date(a.date));
+    return results.slice(0,3);
   }
 
   if(!mount)return;
 
-  fetchLatestCommit()
+  fetchLatestCommits()
     .then(renderCommit)
     .catch(err=>{
       console.warn('Latest commit:',err.message);
