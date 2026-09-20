@@ -326,23 +326,28 @@ html.lenis,html.lenis body{height:auto}
 /* LAST COMMITS */
 .commit-list{
   display:grid;
-  gap:.55rem;
+  gap:1rem;
   border-top:1px solid var(--line);
   border-bottom:1px solid var(--line);
-  padding:.55rem 0;
+  padding:1rem 0;
 }
 .commit-wrap{
   display:block;
+  width:100%;
   border:1px solid var(--line);
-  border-radius:10px;
-  padding:1rem 1.1rem;
+  border-radius:14px;
+  padding:1.1rem 1.2rem;
   background:#0b0908;
-  transition:transform .35s var(--ease),border-color .35s var(--ease),background .35s var(--ease);
+  transition:transform .35s var(--ease),border-color .35s var(--ease),background .35s var(--ease),opacity .5s var(--ease);
 }
 .commit-wrap:hover{
   transform:translateY(-2px);
   background:#100d0b;
   border-color:var(--line-2);
+}
+.commit-wrap.is-revealed{
+  opacity:1;
+  transform:none;
 }
 .commit-row{
   display:grid;
@@ -351,12 +356,40 @@ html.lenis,html.lenis body{height:auto}
   gap:1rem;
   min-width:0;
 }
+.commit-wrap.private{
+  cursor:default;
+}
+.commit-lock{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:2rem;
+  height:2rem;
+  font-size:1rem;
+  line-height:1;
+  color:var(--fg-2);
+  padding-top:.05rem;
+}
+.commit-wrap.private .commit-message{
+  color:var(--fg);
+}
+.commit-wrap.private .commit-label{
+  color:var(--fg-2);
+}
 .commit-arrow{
   font-size:1rem;
   color:var(--fg-3);
   font-weight:500;
   padding-top:.15rem;
   transition:color .35s var(--ease),transform .35s var(--ease);
+}
+.commit-list > .commit-wrap:not(:first-child){
+  opacity:0;
+  transform:translateY(18px);
+}
+.commit-list > .commit-wrap.is-revealed{
+  opacity:1;
+  transform:translateY(0);
 }
 a.commit-wrap:hover .commit-arrow{color:var(--accent);transform:translate(2px,-2px)}
 .commit-body{min-width:0}
@@ -390,6 +423,7 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
 }
 .commit-repo b{font-weight:400;color:var(--fg-2)}
 .commit-side{text-align:right;padding-top:.15rem;white-space:nowrap}
+.commit-private{display:inline-flex;align-items:center;gap:.35rem}
 .commit-time{
   font-size:.72rem;
   color:var(--fg-2);
@@ -697,7 +731,7 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
   }
   .section-meta{display:none}
   .section-title{font-size:clamp(1.5rem,7vw,2rem)}
-  .commit-row{grid-template-columns:1.75rem minmax(0,1fr);gap:.8rem}
+  .commit-row{grid-template-columns:2rem minmax(0,1fr);gap:.8rem}
   .commit-side{grid-column:2;text-align:left;padding-top:0}
   .commit-wrap{border-radius:12px;padding:1rem}
   .commit-message{font-size:clamp(1.2rem,6vw,1.65rem)}
@@ -1129,7 +1163,22 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
       return '<div class="commit-wrap is-private">'+inner+'</div>';
     }).join('')+'</div>';
 
-    if(window.gsap) gsap.from('.commit-wrap',{opacity:0,y:12,duration:.6,ease:'power2.out',stagger:.08});
+    const cards=[...mount.querySelectorAll('.commit-wrap')];
+    cards[0]?.classList.add('is-revealed');
+
+    if(cards.length>1 && 'IntersectionObserver' in window){
+      const observer=new IntersectionObserver(entries=>{
+        entries.forEach(entry=>{
+          if(entry.isIntersecting){
+            entry.target.classList.add('is-revealed');
+            observer.unobserve(entry.target);
+          }
+        });
+      },{root:null,rootMargin:'0px 0px -10% 0px',threshold:.15});
+      cards.slice(1).forEach(card=>observer.observe(card));
+    }else{
+      cards.slice(1).forEach(card=>card.classList.add('is-revealed'));
+    }
   }
 
   function renderError(){
@@ -2008,7 +2057,7 @@ a.commit-wrap:hover .commit-arrow{
    * return the latest commits authored by the account as JSON.
    */
   async function fetchLatestCommits(){
-    const res=await fetch('/api/commits.json?_='+Date.now(),{
+    const res=await fetch('/data/recent-commits.json?_='+Date.now(),{
       headers:{Accept:'application/json'},
       cache:'no-store',
       credentials:'same-origin'
