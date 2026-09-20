@@ -7,6 +7,8 @@ on:
       - data/recent-commits.json
       - .github/workflows/recent-commits.yml
   workflow_dispatch:
+  schedule:
+    - cron: "0 * * * *"
 
 permissions:
   contents: write
@@ -23,7 +25,18 @@ jobs:
           set -euo pipefail
 
           mkdir -p output
-          curl --fail-with-body --silent --show-error             -H "Accept: application/vnd.github+json"             -H "Authorization: Bearer ${GITHUB_PAT}"             -H "X-GitHub-Api-Version: 2022-11-28"             "https://api.github.com/search/commits?q=author:aceyash-dev&sort=committer-date&order=desc&per_page=3"             -o response.json
+          login="$(curl --fail-with-body --silent --show-error \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${GITHUB_PAT}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/user" | node -e "let s=''; process.stdin.on('data',d=>s+=d); process.stdin.on('end',()=>{const u=JSON.parse(s); if(!u.login) process.exit(1); process.stdout.write(u.login);})")
+
+          curl --fail-with-body --silent --show-error \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${GITHUB_PAT}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/search/commits?q=author:${login}&sort=committer-date&order=desc&per_page=3" \
+            -o response.json
 
           node <<'NODE'
           const fs = require('fs');
