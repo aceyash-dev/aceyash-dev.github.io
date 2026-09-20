@@ -323,88 +323,87 @@ html.lenis,html.lenis body{height:auto}
   text-align:right;
 }
 
-/* LAST COMMIT */
+/* LAST COMMITS */
 .commit-list{
   display:grid;
-  gap:.65rem;
+  gap:.55rem;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  padding:.55rem 0;
 }
 .commit-wrap{
   display:block;
   border:1px solid var(--line);
-  border-radius:14px;
-  padding:clamp(1rem,2.2vw,1.45rem);
-  background:rgba(242,237,228,.025);
-  transition:transform .4s var(--ease),background .4s var(--ease),border-color .4s var(--ease);
+  border-radius:10px;
+  padding:1rem 1.1rem;
+  background:#0b0908;
+  transition:transform .35s var(--ease),border-color .35s var(--ease),background .35s var(--ease);
 }
 .commit-wrap:hover{
   transform:translateY(-2px);
-  background:rgba(242,237,228,.055);
+  background:#100d0b;
   border-color:var(--line-2);
 }
 .commit-row{
   display:grid;
-  grid-template-columns:3rem minmax(0,1fr) auto;
+  grid-template-columns:2rem minmax(0,1fr) auto;
   align-items:start;
-  gap:clamp(1rem,2.5vw,2rem);
+  gap:1rem;
   min-width:0;
-  transition:padding .5s var(--ease);
 }
-a.commit-wrap:hover .commit-message{color:var(--accent)}
-a.commit-wrap:hover .commit-arrow{color:var(--accent);transform:translate(2px,-2px)}
-a.commit-wrap:hover .commit-time{color:var(--fg)}
 .commit-arrow{
-  font-size:1.1rem;
+  font-size:1rem;
   color:var(--fg-3);
   font-weight:500;
-  padding-top:.35rem;
-  transition:color .4s var(--ease),transform .4s var(--ease);
-  display:inline-block;
+  padding-top:.15rem;
+  transition:color .35s var(--ease),transform .35s var(--ease);
 }
+a.commit-wrap:hover .commit-arrow{color:var(--accent);transform:translate(2px,-2px)}
 .commit-body{min-width:0}
 .commit-label{
-  font-size:.6rem;
-  letter-spacing:.24em;
+  font-size:.58rem;
+  letter-spacing:.2em;
   text-transform:uppercase;
   color:var(--accent);
   font-weight:500;
   display:block;
-  margin-bottom:.6rem;
+  margin-bottom:.35rem;
 }
 .commit-message{
-  font-size:clamp(1.25rem,3vw,2.4rem);
+  font-size:clamp(1rem,2.2vw,1.35rem);
   font-weight:400;
-  letter-spacing:-.03em;
-  line-height:1.15;
+  letter-spacing:-.02em;
+  line-height:1.2;
   color:var(--fg);
   display:block;
-  transition:color .4s var(--ease);
+  transition:color .35s var(--ease);
   overflow-wrap:anywhere;
 }
+a.commit-wrap:hover .commit-message{color:var(--accent)}
 .commit-repo{
-  font-size:.78rem;
+  font-size:.7rem;
   font-weight:300;
   color:var(--fg-3);
   display:block;
-  margin-top:.7rem;
+  margin-top:.45rem;
   overflow-wrap:anywhere;
 }
 .commit-repo b{font-weight:400;color:var(--fg-2)}
-.commit-side{text-align:right;padding-top:.35rem;white-space:nowrap}
+.commit-side{text-align:right;padding-top:.15rem;white-space:nowrap}
 .commit-time{
-  font-size:.78rem;
+  font-size:.72rem;
   color:var(--fg-2);
   font-weight:400;
   display:block;
-  transition:color .4s var(--ease);
   font-variant-numeric:tabular-nums;
 }
 .commit-date{
-  font-size:.64rem;
-  letter-spacing:.14em;
+  font-size:.58rem;
+  letter-spacing:.1em;
   text-transform:uppercase;
   color:var(--fg-3);
   display:block;
-  margin-top:.4rem;
+  margin-top:.3rem;
   font-variant-numeric:tabular-nums;
 }
 .commit-state{
@@ -412,7 +411,6 @@ a.commit-wrap:hover .commit-time{color:var(--fg)}
   letter-spacing:.16em;
   text-transform:uppercase;
   color:var(--fg-3);
-  font-weight:400;
   padding:1rem 0;
 }
 
@@ -1138,53 +1136,23 @@ a.commit-wrap:hover .commit-time{color:var(--fg)}
   }
 
   /*
-   * GitHub Pages is public/static, so browser-side requests can only read
-   * public repositories. Private repository data must never be exposed by
-   * embedding an authenticated GitHub token in this page.
+   * Fetch the authenticated user's commits, not commits belonging to a
+   * particular repository. This endpoint requires authentication, so private
+   * repositories are included without exposing credentials to the page.
    *
-   * Fetch recent commits from the user's public repositories and keep the
-   * newest three, which gives the notification-stack presentation below.
+   * The browser must call our same-origin /api/commits endpoint. It should
+   * return the latest commits authored by the account as JSON.
    */
   async function fetchLatestCommits(){
-    const headers={Accept:'application/vnd.github+json'};
-    const bust=Date.now().toString();
-
-    const reposRes=await fetch(
-      'https://api.github.com/users/'+encodeURIComponent(fallbackUser)+'/repos?type=owner&sort=pushed&direction=desc&per_page=100&_='+bust,
-      {headers,cache:'no-store',credentials:'omit'}
-    );
-    if(!reposRes.ok) throw new Error('GitHub '+reposRes.status);
-
-    const repos=(await reposRes.json()).filter(r=>!r.fork&&!r.archived);
-    const results=[];
-
-    for(const repo of repos){
-      if(results.length>=3) break;
-
-      try{
-        const cRes=await fetch(
-          'https://api.github.com/repos/'+repo.full_name+'/commits?sha='+encodeURIComponent(repo.default_branch||'main')+'&per_page=1&_='+Date.now(),
-          {headers,cache:'no-store',credentials:'omit'}
-        );
-        if(!cRes.ok) continue;
-
-        const commits=await cRes.json();
-        const c=commits[0];
-        if(!c) continue;
-
-        results.push({
-          repo:repo.name,
-          repoUrl:repo.html_url,
-          message:(c.commit?.message||'').split('\\n')[0],
-          date:c.commit?.author?.date||c.commit?.committer?.date||null,
-          url:c.html_url,
-          public:true
-        });
-      }catch{}
-    }
-
-    results.sort((a,b)=>new Date(b.date)-new Date(a.date));
-    return results.slice(0,3);
+    const res=await fetch('/api/commits?_='+Date.now(),{
+      headers:{Accept:'application/json'},
+      cache:'no-store',
+      credentials:'same-origin'
+    });
+    if(!res.ok) throw new Error('Commit feed '+res.status);
+    const data=await res.json();
+    if(!Array.isArray(data)) throw new Error('Invalid commit feed');
+    return data.slice(0,3);
   }
 
   if(!mount)return;
