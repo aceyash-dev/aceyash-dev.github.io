@@ -1077,10 +1077,15 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
         bg.style.transform='scale('+scale.toFixed(4)+') translateY('+shift+'vh)';
       }
 
-      // One-shot reveals only. ScrollTrigger starts the animation when an
-    // element enters the viewport, then kills the trigger. Nothing here is
-    // scrubbed or tied to scroll progress, so the content never shakes on
-    // subsequent scrolling.
+      if(!reduce && fine && hasGsap && !footerFired && p>.85){
+        footerFired=true;
+        gsap.from('.footer-inner > *',{opacity:0,y:14,duration:1,ease:'power3.out',stagger:.08});
+      }
+    };
+
+    // Create reveal triggers once. The previous implementation created and
+    // reset these on every scroll event, which made the content appear static
+    // instead of actually playing its entrance animation.
     if(!reduce && hasGsap){
       const revealGroups=[
         '.profile-intro > *',
@@ -1090,6 +1095,7 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
         '.contact-head',
         '.contact-note'
       ];
+
       revealGroups.forEach(selector=>{
         const els=gsap.utils.toArray(selector);
         if(!els.length)return;
@@ -1101,22 +1107,25 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
           onEnter:self=>{
             self.kill();
             gsap.to(els,{
-              autoAlpha:1,y:0,filter:'blur(0px)',
-              duration:.85,ease:'expo.out',stagger:.08,
+              autoAlpha:1,
+              y:0,
+              filter:'blur(0px)',
+              duration:.85,
+              ease:'expo.out',
+              stagger:.08,
               overwrite:'auto'
             });
           }
         });
       });
-    }
 
-    // One-shot skills entrance. Do not scrub this with scroll. Once the
-    // rail enters view, it slides in and stays put.
-    if(!reduce && hasGsap){
       const rail=document.querySelector('.skills-rail');
       const track=document.querySelector('.skills-track');
       if(rail && track){
-        gsap.set(track,{x:()=>Math.min(80,Math.max(24,track.scrollWidth*.04)),autoAlpha:0});
+        gsap.set(track,{
+          x:()=>Math.min(80,Math.max(24,track.scrollWidth*.04)),
+          autoAlpha:0
+        });
         ScrollTrigger.create({
           trigger:rail,
           start:'top 88%',
@@ -1124,18 +1133,16 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
           onEnter:self=>{
             self.kill();
             gsap.to(track,{
-              x:0,autoAlpha:1,duration:1,ease:'expo.out',overwrite:'auto'
+              x:0,
+              autoAlpha:1,
+              duration:1,
+              ease:'expo.out',
+              overwrite:'auto'
             });
           }
         });
       }
     }
-
-    if(!reduce && fine && hasGsap && !footerFired && p>.85){
-        footerFired=true;
-        gsap.from('.footer-inner > *',{opacity:0,y:14,duration:1,ease:'power3.out',stagger:.08});
-      }
-    };
 
     window.addEventListener('scroll',onScroll,{passive:true});
     window.addEventListener('resize',onScroll,{passive:true});
@@ -1191,9 +1198,6 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
       if(head) gsap.from(head,{opacity:0,y:8,duration:.7,ease:'power2.out',scrollTrigger:{trigger:sec,start:'top 82%',once:true}});
     });
 
-    gsap.from('.about-copy p',{opacity:0,y:8,duration:.7,ease:'power2.out',stagger:.1,scrollTrigger:{trigger:'.about-copy',start:'top 82%',once:true}});
-    gsap.from('.about-portrait',{opacity:0,duration:1,ease:'power2.out',scrollTrigger:{trigger:'.about-portrait',start:'top 82%',once:true}});
-    gsap.from('.contact-head',{opacity:0,y:12,duration:1,ease:'expo.out',scrollTrigger:{trigger:'.contact-section',start:'top 75%',once:true}});
 
     if(fine){
       const magnet=document.querySelector('.magnet');
