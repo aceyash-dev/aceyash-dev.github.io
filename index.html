@@ -1144,7 +1144,7 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
    * return the latest commits authored by the account as JSON.
    */
   async function fetchLatestCommits(){
-    const res=await fetch('/api/commits?_='+Date.now(),{
+    const res=await fetch('/api/commits.json?_='+Date.now(),{
       headers:{Accept:'application/json'},
       cache:'no-store',
       credentials:'same-origin'
