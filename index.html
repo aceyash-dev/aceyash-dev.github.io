@@ -1116,48 +1116,44 @@ a.commit-wrap:hover .commit-time{color:var(--fg)}
   }
 
   /*
-   * GitHub Pages is static, so /api/last-commit cannot be assumed to exist.
-   * Prefer the public GitHub API directly and keep the request count bounded.
+   * Read the homepage repository directly.
+   *
+   * The previous implementation first fetched the user's repositories and then
+   * queried the first few repositories. That adds another cacheable API layer
+   * and can return an older pushed repository list. For this page, the source
+   * of truth is this repository, so query its main branch directly.
    */
-  async function viaDirect(){
-    const headers={Accept:'application/vnd.github+json'};
-    const bust=Date.now().toString();
+  async function fetchLatestCommit(){
+    const url='https://api.github.com/repos/'+encodeURIComponent(fallbackUser)+'/aceyash-dev.github.io/commits?sha=main&per_page=1&_='+Date.now();
+    const res=await fetch(url,{
+      method:'GET',
+      headers:{
+        Accept:'application/vnd.github+json',
+        'Cache-Control':'no-cache',
+        Pragma:'no-cache'
+      },
+      cache:'no-store',
+      credentials:'omit'
+    });
 
-    const reposRes=await fetch(
-      'https://api.github.com/users/'+encodeURIComponent(fallbackUser)+'/repos?type=owner&sort=pushed&direction=desc&per_page=8&_='+bust,
-      {headers,cache:'no-store'}
-    );
-    if(!reposRes.ok) throw new Error('GitHub '+reposRes.status);
+    if(!res.ok) throw new Error('GitHub '+res.status);
 
-    const repos=await reposRes.json();
-    const candidates=repos.filter(r=>!r.fork&&!r.archived);
+    const commits=await res.json();
+    const c=commits[0];
+    if(!c) throw new Error('No commits found');
 
-    for(const repo of candidates.slice(0,5)){
-      const cRes=await fetch(
-        'https://api.github.com/repos/'+repo.full_name+'/commits?per_page=1&_='+Date.now(),
-        {headers,cache:'no-store'}
-      );
-      if(!cRes.ok) continue;
-
-      const commits=await cRes.json();
-      if(!commits.length) continue;
-
-      const c=commits[0];
-      return {
-        repo:repo.name,
-        repoUrl:repo.html_url,
-        message:(c.commit?.message||'').split('\n')[0],
-        date:c.commit?.author?.date||c.commit?.committer?.date||null,
-        url:c.html_url
-      };
-    }
-
-    throw new Error('No commits found');
+    return {
+      repo:'aceyash-dev.github.io',
+      repoUrl:'https://github.com/aceyash-dev/aceyash-dev.github.io',
+      message:(c.commit?.message||'').split('\n')[0],
+      date:c.commit?.author?.date||c.commit?.committer?.date||null,
+      url:c.html_url
+    };
   }
 
   if(!mount)return;
 
-  viaDirect()
+  fetchLatestCommit()
     .then(renderCommit)
     .catch(err=>{
       console.warn('Latest commit:',err.message);
