@@ -699,8 +699,10 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
 .profile-meta-row a{transition:color .3s var(--ease)}
 .profile-meta-row a:hover{color:var(--accent)}
 .profile-meta-row i{font-style:normal;color:var(--accent);margin-left:.25rem}
-.skills-rail{margin:clamp(3rem,7vw,6rem) calc(clamp(1.25rem,4vw,3.5rem) * -1) calc(clamp(3rem,7vw,6rem) * -1);border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;touch-action:pan-y}
-.skills-track{display:flex;width:max-content;align-items:center;gap:1.25rem;padding:1.2rem 0;will-change:transform}
+.skills-rail{margin:clamp(3rem,7vw,6rem) calc(clamp(1.25rem,4vw,3.5rem) * -1) calc(clamp(3rem,7vw,6rem) * -1);border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;touch-action:pan-y;position:relative}
+.skills-track{display:flex;width:max-content;align-items:center;gap:1.25rem;padding:1.2rem 0;will-change:transform;transform:translate3d(0,0,0)}
+.skills-track span{transition:color .3s var(--ease)}
+.skills-track span:hover{color:var(--accent)}
 .skills-track span{font-size:clamp(1.5rem,4vw,3.5rem);font-weight:300;letter-spacing:-.04em;white-space:nowrap}
 .skills-track i{font-style:normal;color:var(--accent);font-size:1.1rem}
 .inline-link{color:var(--fg);border-bottom:1px solid var(--line-2);transition:color .3s var(--ease),border-color .3s var(--ease)}
@@ -1078,39 +1080,52 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
         bg.style.transform='scale('+scale.toFixed(4)+') translateY('+shift+'vh)';
       }
 
-      // Staggered blur reveals for content blocks.
+      // Robust staggered blur reveals. Set the hidden state explicitly,
+    // then let ScrollTrigger own the transition into view.
     if(!reduce && hasGsap){
-      gsap.utils.toArray('.profile-intro > *, .profile-meta-row, .about-copy p').forEach(el=>el.classList.add('blur-reveal'));
-      gsap.utils.toArray('.blur-reveal').forEach((el,i)=>{
-        gsap.to(el,{
-          filter:'blur(0px)',opacity:1,y:0,duration:.8,ease:'expo.out',delay:(i%6)*.07,
-          scrollTrigger:{trigger:el,start:'top 88%',once:true}
-        });
+      const revealGroups=[
+        '.profile-intro > *',
+        '.profile-meta-row',
+        '.about-copy p',
+        '.about-portrait',
+        '.contact-head',
+        '.contact-note'
+      ];
+      revealGroups.forEach(selector=>{
+        const els=gsap.utils.toArray(selector);
+        if(!els.length)return;
+        gsap.fromTo(els,
+          {autoAlpha:0,y:24,filter:'blur(12px)'},
+          {
+            autoAlpha:1,y:0,filter:'blur(0px)',
+            duration:.9,ease:'expo.out',stagger:.09,
+            scrollTrigger:{trigger:els[0],start:'top 86%',once:true}
+          }
+        );
       });
     }
 
-    // Pinned horizontal skills rail on fine pointers. Vertical wheel input is
-    // converted into horizontal progress while the rail is in view, then
-    // normal page scrolling resumes. Touch devices keep native vertical scroll.
+    // Stable pinned horizontal skills rail. ScrollTrigger owns the pinned
+    // distance and a real GSAP tween owns the horizontal translation.
+    // This avoids manually mutating transforms from onUpdate.
     if(!reduce && fine && hasGsap){
       const rail=document.querySelector('.skills-rail');
       const track=document.querySelector('.skills-track');
       if(rail && track){
-        const overflow=()=>Math.max(0,track.scrollWidth-rail.clientWidth);
-        const state={x:0};
-        ScrollTrigger.create({
-          trigger:rail,
-          start:'top 70%',
-          end:()=>'+='+Math.max(260,overflow()+window.innerHeight*.35),
-          pin:true,
-          pinSpacing:true,
-          scrub:1,
-          anticipatePin:1,
-          invalidateOnRefresh:true,
-          onUpdate:self=>{
-            const max=overflow();
-            state.x=max*self.progress;
-            gsap.set(track,{x:-state.x});
+        const getDistance=()=>Math.max(0,track.scrollWidth-rail.clientWidth);
+        gsap.to(track,{
+          x:()=>-getDistance(),
+          ease:'none',
+          scrollTrigger:{
+            trigger:rail,
+            start:'top top',
+            end:()=>'+='+Math.max(window.innerWidth*0.9,getDistance()),
+            pin:true,
+            pinSpacing:true,
+            scrub:1,
+            anticipatePin:1,
+            invalidateOnRefresh:true,
+            refreshPriority:1
           }
         });
       }
@@ -1197,7 +1212,12 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
       }
     }
 
-    window.addEventListener('load',()=>ScrollTrigger.refresh(),{once:true});
+    window.addEventListener('load',()=>{
+      requestAnimationFrame(()=>requestAnimationFrame(()=>ScrollTrigger.refresh()));
+    },{once:true});
+    if(document.fonts && document.fonts.ready){
+      document.fonts.ready.then(()=>ScrollTrigger.refresh()).catch(()=>{});
+    }
   };
 
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start,{once:true});
@@ -1251,7 +1271,7 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
             '<span class="commit-message">'+esc(data.message||'—')+'</span>'+
             (data.public
               ? '<span class="commit-repo">in <b>'+repo+'</b></span>'
-              : '<span class="commit-repo">Private repository</span>')+
+              : '<span class="commit-repo">in <b>'+repo+'</b> · Private repository</span>')+
           '</div>'+
           '<div class="commit-side">'+
             '<span class="commit-time">'+esc(relative)+'</span>'+
