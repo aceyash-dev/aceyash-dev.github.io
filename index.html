@@ -684,6 +684,36 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
 }
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
 
+/* PROFILE / CAPABILITIES */
+.profile-section{overflow:hidden}
+.profile-grid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(260px,.8fr);gap:clamp(2rem,7vw,7rem);align-items:end}
+.profile-intro{min-width:0}
+.profile-kicker{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin:0 0 1rem;font-weight:500}
+.profile-intro h3{font-size:clamp(2.2rem,5.5vw,5.2rem);line-height:.94;letter-spacing:-.055em;font-weight:300;margin:0;max-width:12ch}
+.profile-intro h3 em{font-family:'Instrument Serif',serif;font-style:italic;color:var(--accent-soft);font-weight:400}
+.profile-intro>p:last-child{font-size:clamp(1rem,1.5vw,1.25rem);line-height:1.55;color:var(--fg-2);font-weight:300;max-width:48ch;margin:2rem 0 0}
+.profile-meta{border-top:1px solid var(--line);min-width:0}
+.profile-meta-row{display:flex;justify-content:space-between;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--line);font-size:.72rem}
+.profile-meta-row span{color:var(--fg-3);text-transform:uppercase;letter-spacing:.14em}
+.profile-meta-row b,.profile-meta-row a{font-weight:400;color:var(--fg);text-align:right}
+.profile-meta-row a{transition:color .3s var(--ease)}
+.profile-meta-row a:hover{color:var(--accent)}
+.profile-meta-row i{font-style:normal;color:var(--accent);margin-left:.25rem}
+.skills-rail{margin:clamp(3rem,7vw,6rem) calc(clamp(1.25rem,4vw,3.5rem) * -1) calc(clamp(3rem,7vw,6rem) * -1);border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;touch-action:pan-y}
+.skills-track{display:flex;width:max-content;align-items:center;gap:1.25rem;padding:1.2rem 0;will-change:transform}
+.skills-track span{font-size:clamp(1.5rem,4vw,3.5rem);font-weight:300;letter-spacing:-.04em;white-space:nowrap}
+.skills-track i{font-style:normal;color:var(--accent);font-size:1.1rem}
+.inline-link{color:var(--fg);border-bottom:1px solid var(--line-2);transition:color .3s var(--ease),border-color .3s var(--ease)}
+.inline-link:hover{color:var(--accent);border-color:var(--accent)}
+
+.blur-reveal{filter:blur(10px);opacity:0;transform:translateY(24px);will-change:filter,opacity,transform}
+.blur-reveal.is-visible{filter:blur(0);opacity:1;transform:none}
+@media (max-width:720px){
+  .profile-grid{grid-template-columns:1fr;gap:2.5rem}
+  .profile-intro h3{max-width:13ch}
+  .profile-meta-row{font-size:.65rem}
+}
+
 /* TABLET */
 @media (max-width:900px){
   .about-grid{grid-template-columns:minmax(160px,260px) minmax(0,1fr);gap:clamp(1.5rem,5vw,3rem)}
@@ -840,6 +870,7 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
   }
   .marquee-track,.live,.hero-marker .arrow{animation:none}
   .grain{opacity:.03}
+  .blur-reveal{filter:none;opacity:1;transform:none}
 }
 </style>
 </head>
@@ -852,6 +883,7 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
   <a class="nav-logo" href="#top">YASH<em>©</em></a>
   <div class="nav-links">
     <a href="#work">Work</a>
+    <a href="#profile">Profile</a>
     <a href="#about">About</a>
     <a href="#contact">Contact</a>
   </div>
@@ -868,9 +900,9 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
     <h1 class="name" aria-label="Yash" id="heroName">
       <span class="m"><span class="ltr">Y</span></span><span class="m"><span class="ltr">A</span></span><span class="m"><span class="ltr">S</span></span><span class="m"><span class="ltr">H</span></span>
     </h1>
-    <div class="hero-name-sub">Developer · Building for the web</div>
+    <div class="hero-name-sub">Teen developer · Varanasi, India · Building for the web</div>
     <div class="hero-foot">
-      <p class="hero-note">Interfaces built to hold up under real use. <em>Mostly frontend, occasionally systems.</em></p>
+      <p class="hero-note">Teen developer from <em>Varanasi</em>, building interfaces and products that hold up under real use.</p>
       <div class="hero-marker"><span>Fall inward</span><span class="arrow" aria-hidden="true">↓</span></div>
     </div>
   </header>
@@ -886,9 +918,37 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
     </div>
   </section>
 
+  <section class="section profile-section" id="profile" aria-labelledby="profile-title">
+    <div class="section-head">
+      <span class="section-num">03 / Identity</span>
+      <h2 class="section-title" id="profile-title">Built from <em>curiosity</em></h2>
+      <span class="section-meta">Varanasi · India</span>
+    </div>
+    <div class="profile-grid">
+      <div class="profile-intro">
+        <p class="profile-kicker">Yash · Teen developer</p>
+        <h3>Building on the web, <em>one strange idea at a time.</em></h3>
+        <p>I'm from Varanasi and I build digital products with a bias toward clean interfaces, fast interactions, and things that feel deliberate instead of assembled by committee.</p>
+      </div>
+      <div class="profile-meta">
+        <div class="profile-meta-row"><span>Based in</span><b>Varanasi, India</b></div>
+        <div class="profile-meta-row"><span>Instagram</span><a href="https://instagram.com/archives.of.yash" target="_blank" rel="noopener noreferrer">@archives.of.yash <i aria-hidden="true">↗</i></a></div>
+        <div class="profile-meta-row"><span>Role</span><b>Founder &amp; CEO · The Ace Base</b></div>
+        <div class="profile-meta-row"><span>Focus</span><b>Web · Native · Interfaces</b></div>
+      </div>
+    </div>
+
+    <div class="skills-rail" aria-label="Technologies">
+      <div class="skills-track">
+        <span>HTML5</span><i>·</i><span>CSS</span><i>·</i><span>JavaScript</span><i>·</i><span>Capacitor</span><i>·</i>
+        <span>HTML5</span><i>·</i><span>CSS</span><i>·</i><span>JavaScript</span><i>·</i><span>Capacitor</span><i>·</i>
+      </div>
+    </div>
+  </section>
+
   <section class="section" id="about" aria-labelledby="about-title">
     <div class="section-head">
-      <span class="section-num">03 / Signal</span>
+      <span class="section-num">04 / Signal</span>
       <h2 class="section-title" id="about-title">Behind the <em>work</em></h2>
       <span class="section-meta">Independent developer</span>
     </div>
@@ -898,22 +958,22 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
       </div>
       <div class="about-copy">
         <p>I build interfaces that are <em>fast, quiet, and considered</em> — and that hold up under real use.</p>
-        <p>Mostly frontend. Occasionally systems. Always with an eye on how it feels to move through the thing, not just how it looks standing still.</p>
-        <p>Currently open to select projects. Based remotely, working across time zones.</p>
+        <p>My stack is deliberately close to the platform: HTML5, CSS, JavaScript, and Capacitor for native Android work.</p>
+        <p>Alongside my own projects, I run <em>The Ace Base</em>, where I build and ship tools for the web.</p>
       </div>
     </div>
   </section>
 
   <section class="section contact-section" id="contact" aria-labelledby="contact-title">
     <div class="section-head">
-      <span class="section-num">04 / Return</span>
+      <span class="section-num">05 / Return</span>
       <h2 class="section-title" id="contact-title">Come back <em>around</em></h2>
       <span class="section-meta">Let's build</span>
     </div>
     <h3 class="contact-head">Let's build<br><em>something.</em></h3>
     <div class="contact-bottom">
-      <p class="contact-note">If you have a product, system, or piece of strange work that needs a designer-developer, I'd like to hear about it.</p>
-      <a class="magnet" href="mailto:aceyash-dev@proton.me" aria-label="Email Yash at aceyash-dev@proton.me">aceyash-dev@proton.me <i aria-hidden="true">↗</i></a>
+      <p class="contact-note">Founder &amp; CEO of <a class="inline-link" href="https://ace-base.cc" target="_blank" rel="noopener noreferrer">The Ace Base</a>. For projects, collaborations, or other useful trouble, get in touch.</p>
+      <a class="magnet" href="mailto:hello@ace-base.cc" aria-label="Email The Ace Base at hello@ace-base.cc">hello@ace-base.cc <i aria-hidden="true">↗</i></a>
     </div>
   </section>
 </main>
@@ -935,6 +995,7 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
           <h3>Sections</h3>
           <ul>
             <li><a href="#work">Work <i aria-hidden="true">↗</i></a></li>
+            <li><a href="#profile">Profile <i aria-hidden="true">↗</i></a></li>
             <li><a href="#about">About <i aria-hidden="true">↗</i></a></li>
             <li><a href="#contact">Contact <i aria-hidden="true">↗</i></a></li>
           </ul>
@@ -943,12 +1004,14 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
           <h3>Elsewhere</h3>
           <ul>
             <li><a href="https://github.com/aceyash-dev" rel="noopener noreferrer" target="_blank">GitHub <i aria-hidden="true">↗</i></a></li>
+            <li><a href="https://instagram.com/archives.of.yash" rel="noopener noreferrer" target="_blank">Instagram <i aria-hidden="true">↗</i></a></li>
+            <li><a href="https://ace-base.cc" rel="noopener noreferrer" target="_blank">The Ace Base <i aria-hidden="true">↗</i></a></li>
           </ul>
         </div>
         <div>
           <h3>Direct</h3>
           <ul>
-            <li><a href="mailto:aceyash-dev@proton.me">aceyash-dev@proton.me <i aria-hidden="true">↗</i></a></li>
+            <li><a href="mailto:hello@ace-base.cc">hello@ace-base.cc <i aria-hidden="true">↗</i></a></li>
           </ul>
         </div>
       </div>
@@ -1015,7 +1078,45 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
         bg.style.transform='scale('+scale.toFixed(4)+') translateY('+shift+'vh)';
       }
 
-      if(!reduce && fine && hasGsap && !footerFired && p>.85){
+      // Staggered blur reveals for content blocks.
+    if(!reduce && hasGsap){
+      gsap.utils.toArray('.profile-intro > *, .profile-meta-row, .about-copy p').forEach(el=>el.classList.add('blur-reveal'));
+      gsap.utils.toArray('.blur-reveal').forEach((el,i)=>{
+        gsap.to(el,{
+          filter:'blur(0px)',opacity:1,y:0,duration:.8,ease:'expo.out',delay:(i%6)*.07,
+          scrollTrigger:{trigger:el,start:'top 88%',once:true}
+        });
+      });
+    }
+
+    // Pinned horizontal skills rail on fine pointers. Vertical wheel input is
+    // converted into horizontal progress while the rail is in view, then
+    // normal page scrolling resumes. Touch devices keep native vertical scroll.
+    if(!reduce && fine && hasGsap){
+      const rail=document.querySelector('.skills-rail');
+      const track=document.querySelector('.skills-track');
+      if(rail && track){
+        const overflow=()=>Math.max(0,track.scrollWidth-rail.clientWidth);
+        const state={x:0};
+        ScrollTrigger.create({
+          trigger:rail,
+          start:'top 70%',
+          end:()=>'+='+Math.max(260,overflow()+window.innerHeight*.35),
+          pin:true,
+          pinSpacing:true,
+          scrub:1,
+          anticipatePin:1,
+          invalidateOnRefresh:true,
+          onUpdate:self=>{
+            const max=overflow();
+            state.x=max*self.progress;
+            gsap.set(track,{x:-state.x});
+          }
+        });
+      }
+    }
+
+    if(!reduce && fine && hasGsap && !footerFired && p>.85){
         footerFired=true;
         gsap.from('.footer-inner > *',{opacity:0,y:14,duration:1,ease:'power3.out',stagger:.08});
       }
