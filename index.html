@@ -1131,36 +1131,36 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
   };
 
   function renderCommit(items){
-    if(!Array.isArray(items)||!items.length){
-      mount.innerHTML='<div class="commit-state">No recent commits found</div>';
+    if(!Array.isArray(items) || !items.length){
+      renderError();
       return;
     }
 
     mount.innerHTML='<div class="commit-list">'+items.slice(0,3).map((data,index)=>{
       const relative=fmtRel(data.date);
       const absolute=fmtAbs(data.date);
-      const isPublic=data.public===true;
-      const tag=isPublic
-        ? '<span class="commit-repo">in <b>'+esc(data.repo||'repository')+'</b></span>'
-        : '<span class="commit-repo">in <b>'+esc(data.repo||'repository')+'</b><span class="commit-private">Private</span></span>';
-      const inner=
+      const repo=esc(data.repo||'repository');
+
+      const content=
         '<div class="commit-row">'+
-          '<span class="commit-arrow" aria-hidden="true">'+(isPublic?'↗':'•')+'</span>'+
+          '<span class="'+(data.public?'commit-arrow':'commit-lock')+'" aria-hidden="true">'+(data.public?'↗':'🔒')+'</span>'+
           '<div class="commit-body">'+
-            '<span class="commit-label">Recent commit · '+(index+1)+'</span>'+
+            '<span class="commit-label">Recent commit '+(index+1)+'</span>'+
             '<span class="commit-message">'+esc(data.message||'—')+'</span>'+
-            tag+
+            (data.public
+              ? '<span class="commit-repo">in <b>'+repo+'</b></span>'
+              : '<span class="commit-repo">Private repository</span>')+
           '</div>'+
           '<div class="commit-side">'+
             '<span class="commit-time">'+esc(relative)+'</span>'+
             '<span class="commit-date">'+esc(absolute)+'</span>'+
+            (data.private ? '<span class="commit-date commit-private">🔒 Private</span>' : '')+
           '</div>'+
         '</div>';
 
-      if(isPublic&&data.repoUrl){
-        return '<a class="commit-wrap" href="'+esc(data.repoUrl)+'" target="_blank" rel="noopener noreferrer">'+inner+'</a>';
-      }
-      return '<div class="commit-wrap is-private">'+inner+'</div>';
+      return data.public
+        ? '<a class="commit-wrap" href="'+esc(data.repoUrl||'#')+'" target="_blank" rel="noopener noreferrer" aria-label="'+esc(data.message||'Latest commit')+'">'+content+'</a>'
+        : '<div class="commit-wrap private" aria-label="'+esc((data.message||'Latest commit')+' in private repository')+'">'+content+'</div>';
     }).join('')+'</div>';
 
     const cards=[...mount.querySelectorAll('.commit-wrap')];
@@ -1180,7 +1180,6 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
       cards.slice(1).forEach(card=>card.classList.add('is-revealed'));
     }
   }
-
   function renderError(){
     mount.innerHTML='<div class="commit-state">Recent commits unavailable</div>';
   }
