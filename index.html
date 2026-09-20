@@ -1174,7 +1174,7 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
             observer.unobserve(entry.target);
           }
         });
-      },{root:null,rootMargin:'0px 0px -10% 0px',threshold:.15});
+      },{root:null,rootMargin:'0px 0px -65% 0px',threshold:.1});
       cards.slice(1).forEach(card=>observer.observe(card));
     }else{
       cards.slice(1).forEach(card=>card.classList.add('is-revealed'));
