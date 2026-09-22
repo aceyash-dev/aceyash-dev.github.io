@@ -1,5 +1,8 @@
 {
   "functions": {
-    "api/last-commit.js": { "memory": 128, "maxDuration": 10 }
+    "api/commits.js": {
+      "memory": 128,
+      "maxDuration": 10
+    }
   }
 }
