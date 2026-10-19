@@ -1316,7 +1316,7 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
           '<div class="commit-side">'+
             '<span class="commit-time">'+esc(relative)+'</span>'+
             '<span class="commit-date">'+esc(absolute)+'</span>'+
-            (data.private ? '<span class="commit-date commit-private">🔒 Private</span>' : '')+
+            (!data.public ? '<span class="commit-date commit-private">🔒 Private</span>' : '')+
           '</div>'+
         '</div>';
 

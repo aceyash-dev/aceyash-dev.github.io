@@ -6,7 +6,7 @@ export default async function handler(req, res) {
 
   const token = process.env.GITHUB_PAT;
   if (!token) {
-    return res.status(500).json({ error: 'GITHUB_PAT is not configured' });
+    return res.status(503).json({ error: 'Commit feed is temporarily unavailable' });
   }
 
   try {
@@ -51,12 +51,12 @@ export default async function handler(req, res) {
       const visibility = repo.visibility || (repo.private ? 'private' : 'public');
 
       return {
-        repo: repo.name || repo.full_name || 'repository',
-        repoUrl: repo.html_url || null,
+        repo: visibility === 'public' ? (repo.name || repo.full_name || 'repository') : 'private repository',
+        repoUrl: visibility === 'public' ? (repo.html_url || null) : null,
         public: visibility === 'public',
         message: String(item.commit?.message || item.commit?.title || '').split('\n')[0],
         date: item.commit?.author?.date || item.commit?.committer?.date || null,
-        url: item.html_url || null
+        url: visibility === 'public' ? (item.html_url || null) : null
       };
     });
 
