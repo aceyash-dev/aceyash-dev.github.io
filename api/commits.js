@@ -46,19 +46,26 @@ export default async function handler(req, res) {
       throw new Error('GitHub did not return commit search results');
     }
 
-    const commits = data.items.slice(0, 3).map(item => {
-      const repo = item.repository || {};
-      const visibility = repo.visibility || (repo.private ? 'private' : 'public');
-
-      return {
-        repo: visibility === 'public' ? (repo.name || repo.full_name || 'repository') : 'private repository',
-        repoUrl: visibility === 'public' ? (repo.html_url || null) : null,
-        public: visibility === 'public',
-        message: String(item.commit?.message || item.commit?.title || '').split('\n')[0],
-        date: item.commit?.author?.date || item.commit?.committer?.date || null,
-        url: visibility === 'public' ? (item.html_url || null) : null
-      };
-    });
+    // GitHub search can include private repositories when this endpoint uses a
+    // personal access token. Never expose their commit messages, dates, or URLs
+    // through this public feed; filter before mapping any private metadata.
+    const commits = data.items
+      .filter(item => {
+        const repo = item.repository;
+        return repo?.visibility === 'public' || repo?.private === false;
+      })
+      .slice(0, 3)
+      .map(item => {
+        const repo = item.repository || {};
+        return {
+          repo: repo.name || repo.full_name || 'repository',
+          repoUrl: repo.html_url || null,
+          public: true,
+          message: String(item.commit?.message || item.commit?.title || '').split('\n')[0],
+          date: item.commit?.author?.date || item.commit?.committer?.date || null,
+          url: item.html_url || null
+        };
+      });
 
     res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=600');
     return res.status(200).json(commits);
