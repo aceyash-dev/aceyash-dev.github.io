@@ -460,6 +460,7 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
   color:var(--fg-3);
   padding:1rem 0;
 }
+.commit-retry{margin-left:.8rem;color:var(--accent);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
 
 /* ABOUT */
 .about-grid{
@@ -906,13 +907,13 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
 </nav>
 
 <main id="page">
-  <header class="hero" id="top">
+  <header class="hero h-card" id="top">
     <div class="hero-top">
       <span>01 / Approach</span>
       <em>Portfolio 2024 — 2026</em>
     </div>
     <div class="hero-spacer"></div>
-    <h1 class="name" aria-label="Yash" id="heroName">
+    <h1 class="name p-name" aria-label="Yash" id="heroName">
       <span class="m"><span class="ltr">Y</span></span><span class="m"><span class="ltr">A</span></span><span class="m"><span class="ltr">S</span></span><span class="m"><span class="ltr">H</span></span>
     </h1>
     <div class="hero-name-sub">Teen developer · Varanasi, India · Building for the web</div>
@@ -1035,7 +1036,7 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
         <div>
           <h3>Elsewhere</h3>
           <ul>
-            <li><a href="https://github.com/aceyash-dev" rel="noopener noreferrer" target="_blank">GitHub <i aria-hidden="true">↗</i></a></li>
+            <li><a href="https://github.com/aceyash-dev" class="u-url" rel="me noopener noreferrer" target="_blank">GitHub <i aria-hidden="true">↗</i></a></li>
             <li><a href="https://instagram.com/archives.of.yash" rel="noopener noreferrer" target="_blank">Instagram <i aria-hidden="true">↗</i></a></li>
             <li><a href="https://ace-base.cc" rel="noopener noreferrer" target="_blank">The Ace Base <i aria-hidden="true">↗</i></a></li>
           </ul>
@@ -1289,15 +1290,19 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
     return Math.floor(mo/12)+'y ago';
   };
 
-  function renderCommit(items){
+  function renderCommit(items, publicOnly = false){
     if(!Array.isArray(items) || !items.length){
       renderError();
       return;
     }
 
-    mount.innerHTML='<div class="commit-list">'+items.slice(0,3).map((data,index)=>{
+    mount.innerHTML=(publicOnly ? '<div class="commit-state" role="status">Public commits only · fallback feed</div>' : '')+'<div class="commit-list">'+items.slice(0,3).map((data,index)=>{
       const relative=fmtRel(data.date);
       const absolute=fmtAbs(data.date);
+      const timestamp=data.date && Number.isFinite(Date.parse(data.date)) ? new Date(data.date).toISOString() : '';
+      const timeMarkup=timestamp
+        ? '<time class="commit-time" datetime="'+esc(timestamp)+'">'+esc(relative)+'</time>'
+        : '<span class="commit-time">'+esc(relative)+'</span>';
       const repo=esc(data.repo||'repository');
 
       const content=
@@ -1311,7 +1316,7 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
               : '<span class="commit-repo">in <b>'+repo+'</b> · Private repository</span>')+
           '</div>'+
           '<div class="commit-side">'+
-            '<span class="commit-time">'+esc(relative)+'</span>'+
+            timeMarkup+
             '<span class="commit-date">'+esc(absolute)+'</span>'+
             (!data.public ? '<span class="commit-date commit-private">🔒 Private</span>' : '')+
           '</div>'+
@@ -1340,7 +1345,8 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
     }
   }
   function renderError(){
-    mount.innerHTML='<div class="commit-state">Latest commit unavailable</div>';
+    mount.innerHTML='<div class="commit-state" role="status">Latest commit unavailable <button type="button" class="commit-retry">Retry</button></div>';
+    mount.querySelector('.commit-retry')?.addEventListener('click',loadCommits);
   }
 
   /*
@@ -1363,14 +1369,48 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
     return data.slice(0,3);
   }
 
-  if(!mount)return;
-
-  fetchLatestCommits()
-    .then(renderCommit)
-    .catch(err=>{
-      console.warn('Latest commit:',err.message);
-      renderError();
+  async function fetchPublicCommits(){
+    const url='https://api.github.com/search/commits?q=author%3Aaceyash-dev&sort=committer-date&order=desc&per_page=3';
+    const res=await fetch(url,{
+      headers:{Accept:'application/vnd.github+json'},
+      cache:'no-store'
     });
+    if(!res.ok) throw new Error('Public GitHub commit search '+res.status);
+    const data=await res.json();
+    if(!Array.isArray(data.items)) throw new Error('Invalid public GitHub commit search');
+    return data.items
+      .filter(item=>item && item.repository && item.repository.private!==true && item.commit)
+      .map(item=>({
+        repo:item.repository.name||item.repository.full_name||'repository',
+        repoUrl:item.repository.html_url||'#',
+        public:true,
+        message:String(item.commit.message||'').split('\n')[0],
+        date:item.commit.author?.date||item.commit.committer?.date||null
+      }));
+  }
+
+  async function loadCommits(){
+    mount.innerHTML='<div class="commit-state" role="status">Loading recent commits…</div>';
+    try{
+      const items=await fetchLatestCommits();
+      if(!items.length) throw new Error('Empty authenticated commit feed');
+      renderCommit(items);
+      return;
+    }catch(err){
+      console.warn('Authenticated commit feed:',err.message);
+    }
+    try{
+      const items=await fetchPublicCommits();
+      if(!items.length) throw new Error('No public commits found');
+      renderCommit(items,true);
+    }catch(err){
+      console.warn('Public commit fallback:',err.message);
+      renderError();
+    }
+  }
+
+  if(!mount)return;
+  loadCommits();
 })();
 </script>
 </body>
