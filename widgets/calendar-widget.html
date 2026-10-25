@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar Widget</title>
+    <style>
+        .calendar-widget {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 14px;
+            color: #333;
+            padding: 15px;
+            background: #f0f8ff;
+            border-radius: 8px;
+            border: 1px solid #b0e0e6;
+            width: 220px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="calendar-widget" id="calendar">Loading calendar...</div>
+    
+    <script>
+        // Simple calendar widget - shows current date info
+        const today = new Date();
+        const options = { 
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        };
+        
+        document.getElementById('calendar').textContent = 
+            "Today is: " + today.toLocaleDateString('en-IN', options) + 
+            "\n\nCalendar widget placeholder - would integrate with full calendar API";
+    </script>
+</body>
+</html>
