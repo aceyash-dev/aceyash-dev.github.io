@@ -1,8 +1,36 @@
+const RATE_WINDOW_MS = 60_000;
+const MAX_REQUESTS_PER_WINDOW = 30;
+const MAX_RATE_KEYS = 5_000;
+const requestBuckets = new Map();
+
+function enforceRequestLimit(req, res) {
+  // Vercel supplies x-real-ip; ignore client-controlled X-Forwarded-For.
+  const rawIp = req.headers?.['x-real-ip'];
+  const ip = String(Array.isArray(rawIp) ? rawIp[0] : rawIp || 'unknown').trim().slice(0, 128) || 'unknown';
+  const now = Date.now();
+  const active = (requestBuckets.get(ip) || []).filter(time => now - time < RATE_WINDOW_MS);
+  if (active.length >= MAX_REQUESTS_PER_WINDOW) {
+    requestBuckets.set(ip, active);
+    const retryAfter = Math.max(1, Math.ceil((active[0] + RATE_WINDOW_MS - now) / 1000));
+    res.setHeader('Retry-After', String(retryAfter));
+    res.setHeader('Cache-Control', 'no-store');
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.status(429).json({ error: 'Too many requests', retryAfter });
+    return false;
+  }
+  active.push(now);
+  requestBuckets.delete(ip);
+  requestBuckets.set(ip, active);
+  while (requestBuckets.size > MAX_RATE_KEYS) requestBuckets.delete(requestBuckets.keys().next().value);
+  return true;
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
     res.setHeader('Allow', 'GET');
     return res.status(405).json({ error: 'Method not allowed' });
   }
+  if (!enforceRequestLimit(req, res)) return;
 
   const token = process.env.GITHUB_PAT;
   if (!token) {
