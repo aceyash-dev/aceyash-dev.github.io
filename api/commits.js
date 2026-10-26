@@ -10,22 +10,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const userResponse = await fetch('https://api.github.com/user', {
-      headers: {
-        Accept: 'application/vnd.github+json',
-        Authorization: `Bearer ${token}`,
-        'X-GitHub-Api-Version': '2022-11-28'
-      }
-    });
-
-    if (!userResponse.ok) {
-      throw new Error(`GitHub user lookup failed: ${userResponse.status}`);
-    }
-
-    const user = await userResponse.json();
-    if (!user.login) throw new Error('GitHub user lookup returned no login');
-
-    const query = encodeURIComponent(`author:${user.login}`);
+    const query = encodeURIComponent('author:aceyash-dev');
     const commitsResponse = await fetch(
       `https://api.github.com/search/commits?q=${query}&sort=committer-date&order=desc&per_page=3`,
       {

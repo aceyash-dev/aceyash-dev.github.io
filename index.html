@@ -1358,9 +1358,9 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
    * return the latest commits authored by the account as JSON.
    */
   async function fetchLatestCommits(){
-    const res=await fetch('/api/commits?_='+Date.now(),{
+    const res=await fetch('/api/commits',{
       headers:{Accept:'application/json'},
-      cache:'no-store',
+      cache:'default',
       credentials:'same-origin'
     });
     if(!res.ok) throw new Error('Commit feed '+res.status);
@@ -1369,25 +1369,6 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
     return data.slice(0,3);
   }
 
-  async function fetchPublicCommits(){
-    const url='https://api.github.com/search/commits?q=author%3Aaceyash-dev&sort=committer-date&order=desc&per_page=3';
-    const res=await fetch(url,{
-      headers:{Accept:'application/vnd.github+json'},
-      cache:'no-store'
-    });
-    if(!res.ok) throw new Error('Public GitHub commit search '+res.status);
-    const data=await res.json();
-    if(!Array.isArray(data.items)) throw new Error('Invalid public GitHub commit search');
-    return data.items
-      .filter(item=>item && item.repository && item.repository.private!==true && item.commit)
-      .map(item=>({
-        repo:item.repository.name||item.repository.full_name||'repository',
-        repoUrl:item.repository.html_url||'#',
-        public:true,
-        message:String(item.commit.message||'').split('\n')[0],
-        date:item.commit.author?.date||item.commit.committer?.date||null
-      }));
-  }
 
   async function loadCommits(){
     mount.innerHTML='<div class="commit-state" role="status">Loading recent commits…</div>';
@@ -1395,16 +1376,8 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
       const items=await fetchLatestCommits();
       if(!items.length) throw new Error('Empty authenticated commit feed');
       renderCommit(items);
-      return;
     }catch(err){
       console.warn('Authenticated commit feed:',err.message);
-    }
-    try{
-      const items=await fetchPublicCommits();
-      if(!items.length) throw new Error('No public commits found');
-      renderCommit(items,true);
-    }catch(err){
-      console.warn('Public commit fallback:',err.message);
       renderError();
     }
   }
