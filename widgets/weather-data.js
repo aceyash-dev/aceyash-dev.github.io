@@ -49,10 +49,12 @@ async function loadWeather() {
     const data = await request(forecast, controller.signal);
     const current = data.current;
     if (!current || !Number.isFinite(current.temperature_2m)) throw new Error("Current conditions are unavailable");
+    const temperatureUnit = data.current_units?.temperature_2m || (WEATHER_CONFIG.units === "fahrenheit" ? "°F" : "°C");
+    const windUnit = data.current_units?.wind_speed_10m || "km/h";
     const title = node("h1", "widget__title", `${place.name}${place.admin1 ? `, ${place.admin1}` : ""}`);
-    const temperature = node("p", "widget__value", `${Math.round(current.temperature_2m)}°C`);
+    const temperature = node("p", "widget__value", `${Math.round(current.temperature_2m)}${temperatureUnit}`);
     const condition = node("p", "widget__meta", weatherLabels.get(current.weather_code) || "Current conditions");
-    const details = node("p", "widget__meta", `Feels like ${Math.round(current.apparent_temperature)}°C · Humidity ${current.relative_humidity_2m}% · Wind ${Math.round(current.wind_speed_10m)} km/h`);
+    const details = node("p", "widget__meta", `Feels like ${Math.round(current.apparent_temperature)}${temperatureUnit} · Humidity ${current.relative_humidity_2m}% · Wind ${Math.round(current.wind_speed_10m)} ${windUnit}`);
     const updated = node("p", "widget__meta", `Updated ${new Date(current.time).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`);
     root.replaceChildren(title, temperature, condition, details, updated);
     root.setAttribute("aria-busy", "false");

@@ -1,4 +1,19 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Today's date in your local timezone."><title>Calendar Widget</title><link rel="stylesheet" href="./widget.css"></head>
 <body><section class="widget widget--calendar"><h1 class="widget__title">Today</h1><p class="widget__value" id="calendar"></p><p class="widget__meta" id="calendar-year"></p></section>
-<script>const today=new Date();document.querySelector('#calendar').textContent=today.toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long'});document.querySelector('#calendar-year').textContent=today.toLocaleDateString('en-IN',{year:'numeric'});</script></body></html>
+<script>
+const calendar = document.querySelector('#calendar');
+const year = document.querySelector('#calendar-year');
+function updateCalendar() {
+  const today = new Date();
+  calendar.textContent = today.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' });
+  year.textContent = today.toLocaleDateString('en-IN', { year: 'numeric' });
+}
+function scheduleMidnightRefresh() {
+  const now = new Date();
+  const nextMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+  setTimeout(() => { updateCalendar(); scheduleMidnightRefresh(); }, nextMidnight.getTime() - now.getTime());
+}
+updateCalendar();
+scheduleMidnightRefresh();
+</script></body></html>
