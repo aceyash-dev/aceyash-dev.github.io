@@ -15,7 +15,7 @@ function enforceRequestLimit(req, res) {
     res.setHeader('Retry-After', String(retryAfter));
     res.setHeader('Cache-Control', 'no-store');
     res.setHeader('Content-Type', 'application/json; charset=utf-8');
-    res.status(429).json({ error: 'Too many requests', retryAfter });
+    req.method === 'HEAD' ? res.status(429).end() : res.status(429).json({ error: 'Too many requests', retryAfter });
     return false;
   }
   active.push(now);
@@ -26,21 +26,26 @@ function enforceRequestLimit(req, res) {
 }
 
 export default async function handler(req, res) {
-  if (req.method !== 'GET') {
-    res.setHeader('Allow', 'GET');
+  const allow = 'GET, HEAD, OPTIONS';
+  if (req.method === 'OPTIONS') {
+    res.setHeader('Allow', allow);
+    res.setHeader('Cache-Control', 'no-store');
+    return res.status(204).end();
+  }
+  if (!['GET', 'HEAD'].includes(req.method)) {
+    res.setHeader('Allow', allow);
     return res.status(405).json({ error: 'Method not allowed' });
   }
   if (!enforceRequestLimit(req, res)) return;
-
   const token = process.env.GITHUB_PAT;
   if (!token) {
-    return res.status(503).json({ error: 'Commit feed is temporarily unavailable' });
+    return req.method === 'HEAD' ? res.status(503).end() : res.status(503).json({ error: 'Commit feed is temporarily unavailable' });
   }
 
   try {
     const query = encodeURIComponent('author:aceyash-dev');
     const commitsResponse = await fetch(
-      `https://api.github.com/search/commits?q=${query}&sort=committer-date&order=desc&per_page=3`,
+      `https://api.github.com/search/commits?q=${query}&sort=committer-date&order=desc&per_page=30`,
       {
         headers: {
           Accept: 'application/vnd.github+json',
@@ -81,9 +86,9 @@ export default async function handler(req, res) {
       });
 
     res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=600');
-    return res.status(200).json(commits);
+    return req.method === 'HEAD' ? res.status(200).end() : res.status(200).json(commits);
   } catch (error) {
     console.error('Recent commits:', error);
-    return res.status(502).json({ error: 'Unable to load recent commits' });
+    return req.method === 'HEAD' ? res.status(502).end() : res.status(502).json({ error: 'Unable to load recent commits' });
   }
 }

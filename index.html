@@ -1370,14 +1370,45 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
   }
 
 
+  async function fetchPublicCommitsFallback(){
+    const url=new URL('https://api.github.com/search/commits');
+    url.searchParams.set('q','author:aceyash-dev');
+    url.searchParams.set('sort','committer-date');
+    url.searchParams.set('order','desc');
+    url.searchParams.set('per_page','30');
+    const res=await fetch(url.toString(),{
+      headers:{Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'},
+      cache:'no-store'
+    });
+    if(!res.ok)throw new Error('Public GitHub fallback '+res.status);
+    const data=await res.json();
+    if(!Array.isArray(data.items))throw new Error('Invalid public GitHub fallback');
+    return data.items.filter(item=>item.repository?.visibility==='public'||item.repository?.private===false)
+      .slice(0,3).map(item=>({
+        repo:item.repository?.name||item.repository?.full_name||'repository',
+        repoUrl:item.repository?.html_url||null,
+        public:true,
+        message:String(item.commit?.message||item.commit?.title||'').split('\n')[0],
+        date:item.commit?.author?.date||item.commit?.committer?.date||null,
+        url:item.html_url||null
+      }));
+  }
+
   async function loadCommits(){
     mount.innerHTML='<div class="commit-state" role="status">Loading recent commits…</div>';
     try{
       const items=await fetchLatestCommits();
-      if(!items.length) throw new Error('Empty authenticated commit feed');
-      renderCommit(items);
+      if(items.length){renderCommit(items);return;}
+      throw new Error('Primary commit feed was empty');
     }catch(err){
-      console.warn('Authenticated commit feed:',err.message);
+      console.warn('Authenticated commit feed unavailable; trying public fallback:',err.message);
+    }
+    try{
+      const items=await fetchPublicCommitsFallback();
+      if(!items.length)throw new Error('Public commit fallback was empty');
+      renderCommit(items,true);
+    }catch(err){
+      console.warn('Public commit fallback:',err.message);
       renderError();
     }
   }
