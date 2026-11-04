@@ -882,10 +882,14 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
   .marquee-track,.live,.hero-marker .arrow{animation:none}
   .grain{opacity:.03}
 }
+.skip-link{position:absolute;left:-9999px;top:1rem;z-index:1000;padding:12px 16px;border-radius:6px;background:var(--fg);color:var(--bg);font-weight:700;text-decoration:none}
+.skip-link:focus{left:1rem;outline:3px solid var(--accent);outline-offset:3px}
+main#page:focus{outline:none}
 </style>
 </head>
 
 <body>
+<a class="skip-link" href="#page">Skip to content</a>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
 {"@type":"Person","@id":"https://aceyash-dev.github.io/#person","name":"Yash","url":"https://aceyash-dev.github.io/","jobTitle":"Developer","homeLocation":{"@type":"Place","name":"Varanasi, India"},"worksFor":{"@type":"Organization","name":"The Ace Base","url":"https://ace-base.cc/"},"sameAs":["https://instagram.com/archives.of.yash","https://ace-base.cc/"]},
@@ -906,7 +910,7 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
   <div class="nav-progress" aria-hidden="true"><i id="navProgress"></i></div>
 </nav>
 
-<main id="page">
+<main id="page" tabindex="-1">
   <header class="hero h-card" id="top">
     <div class="hero-top">
       <span>01 / Approach</span>
@@ -1325,7 +1329,7 @@ a.commit-wrap:hover .commit-message{color:var(--accent)}
 
       return data.public
         ? '<a class="commit-wrap" href="'+esc(data.repoUrl||'#')+'" target="_blank" rel="noopener noreferrer" aria-label="'+esc(data.message||'Latest commit')+'">'+content+'</a>'
-        : '<div class="commit-wrap private" aria-label="'+esc((data.message||'Latest commit')+' in private repository')+'">'+content+'</div>';
+        : '<div class="commit-wrap private" role="group" aria-label="'+esc((data.message||'Latest commit')+' in private repository')+'">'+content+'</div>';
     }).join('')+'</div>';
 
     const cards=[...mount.querySelectorAll('.commit-wrap')];
