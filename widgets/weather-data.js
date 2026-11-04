@@ -18,7 +18,13 @@ function node(tag, className, value) {
   if (value !== undefined) el.textContent = value;
   return el;
 }
-function renderState(title, message, retry = false) {
+// The newest run owns the DOM. An older response that lands late is dropped
+// instead of overwriting a fresher one.
+let activeController = null;
+let run = 0;
+
+function renderState(title, message, retry = false, mine = run) {
+  if (mine !== run) return;
   root.setAttribute("aria-busy", retry ? "false" : "true");
   const content = [node("h1", "widget__title", title), node("p", "widget__meta", message)];
   if (retry) {
@@ -35,9 +41,18 @@ async function request(url, signal) {
   return response.json();
 }
 async function loadWeather() {
-  renderState("Current weather", `Finding live conditions for ${requestedLocation}…`);
+  // Cancel the previous request before starting this one: the interval and the
+  // "Try again" button can both fire while a slow request is still open.
+  activeController?.abort();
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), WEATHER_CONFIG.timeoutMs);
+  activeController = controller;
+  const mine = ++run;
+  renderState("Current weather", `Finding live conditions for ${requestedLocation}…`, false, mine);
+  let timedOut = false;
+  const timeout = setTimeout(() => {
+    timedOut = true;
+    controller.abort();
+  }, WEATHER_CONFIG.timeoutMs);
   try {
     const geo = new URL("https://geocoding-api.open-meteo.com/v1/search");
     geo.search = new URLSearchParams({ name: requestedLocation, count: "1", language: "en", format: "json" });
@@ -56,13 +71,20 @@ async function loadWeather() {
     const condition = node("p", "widget__meta", weatherLabels.get(current.weather_code) || "Current conditions");
     const details = node("p", "widget__meta", `Feels like ${Math.round(current.apparent_temperature)}${temperatureUnit} · Humidity ${current.relative_humidity_2m}% · Wind ${Math.round(current.wind_speed_10m)} ${windUnit}`);
     const updated = node("p", "widget__meta", `Updated ${new Date(current.time).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`);
+    if (mine !== run) return;
     root.replaceChildren(title, temperature, condition, details, updated);
     root.setAttribute("aria-busy", "false");
   } catch (error) {
-    const message = error.name === "AbortError" ? "The weather request timed out." : "Live weather is temporarily unavailable.";
-    renderState("Weather unavailable", message, true);
+    // A superseded run stays silent; our own timeout still reports.
+    if (mine !== run) return;
+    if (error.name === "AbortError") {
+      if (timedOut) renderState("Weather unavailable", "The weather request timed out.", true, mine);
+      return;
+    }
+    renderState("Weather unavailable", "Live weather is temporarily unavailable.", true, mine);
   } finally {
     clearTimeout(timeout);
+    if (activeController === controller) activeController = null;
   }
 }
 loadWeather();
