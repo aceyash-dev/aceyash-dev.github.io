@@ -1368,6 +1368,13 @@ main#page:focus{outline:none}
       cache:'default',
       credentials:'same-origin'
     });
+    if(res.status===404){
+      // The canonical site is GitHub Pages, which has no serverless runtime,
+      // so this endpoint cannot exist there. Not an error worth reporting.
+      const missing=new Error('No commit API on this host');
+      missing.expected=true;
+      throw missing;
+    }
     if(!res.ok) throw new Error('Commit feed '+res.status);
     const data=await res.json();
     if(!Array.isArray(data)) throw new Error('Invalid commit feed');
@@ -1406,7 +1413,7 @@ main#page:focus{outline:none}
       if(items.length){renderCommit(items);return;}
       throw new Error('Primary commit feed was empty');
     }catch(err){
-      console.warn('Authenticated commit feed unavailable; trying public fallback:',err.message);
+      if(!err.expected) console.warn('Authenticated commit feed unavailable; trying public fallback:',err.message);
     }
     try{
       const items=await fetchPublicCommitsFallback();
