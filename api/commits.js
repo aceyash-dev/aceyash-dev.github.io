@@ -8,6 +8,7 @@ const requestBuckets = new Map();
 // requests per minute *per token*, so every extra visitor would spend from the
 // same budget. These constants cap what this process actually sends upstream.
 const MAX_UPSTREAM_PER_WINDOW = 20;
+const UPSTREAM_TIMEOUT_MS = 5_000;
 const FEED_TTL_MS = 120_000;
 const upstreamCalls = [];
 let cachedFeed = null;
@@ -16,7 +17,11 @@ let inflightFeed = null;
 function enforceRequestLimit(req, res) {
   // Vercel supplies x-real-ip; ignore client-controlled X-Forwarded-For.
   const rawIp = req.headers?.['x-real-ip'];
-  const ip = String(Array.isArray(rawIp) ? rawIp[0] : rawIp || 'unknown').trim().slice(0, 128) || 'unknown';
+  const ip = String(Array.isArray(rawIp) ? rawIp[0] : rawIp || '').trim().slice(0, 128);
+  // Without a trusted client address every caller would share one bucket, so a
+  // missing header must not turn the limiter into a global one. The upstream
+  // budget below still caps what this process sends to GitHub.
+  if (!ip) return true;
   const now = Date.now();
   const active = (requestBuckets.get(ip) || []).filter(time => now - time < RATE_WINDOW_MS);
   if (active.length >= MAX_REQUESTS_PER_WINDOW) {
@@ -49,7 +54,10 @@ async function requestCommits(token) {
         Accept: 'application/vnd.github+json',
         Authorization: `Bearer ${token}`,
         'X-GitHub-Api-Version': '2022-11-28'
-      }
+      },
+      // Bound the call: a stalled upstream must reject, so `.finally` clears
+      // inflightFeed instead of leaving every visitor awaiting one hung promise.
+      signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS)
     }
   );
 
