@@ -1,5 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import './lib/m3e';
 import './styles/transitions.css';
 import './styles/global.css';
 import './styles/upgrade.css';

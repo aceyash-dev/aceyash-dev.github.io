@@ -47,13 +47,14 @@ export function ContactSection() {
           wrapperClassName="magnet-wrap"
           innerClassName="magnet-inner"
         >
-          <a
-            className="magnet"
+          <m3e-button
+            variant="filled"
+            size="large"
             href={`mailto:${site.email}`}
             aria-label={`Email The Ace Base at ${site.email}`}
           >
             {site.email} <i aria-hidden="true">↗</i>
-          </a>
+          </m3e-button>
         </Magnet>
       </div>
     </section>

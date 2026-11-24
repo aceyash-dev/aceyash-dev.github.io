@@ -17,6 +17,7 @@ export default function App() {
 
   return (
     <MotionConfig reducedMotion="user">
+      <m3e-theme color="#e66a2c" scheme="light" motion="expressive" className="m3e-root">
       <ShaderBackground />
       <AnimatedBackground />
       <SiteHeader />
@@ -32,6 +33,7 @@ export default function App() {
       </main>
 
       <SiteFooter />
+      </m3e-theme>
     </MotionConfig>
   );
 }

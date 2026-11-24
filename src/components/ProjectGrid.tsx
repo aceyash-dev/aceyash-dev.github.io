@@ -1,6 +1,5 @@
 import type { CSSProperties } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
-import SpotlightCard from './vendor/reactbits/SpotlightCard';
 import { LearnMoreChevron } from './LearnMore';
 import { SectionHeading } from './SectionHeading';
 import { projects } from '../data/site';
@@ -28,28 +27,10 @@ export function ProjectGrid() {
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.8, delay: index * 0.08, ease: 'easeOut' }}
           >
-            <SpotlightCard
+            <m3e-card
+              variant="outlined"
               className="project-card"
-              style={
-                {
-                  '--spotlight-card-surface': 'rgba(10, 8, 7, 0.72)',
-                  '--spotlight-card-border': 'rgba(242, 237, 228, 0.1)',
-                  '--spotlight-card-shadow': '0 30px 80px -55px rgba(0, 0, 0, 0.9)',
-                  '--project-accent': project.accent
-                } as CSSProperties
-              }
-              spotlightColor={project.accent}
-              intensity={0.22}
-              spotlightSize={280}
-              softness={0.75}
-              shape="circle"
-              borderGlow={0.6}
-              proximity={90}
-              smoothing={0.3}
-              ambient={false}
-              flare
-              grain={0.025}
-              theme="dark"
+              style={{ '--project-accent': project.accent } as CSSProperties}
             >
               <a
                 className="project-card__anchor t-learn"
@@ -82,7 +63,7 @@ export function ProjectGrid() {
                   </span>
                 </div>
               </a>
-            </SpotlightCard>
+            </m3e-card>
           </motion.div>
         ))}
       </div>

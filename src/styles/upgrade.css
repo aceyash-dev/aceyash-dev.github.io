@@ -33,3 +33,17 @@ body{background:#f5f0e6;color:#17130f}
 
 @media(max-width:767px){.bento-section{padding-top:4rem;padding-bottom:4rem}.bento-section h2{font-size:clamp(2.7rem,12vw,4rem)}.bento-grid{grid-auto-rows:auto}.bento-founder{min-height:320px}}
 @media(prefers-reduced-motion:reduce){.shader-bg{display:none}.bento-orbit,.bento-icon,.stack-chip{transition:none}}
+
+/* Material 3 Expressive (@m3e/web) integration */
+.m3e-root{display:contents}
+.faq-list{display:flex;flex-direction:column;gap:.5rem}
+m3e-expansion-panel.faq-item{--m3e-expansion-panel-container-color:#fffdf8;--m3e-expansion-panel-text-color:#17130f;border:1px solid rgba(23,19,15,.12);border-radius:1.1rem;overflow:hidden}
+m3e-expansion-panel.faq-item .faq-answer p{color:#4a4238;margin:0}
+m3e-expansion-panel.faq-item .faq-links{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:.9rem}
+m3e-expansion-panel.faq-item .faq-links a{color:#e66a2c;font-weight:600;text-decoration:none}
+m3e-card.project-card{display:flex;flex-direction:column;min-height:380px;background:rgba(255,253,248,.92);color:#17130f;border-radius:var(--radius);border-color:rgba(23,19,15,.14);transition:transform .45s var(--ease),border-color .45s var(--ease),box-shadow .45s var(--ease)}
+m3e-card.project-card:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--project-accent) 60%,#17130f);box-shadow:0 26px 60px -36px rgba(65,40,20,.45)}
+m3e-card.project-card .project-card__anchor{display:flex;flex-direction:column;height:100%;padding:1.5rem;color:inherit;text-decoration:none}
+m3e-card.project-card .project-card__description,m3e-card.project-card .project-card__category{color:#62594f}
+m3e-card.project-card .project-card__tech li{color:#17130f;border-color:rgba(23,19,15,.14)}
+@media(prefers-reduced-motion:reduce){m3e-card.project-card:hover{transform:none}}
