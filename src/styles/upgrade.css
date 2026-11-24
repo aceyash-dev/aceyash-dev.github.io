@@ -1,0 +1,35 @@
+/* Cream-and-citrus art direction, Tailwind component finishing, and shader canvas. */
+.shader-bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.14;mix-blend-mode:multiply}
+.bg{z-index:0}.ambient{z-index:1;opacity:.4}.grain{opacity:.025}
+body{background:#f5f0e6;color:#17130f}
+.nav.is-shrunk{background:rgba(245,240,230,.82);border-bottom-color:rgba(23,19,15,.1)}
+.nav-toggle{background:rgba(255,253,248,.76)}
+.nav-menu{background:rgba(255,253,248,.97);box-shadow:0 24px 70px -35px rgba(65,40,20,.28)}
+.section{background:rgba(255,253,248,.83);box-shadow:0 30px 100px -70px rgba(65,40,20,.32);border-radius:1.25rem}
+.section:nth-of-type(even){background:rgba(238,231,218,.9)}
+.section-title em,.hero-top em{color:#e66a2c}
+.name{text-shadow:0 0 75px rgba(230,106,44,.18);color:#17130f}
+.hero-note,.hero-marker,.hero-name-sub{text-shadow:none}
+.hero-status.t-text-swap,.text-swap-host .t-text-swap{color:#e66a2c}
+.hero-note em{color:#17130f}
+.footer{background:#17130f;color:#f5f0e6}
+.footer .foot-shimmer{color:#e66a2c}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.nav.is-shrunk{background:rgba(245,240,230,.96)}.section{background:rgba(255,253,248,.97)}.nav-menu{background:#fffdf8}}
+
+.bento-section{position:relative;z-index:2;color:#17130f}
+.bento-grid{grid-auto-flow:dense}
+.bento-card{position:relative;isolation:isolate;min-width:0}
+.bento-founder{background:linear-gradient(145deg,#292018,#17130f 60%,#352217)}
+.bento-kicker{font-size:.62rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;opacity:.62}
+.bento-icon{display:grid;width:42px;height:42px;place-items:center;border:1px solid rgba(245,240,230,.24);border-radius:50%;transition:transform .35s cubic-bezier(.22,1,.36,1),background .35s}
+.group:hover .bento-icon{transform:rotate(45deg);background:rgba(245,240,230,.1)}
+.bento-orbit{position:absolute;right:-15%;bottom:-75%;width:85%;aspect-ratio:1;border:1px solid rgba(245,240,230,.12);border-radius:50%;pointer-events:none;transition:transform 1s cubic-bezier(.22,1,.36,1)}
+.bento-orbit:before,.bento-orbit:after{content:"";position:absolute;inset:10%;border:1px solid rgba(230,106,44,.32);border-radius:50%}
+.bento-orbit:after{inset:22%;border-color:rgba(245,240,230,.12)}
+.bento-founder:hover .bento-orbit{transform:scale(1.08) rotate(12deg)}
+.stack-chip{display:inline-flex;align-items:center;border:1px solid rgba(23,19,15,.12);border-radius:999px;background:rgba(245,240,230,.72);padding:.55rem .82rem;font-size:.72rem;font-weight:600;transition:transform .25s,background .25s,border-color .25s}
+.stack-chip:hover{transform:translateY(-2px);border-color:rgba(230,106,44,.45);background:#fff8ef}
+.bento-card:focus-visible{outline:2px solid #e66a2c;outline-offset:4px}
+
+@media(max-width:767px){.bento-section{padding-top:4rem;padding-bottom:4rem}.bento-section h2{font-size:clamp(2.7rem,12vw,4rem)}.bento-grid{grid-auto-rows:auto}.bento-founder{min-height:320px}}
+@media(prefers-reduced-motion:reduce){.shader-bg{display:none}.bento-orbit,.bento-icon,.stack-chip{transition:none}}
