@@ -6,7 +6,7 @@ import react from '@vitejs/plugin-react';
 const root = process.cwd();
 
 /**
- * The repository predates Vite and keeps a handful of canonical files and the
+ * The repository predates Vite and keeps a handful of canonical files and
  * standalone widgets at the project root. Vite serves those directly in dev;
  * this plugin carries them into the production bundle so GitHub Pages and
  * Vercel keep every existing URL working.
@@ -27,7 +27,8 @@ function copyLegacyAssets(): Plugin {
         'llms.txt',
         'llms-full.txt',
         'skills.md',
-        'CNAME'
+        'CNAME',
+        'googlec075b3c4e163980c.html'
       ];
 
       for (const file of files) {
