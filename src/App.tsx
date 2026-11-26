@@ -1,39 +1,48 @@
 import { MotionConfig } from 'motion/react';
-import { AnimatedBackground } from './components/AnimatedBackground';
-import { ShaderBackground } from './components/ShaderBackground';
-import { BentoSection } from './components/BentoSection';
 import { SiteHeader } from './components/SiteHeader';
 import { Hero } from './components/Hero';
 import { ProjectGrid } from './components/ProjectGrid';
+import { LeadershipSection } from './components/LeadershipSection';
 import { CommitFeed } from './components/CommitFeed';
-import { ProfileSection } from './components/ProfileSection';
 import { AboutSection } from './components/AboutSection';
+import { SkillsSection } from './components/SkillsSection';
 import { ContactSection } from './components/ContactSection';
 import { SiteFooter } from './components/SiteFooter';
+import { skillsRail } from './data/site';
 import { useLenis } from './hooks/useLenis';
+
+const rail = [...skillsRail, ...skillsRail];
 
 export default function App() {
   useLenis();
 
   return (
     <MotionConfig reducedMotion="user">
-      <m3e-theme color="#e66a2c" scheme="light" motion="expressive" className="m3e-root">
-      <ShaderBackground />
-      <AnimatedBackground />
       <SiteHeader />
 
       <main id="page" tabIndex={-1}>
         <Hero />
-        <BentoSection />
+
+        <div className="skills-rail" aria-hidden="true">
+          <div className="skills-track">
+            {rail.map((skill, index) => (
+              <span key={`${skill}-${index}`}>
+                {skill}
+                <i>·</i>
+              </span>
+            ))}
+          </div>
+        </div>
+
         <ProjectGrid />
+        <LeadershipSection />
         <CommitFeed />
-        <ProfileSection />
         <AboutSection />
+        <SkillsSection />
         <ContactSection />
       </main>
 
       <SiteFooter />
-      </m3e-theme>
     </MotionConfig>
   );
 }

@@ -1,140 +1,192 @@
 import { useEffect, useRef, useState } from 'react';
-import { motion, useScroll, useSpring } from 'motion/react';
-import { navLinks } from '../data/site';
+import { HamburgerMenuIcon } from '@solar-icons/react/linear/hamburger-menu';
+import { CloseIcon } from '@solar-icons/react/linear/close';
+import { ArrowRightUpIcon } from '@solar-icons/react/linear/arrow-right-up';
+import { navLinks, site } from '../data/site';
 
-type MenuState = 'closed' | 'open' | 'closing';
-
+/**
+ * Fixed milk-glass header with scroll-spy navigation, a reading progress
+ * hairline (transform-only, updated via rAF — no re-renders), and a
+ * full-screen mobile menu with Escape support and focus restore.
+ */
 export function SiteHeader() {
-  const [shrunk, setShrunk] = useState(false);
-  const [hidden, setHidden] = useState(false);
-  const [menuState, setMenuState] = useState<MenuState>('closed');
-  const menuButtonRef = useRef<HTMLButtonElement>(null);
-  const { scrollYProgress } = useScroll();
-  const progressX = useSpring(scrollYProgress, {
-    stiffness: 120,
-    damping: 30,
-    restDelta: 0.001
-  });
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [active, setActive] = useState<string | null>(null);
+  const toggleRef = useRef<HTMLButtonElement>(null);
+  const progressRef = useRef<HTMLSpanElement>(null);
 
-  const menuOpen = menuState === 'open';
-
+  // Scroll state + progress bar (no React state churn)
   useEffect(() => {
-    let previousY = window.scrollY;
-    let accumulated = 0;
+    let ticking = false;
 
-    const onScroll = () => {
-      const currentY = window.scrollY || window.pageYOffset;
-      const delta = currentY - previousY;
-      previousY = currentY;
+    const update = () => {
+      ticking = false;
+      const y = window.scrollY || document.documentElement.scrollTop;
+      setScrolled(y > 24);
 
-      setShrunk(currentY > 60);
-
-      if (currentY < 160) {
-        accumulated = 0;
-        setHidden(false);
-      } else if (Math.abs(delta) >= 1) {
-        accumulated += delta;
-        if (Math.abs(accumulated) > 14) {
-          setHidden(accumulated > 0);
-          accumulated = 0;
-        }
+      const doc = document.documentElement;
+      const max = doc.scrollHeight - doc.clientHeight;
+      const progress = max > 0 ? y / max : 0;
+      if (progressRef.current) {
+        progressRef.current.style.transform = `scaleX(${progress})`;
       }
     };
 
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        window.requestAnimationFrame(update);
+      }
+    };
+
+    update();
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll, { passive: true });
-    onScroll();
-
     return () => {
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);
     };
   }, []);
 
+  // Scroll-spy via IntersectionObserver
   useEffect(() => {
-    if (menuState !== 'closing') return undefined;
-    const timer = window.setTimeout(() => setMenuState('closed'), 150);
-    return () => window.clearTimeout(timer);
-  }, [menuState]);
+    const sections = navLinks
+      .map((link) => document.querySelector(link.href))
+      .filter((el): el is HTMLElement => el instanceof HTMLElement);
 
+    if (!sections.length) return undefined;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setActive(`#${entry.target.id}`);
+          }
+        }
+      },
+      { rootMargin: '-38% 0px -55% 0px', threshold: 0 }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, []);
+
+  // Lock body scroll + Escape to close + focus restore
   useEffect(() => {
     if (!menuOpen) return undefined;
 
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== 'Escape') return;
-      setMenuState('closing');
-      menuButtonRef.current?.focus();
+      if (event.key === 'Escape') {
+        setMenuOpen(false);
+        toggleRef.current?.focus();
+      }
     };
 
+
+    const menu = document.getElementById('mobile-menu');
+    const onTab = (event: KeyboardEvent) => {
+      if (event.key !== 'Tab' || !menu) return;
+      const focusables = Array.from(
+        menu.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')
+      ).filter((el) => el.tabIndex !== -1 && el.offsetParent !== null);
+      if (!focusables.length) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    // Move focus into the menu for keyboard users.
+    const firstLink = menu?.querySelector<HTMLElement>('a[href]');
+    firstLink?.focus();
+
     window.addEventListener('keydown', onKeyDown);
-    return () => window.removeEventListener('keydown', onKeyDown);
+    window.addEventListener('keydown', onTab);
+    return () => {
+      document.body.style.overflow = previous;
+      window.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('keydown', onTab);
+    };
   }, [menuOpen]);
 
-  const closeMenu = () => {
-    if (menuState === 'open') setMenuState('closing');
-  };
+  const closeMenu = () => setMenuOpen(false);
 
   return (
-    <nav
-      className={`nav${shrunk ? ' is-shrunk' : ''}${hidden && !menuOpen ? ' is-hidden' : ''}`}
-      aria-label="Primary navigation"
-    >
-      <a className="nav-logo" href="#top" onClick={closeMenu}>
-        YASH<em>©</em>
-      </a>
-
-      <div className="nav-links">
-        {navLinks.map((link) => (
-          <a key={link.href} href={link.href}>
-            {link.label}
+    <>
+      <header className={`site-header${scrolled ? ' is-scrolled' : ''}`}>
+        <nav className="site-nav" aria-label="Primary navigation">
+          <a className="wordmark" href="#top" aria-label="Ace Yash — home" onClick={closeMenu}>
+            Ace&nbsp;Yash<sup>©</sup>
           </a>
-        ))}
-      </div>
 
-      <button
-        ref={menuButtonRef}
-        className="nav-toggle"
-        type="button"
-        aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
-        aria-expanded={menuOpen}
-        aria-controls="mobile-menu"
-        onClick={() => setMenuState((state) => (state === 'open' ? 'closing' : 'open'))}
-      >
-        <span className="t-icon-swap" data-state={menuOpen ? 'b' : 'a'} aria-hidden="true">
-          <svg className="t-icon" data-icon="a" width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <path d="M3 6H17M3 10H17M3 14H17" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-          </svg>
-          <svg className="t-icon" data-icon="b" width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-          </svg>
-        </span>
-        <span className="nav-toggle__label">{menuOpen ? 'Close' : 'Menu'}</span>
-      </button>
+          <ul className="nav-links">
+            {navLinks.map((link) => (
+              <li key={link.href}>
+                <a href={link.href} aria-current={active === link.href ? 'true' : undefined}>
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+
+          <a className="btn btn--solid nav-cta" href={`mailto:${site.email}`}>
+            Say hello
+            <ArrowRightUpIcon size={16} />
+          </a>
+
+          <button
+            ref={toggleRef}
+            className="nav-toggle"
+            type="button"
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
+            aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            onClick={() => setMenuOpen((open) => !open)}
+          >
+            {menuOpen ? <CloseIcon size={18} /> : <HamburgerMenuIcon size={18} />}
+            <span>{menuOpen ? 'Close' : 'Menu'}</span>
+          </button>
+        </nav>
+        <div className="nav-progress" aria-hidden="true">
+          <span ref={progressRef} />
+        </div>
+      </header>
 
       <div
         id="mobile-menu"
-        className={`nav-menu t-dropdown${menuOpen ? ' is-open' : ''}${menuState === 'closing' ? ' is-closing' : ''}`}
-        data-origin="top-right"
+        className={`mobile-menu${menuOpen ? ' is-open' : ''}`}
         aria-hidden={!menuOpen}
       >
-        <nav className="nav-menu__inner" aria-label="Mobile navigation">
+        <nav aria-label="Mobile navigation">
           {navLinks.map((link) => (
             <a
               key={link.href}
+              className="menu-link"
               href={link.href}
               tabIndex={menuOpen ? 0 : -1}
               onClick={closeMenu}
             >
               <span>{link.label}</span>
-              <i aria-hidden="true">↗</i>
+              <ArrowRightUpIcon size={22} aria-hidden="true" />
             </a>
           ))}
         </nav>
+        <div className="menu-foot">
+          <a className="inline-link" href={`mailto:${site.email}`} tabIndex={menuOpen ? 0 : -1}>
+            {site.email}
+          </a>
+          <span>Varanasi, India</span>
+        </div>
       </div>
-
-      <div className="nav-progress" aria-hidden="true">
-        <motion.i style={{ scaleX: progressX }} />
-      </div>
-    </nav>
+    </>
   );
 }

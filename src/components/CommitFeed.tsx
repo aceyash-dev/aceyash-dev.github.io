@@ -1,4 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { GitCommitIcon } from '@solar-icons/react/linear/git-commit';
+import { LockKeyholeIcon } from '@solar-icons/react/linear/lock-keyhole';
+import { ArrowRightUpIcon } from '@solar-icons/react/linear/arrow-right-up';
 import { SectionHeading } from './SectionHeading';
 import { Reveal } from './Reveal';
 import {
@@ -26,8 +29,8 @@ function CommitCard({ commit, index, now }: CommitCardProps) {
 
   const content = (
     <div className="commit-row">
-      <span className={isPublic ? 'commit-arrow' : 'commit-lock'} aria-hidden="true">
-        {isPublic ? '↗' : '🔒'}
+      <span className="commit-icon" aria-hidden="true">
+        {isPublic ? <GitCommitIcon size={20} /> : <LockKeyholeIcon size={19} />}
       </span>
       <div className="commit-body">
         <span className="commit-label">Recent commit {index + 1}</span>
@@ -46,7 +49,7 @@ function CommitCard({ commit, index, now }: CommitCardProps) {
           <span className="commit-time">{relative}</span>
         )}
         <span className="commit-date">{absolute}</span>
-        {!isPublic ? <span className="commit-date commit-private">🔒 Private</span> : null}
+        {!isPublic ? <span className="commit-date">Private repo</span> : <ArrowRightUpIcon size={15} aria-hidden="true" style={{ alignSelf: 'flex-end', color: 'var(--muted)' }} />}
       </div>
     </div>
   );
@@ -76,7 +79,6 @@ export function CommitFeed() {
   const [status, setStatus] = useState<FeedStatus>('loading');
   const [source, setSource] = useState<FeedSource>(null);
   const [commits, setCommits] = useState<Commit[]>([]);
-  const [attempt, setAttempt] = useState(0);
   const [now, setNow] = useState(() => Date.now());
   const abortRef = useRef<AbortController | null>(null);
 
@@ -87,7 +89,6 @@ export function CommitFeed() {
 
     setStatus('loading');
     setSource(null);
-    setAttempt((value) => value + 1);
 
     try {
       const items = await fetchLatestCommits(controller.signal);
@@ -133,20 +134,20 @@ export function CommitFeed() {
 
   return (
     <section className="section activity-section" id="activity" aria-labelledby="activity-title">
+      <div className="container">
       <SectionHeading
         id="activity-title"
-        number="03 / Signal"
+        index="02"
+        label="Activity"
         title="Last"
         accent="commit"
-        meta="Live · aceyash-dev"
+        meta="Live from GitHub — public work only"
       />
 
-      <div
-        className={`commit-panel t-skel${status !== 'loading' ? ' is-revealed' : ''}`}
-        key={attempt}
-      >
+      <div className="commit-panel">
+        {status === 'loading' ? (
         <div
-          className={`t-skel-skeleton commit-skeleton${status === 'loading' ? ' is-pulsing' : ''}`}
+          className="commit-skeleton"
           aria-hidden="true"
         >
           {[0, 1, 2].map((row) => (
@@ -164,12 +165,13 @@ export function CommitFeed() {
             </div>
           ))}
         </div>
+        ) : null}
 
-        <div className="t-skel-content commit-content" aria-live="polite">
+        <div className="commit-content" aria-live="polite">
           {status === 'ready' ? (
             <>
               {source === 'fallback' ? (
-                <div className="commit-state commit-state--note" role="status">
+                <div className="commit-note" role="status">
                   Public commits only · fallback feed
                 </div>
               ) : null}
@@ -194,6 +196,7 @@ export function CommitFeed() {
 
           {status === 'loading' ? <span className="sr-only">Loading recent commits…</span> : null}
         </div>
+      </div>
       </div>
     </section>
   );
