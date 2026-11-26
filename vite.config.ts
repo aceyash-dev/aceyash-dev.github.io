@@ -25,6 +25,7 @@ function copyLegacyAssets(): Plugin {
         'robots.txt',
         'sitemap.xml',
         'llms.txt',
+        'llms-full.txt',
         'skills.md',
         'CNAME'
       ];

@@ -1,116 +1,99 @@
-import { useRef } from 'react';
-import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react';
 import ClickSpark from './vendor/reactbits/ClickSpark';
-import { TextSwap } from './TextSwap';
-import { statusWords } from '../data/site';
+import { ArrowDownIcon } from '@solar-icons/react/linear/arrow-down';
+import { ArrowRightUpIcon } from '@solar-icons/react/linear/arrow-right-up';
+import { Buildings3Icon } from '@solar-icons/react/linear/buildings-3';
+import { CodeIcon } from '@solar-icons/react/linear/code';
+import { MapPointIcon } from '@solar-icons/react/linear/map-point';
+import { SheenPill } from './SheenPill';
+import { site } from '../data/site';
 
-type ScrollProgress = ReturnType<typeof useScroll>['scrollYProgress'];
-
-type HeroLetterProps = {
-  char: string;
-  index: number;
-  offset: number;
-  progress: ScrollProgress;
-  reducedMotion: boolean;
-};
-
-function HeroLetter({ char, index, offset, progress, reducedMotion }: HeroLetterProps) {
-  const x = useTransform(progress, [0, 1], ['0vw', `${offset}vw`]);
-
-  return (
-    <span className="m">
-      <motion.span
-        className="ltr"
-        style={reducedMotion ? undefined : { x }}
-        initial={reducedMotion ? false : { y: '108%' }}
-        animate={{ y: 0 }}
-        transition={{ duration: 1.15, delay: 0.24 + index * 0.08, ease: 'easeOut' }}
-      >
-        {char}
-      </motion.span>
-    </span>
-  );
-}
-
+/**
+ * Editorial hero: milk canvas, oversized Instrument Serif headline,
+ * Solar-icon meta row, framed portrait, and a click-spark interaction
+ * (React Bits) for those who want to poke at it.
+ */
 export function Hero() {
-  const heroRef = useRef<HTMLElement>(null);
-  const reducedMotion = Boolean(useReducedMotion());
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ['start start', 'end start']
-  });
-  const heroFade = useTransform(scrollYProgress, [0, 0.28, 1], [1, 1, 0]);
-  const letters = ['Y', 'A', 'S', 'H'];
-  const center = (letters.length - 1) / 2;
-
   return (
     <ClickSpark
       className="hero-spark"
-      style={{ minHeight: '100svh', height: 'auto', width: '100%' }}
-      sparkColor={['#ff5a1c', '#ffb07a', '#f2ede4']}
-      sparkSize={10}
-      sparkRadius={30}
-      sparkCount={9}
-      sparkWidth={1.4}
-      duration={520}
-      easing="ease-out"
-      shape="streak"
-      randomness={0.35}
-      gravity={0.08}
-      spread={360}
-      direction={0}
-      glow={0.35}
-      ring={false}
-      layer="front"
-      disabled={reducedMotion}
+      sparkColor={['#f07836', '#c95720', '#24221f']}
+      sparkSize={9}
+      sparkRadius={26}
+      sparkCount={8}
+      sparkWidth={1.3}
+      duration={480}
     >
-      <header ref={heroRef} className="hero h-card" id="top">
-        <motion.div
-          className="hero-top"
-          initial={reducedMotion ? false : { opacity: 0, y: -8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.15, ease: 'easeOut' }}
-        >
-          <span>01 / Approach</span>
-          <em>Portfolio 2024 — 2026</em>
-        </motion.div>
+      <header className="hero" id="top">
+        <div className="hero-inner">
+          <div className="hero-copy">
+            <SheenPill>Founder &amp; CEO — The Ace Base</SheenPill>
 
-        <div className="hero-spacer" />
+            <h1>
+              Software,
+              <br />
+              built with <em>intent.</em>
+            </h1>
 
-        <motion.div style={reducedMotion ? undefined : { opacity: heroFade }}>
-          <h1 className="name p-name" aria-label="Yash">
-            {letters.map((char, index) => (
-              <HeroLetter
-                key={char}
-                char={char}
-                index={index}
-                offset={((index - center) / center) * 14}
-                progress={scrollYProgress}
-                reducedMotion={reducedMotion}
-              />
-            ))}
-          </h1>
-          <div className="hero-name-sub">Developer & Founder · Varanasi, India · The Ace Base</div>
-        </motion.div>
+            <p className="hero-sub">
+              <strong>Ace Yash</strong> is a developer and the CEO of{' '}
+              <a className="inline-link" href={site.aceBase} target="_blank" rel="noopener noreferrer">
+                The Ace Base
+              </a>{' '}
+              — building web products, native Android software, and the tools in between.
+            </p>
 
-        <motion.div
-          className="hero-foot"
-          initial={reducedMotion ? false : { opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.92, ease: 'easeOut' }}
-        >
-          <p className="hero-note">
-            Developer and founder from <em>Varanasi</em>,{' '}
-            <TextSwap words={statusWords} className="hero-status" /> thoughtful products at{' '}
-            <a href="https://ace-base.cc" target="_blank" rel="noreferrer">The Ace Base</a>.
-          </p>
-          <div className="hero-marker">
-            <span>Fall inward</span>
-            <span className="arrow" aria-hidden="true">
-              ↓
-            </span>
+            <div className="hero-ctas">
+              <a className="btn btn--solid" href="#work">
+                Explore the work
+                <ArrowDownIcon size={17} aria-hidden="true" />
+              </a>
+              <a className="btn btn--ghost" href={`mailto:${site.email}`}>
+                Get in touch
+                <ArrowRightUpIcon size={17} aria-hidden="true" />
+              </a>
+            </div>
+
+            <div className="hero-meta">
+              <span>
+                <MapPointIcon size={16} aria-hidden="true" />
+                Varanasi, India
+              </span>
+              <span>
+                <Buildings3Icon size={16} aria-hidden="true" />
+                CEO @ The Ace Base
+              </span>
+              <span>
+                <CodeIcon size={16} aria-hidden="true" />
+                React · TypeScript · Go
+              </span>
+            </div>
           </div>
-        </motion.div>
+
+          <div className="portrait-wrap">
+            <span className="portrait-ring" aria-hidden="true" />
+            <figure className="portrait-arch">
+              <img
+                src="/me.jpg"
+                width={460}
+                height={460}
+                alt="White flame emblem — Ace Yash's personal mark for The Ace Base"
+              />
+            </figure>
+            <div className="portrait-card">
+              <b>The Ace Base</b>
+              <span>
+                <a href={site.aceBase} target="_blank" rel="noopener noreferrer">
+                  ace-base.cc
+                </a>
+                <ArrowRightUpIcon size={13} aria-hidden="true" />
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <span className="hero-scroll" aria-hidden="true">
+          Scroll <ArrowDownIcon size={13} />
+        </span>
       </header>
     </ClickSpark>
   );

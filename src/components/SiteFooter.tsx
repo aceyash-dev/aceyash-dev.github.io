@@ -1,93 +1,55 @@
-import { useEffect, useRef, useState } from 'react';
-import { footerColumns } from '../data/site';
+import { ArrowUpIcon } from '@solar-icons/react/linear/arrow-up';
+import { ArrowRightUpIcon } from '@solar-icons/react/linear/arrow-right-up';
+import { footerColumns, site } from '../data/site';
 
+/** Minimal dark footer: wordmark, three compact columns, legal-ish line. */
 export function SiteFooter() {
-  const footerRef = useRef<HTMLElement>(null);
-  const [time, setTime] = useState('--:--:--');
-
-  useEffect(() => {
-    const footer = footerRef.current;
-    if (!footer) return undefined;
-
-    let timer: number | undefined;
-    const tick = () => {
-      setTime(new Date().toLocaleTimeString('en-GB', { hour12: false }));
-    };
-
-    tick();
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && timer === undefined) {
-          tick();
-          timer = window.setInterval(tick, 1000);
-        } else if (!entry.isIntersecting && timer !== undefined) {
-          window.clearInterval(timer);
-          timer = undefined;
-        }
-      },
-      { threshold: 0 }
-    );
-
-    observer.observe(footer);
-    return () => {
-      observer.disconnect();
-      if (timer !== undefined) window.clearInterval(timer);
-    };
-  }, []);
+  const year = new Date().getFullYear();
 
   return (
-    <footer className="footer" id="footer" ref={footerRef}>
-      <div className="footer-inner">
-        <div className="marquee" aria-hidden="true">
-          <div className="marquee-track">
-            <span>Build <em>·</em> Design <em>·</em> Code <em>·</em> </span>
-            <span>Build <em>·</em> Design <em>·</em> Code <em>·</em> </span>
-          </div>
+    <footer className="site-footer">
+      <div className="footer-top">
+        <div className="footer-brand">
+          <a className="wordmark" href="#top" aria-label="Ace Yash — back to top">
+            Ace&nbsp;Yash<sup>©</sup>
+          </a>
+          <p>
+            Developer and CEO of The Ace Base — building web products, native Android software,
+            and deliberate interfaces from Varanasi, India.
+          </p>
         </div>
 
-        <div className="foot-mid">
-          <h2 className="foot-head">
-            Orbit <em>complete.</em>
-          </h2>
-          <span className="foot-shimmer t-shimmer" data-text="Always building">
-            Always building
-          </span>
+        <div className="footer-cols">
+          {footerColumns.map((column) => (
+            <nav key={column.title} aria-label={`Footer — ${column.title}`}>
+              <h2>{column.title}</h2>
+              <ul>
+                {column.links.map((link) => (
+                  <li key={link.href}>
+                    <a
+                      href={link.href}
+                      {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                    >
+                      {link.label}
+                      {link.external ? <ArrowRightUpIcon size={12} aria-hidden="true" /> : null}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ))}
         </div>
+      </div>
 
-        <div className="foot-bottom">
-          <div className="cols">
-            {footerColumns.map((column) => (
-              <div key={column.title}>
-                <h3>{column.title}</h3>
-                <ul>
-                  {column.links.map((link) => (
-                    <li key={`${column.title}-${link.href}-${link.label}`}>
-                      <a
-                        className={link.className}
-                        href={link.href}
-                        target={link.external ? '_blank' : undefined}
-                        rel={link.external ? (link.className === 'u-url' ? 'me noopener noreferrer' : 'noopener noreferrer') : undefined}
-                      >
-                        {link.label} <i aria-hidden="true">↗</i>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-
-          <div className="foot-meta">
-            <div>
-              Local time — <b id="clock">{time}</b>
-            </div>
-            <div>
-              Status — <span className="live" aria-hidden="true" />
-              <b>Available</b>
-            </div>
-          </div>
-        </div>
+      <div className="footer-bottom">
+        <span suppressHydrationWarning>
+          © {year} Ace Yash · <a href={site.aceBase} target="_blank" rel="noopener noreferrer">The Ace Base</a>
+        </span>
+        <span>React · TypeScript · Vite — hosted on GitHub Pages</span>
+        <a className="to-top" href="#top">
+          Back to top
+          <ArrowUpIcon size={14} aria-hidden="true" />
+        </a>
       </div>
     </footer>
   );

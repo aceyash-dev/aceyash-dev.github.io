@@ -1,26 +1,59 @@
-# aceyash-dev Portfolio
+# Ace Yash — Portfolio
 
-A motion-led React rebuild of the personal portfolio for **Ace Yash**, developer
-and founder/CEO of [The Ace Base](https://ace-base.cc/).
+The personal portfolio of **Ace Yash**, developer and founder/CEO of
+[The Ace Base](https://ace-base.cc/) — an editorial, milk-and-orange single-page
+site built with React, TypeScript, and Vite, prerendered to static HTML and
+hosted on GitHub Pages.
 
-The site keeps the original warm, orbital visual language and canonical GitHub
-Pages URLs, but the homepage is now a typed React application with reusable
-components, accessible interaction states, and production animation patterns.
+Canonical URL: <https://aceyash-dev.github.io/>
+
+## Design system
+
+- **Palette — milk & orange.** Milk canvas (`#F7F4EC`), pure-white cards, an
+  intentional orange system (`#F07836` brand, `#C95720` deep/hover, `#A8490F`
+  text-safe accent), ink `#24221F`, warm neutral borders. No gradients of
+  purple, no neon — one accent, used deliberately.
+- **Typography.** [Instrument Serif](https://fonts.google.com/specimen/Instrument+Serif)
+  for display headlines (roman + italic accents), [Figtree](https://fonts.google.com/specimen/Figtree)
+  for interface and body text.
+- **Icons.** [Solar Icons](https://www.solariconset.com/) via the official
+  [`@solar-icons/react`](https://www.npmjs.com/package/@solar-icons/react)
+  package (MIT; icons by 480 Design, CC BY 4.0) — Linear style throughout,
+  with inline stroke paths only for the two GitHub/Instagram brand marks that
+  Solar does not cover.
+- **Motion.** Motion (framer-motion) reveals and hover physics, Lenis smooth
+  scrolling, a click-spark interaction, a marquee skills rail, and a sheen
+  sweep on the hero badge. Everything degrades under
+  `prefers-reduced-motion` and `MotionConfig reducedMotion="user"`.
+
+## Sections
+
+1. Hero — positioning, dual identity (developer + CEO of The Ace Base), portrait
+2. Selected work — asymmetric editorial grid (The Ace Base, Typace, AceMail, browser widgets)
+3. The Ace Base — leadership panel (dark, full-bleed)
+4. Activity — latest public GitHub commits (same-origin `/api/commits` on Vercel; public GitHub search API fallback on Pages)
+5. About — bio, fast facts, and a question-first FAQ (mirrored in JSON-LD/FAQPage)
+6. Skills — Web / Native / Tools & craft, Solar icons, no fabricated percentages
+7. Contact — email-first with GitHub / Instagram / The Ace Base alternates
 
 ## Stack
 
 - **React 18 + TypeScript + Vite**
-- **Motion** for scroll-linked choreography, reveals, and reduced-motion-aware transitions
-- **Lenis** for smooth inertial scrolling on capable devices
-- **React Bits** source-owned components: `BlurText`, `ClickSpark`, `Magnet`, `SpotlightCard`
-- **Transitions.dev** copy-in CSS recipes: text swaps, dropdowns, icon swaps, skeleton reveals, sliding tabs, side-by-side page swaps, accordions, shimmer text, and learn-more hovers
-- **Tailwind CSS 3** for utility-first layout and styling, with a small CSS layer for branded motion and the existing editorial components
-- **Hugeicons** for interface icons
-- Instrument Serif + Figtree typography; a lightweight custom WebGL shader responds to pointer movement
+- **Motion** for scroll-linked reveals and reduced-motion-aware transitions
+- **Lenis** for inertial scrolling on capable pointers
+- **React Bits** source-owned components: `BlurText`, `ClickSpark`, `Magnet`,
+  `SpotlightCard` (light theme, orange spotlight)
+- **Solar Icons** — Linear icons via `@solar-icons/react`
+- A single hand-written stylesheet (`src/styles/global.css`) — no CSS framework
 
-React Bits and Transitions.dev are registries, not runtime packages. The small
-pieces this site uses live in the repository, along with their notices in
-[`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md).
+No Tailwind, no component-library runtime, no icon-font dependencies.
+
+React Bits is a registry, not a runtime package; the small pieces this site
+uses live in `src/components/vendor/reactbits/` with notices in
+[`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md). The OriginKit registry
+(www.originkit.dev) was unreachable from the build environment, so no
+OriginKit code is bundled — see *OriginKit* in the notices for what was
+recreated from their documented patterns instead.
 
 ## Run locally
 
@@ -33,83 +66,68 @@ Other commands:
 
 ```bash
 npm run typecheck   # strict TypeScript check
-npm run build       # typecheck + production build to dist/
+npm run build       # typecheck + client build + SSR prerender into dist/
 npm run preview     # serve the production build
+npm run prerender   # re-inject static markup into dist/index.html
 ```
-
-The Vite dev server binds to `0.0.0.0`, so it works in remote preview
-environments as well as locally.
 
 ## Project layout
 
 ```text
-index.html                 Vite entry, SEO, JSON-LD, noscript fallback
-src/main.tsx               React root and global styles
-src/App.tsx                Page composition, Motion config, Lenis setup
-src/components/            Portfolio sections and interaction components
-src/components/vendor/     Source-owned React Bits components
-src/styles/transitions.css Adapted Transitions.dev CSS recipes
-src/styles/global.css      Design system, layout, responsive styles
-src/data/site.ts            Content and project/skills data
-src/lib/commits.ts          Same-origin API + public GitHub fallback
-public/                    Vite-served static assets (favicon)
-widgets/                   Preserved standalone browser widgets
-api/commits.js              Optional Vercel serverless commit endpoint
+index.html                  Vite entry — SEO/meta/JSON-LD, <noscript> fallback
+src/main.tsx                hydration (falls back to client render in dev)
+src/entry-server.tsx        SSR entry for the prerender step
+src/App.tsx                 page composition
+src/components/             sections and interaction components
+src/components/vendor/      source-owned React Bits components
+src/styles/global.css       the entire design system
+src/data/site.ts            content model (projects, skills, FAQ, footer)
+src/lib/commits.ts          commit feed (same-origin API + public fallback)
+scripts/prerender.mjs       bakes static markup into dist/index.html
+public/                     favicon.svg (+ me.jpg, bg.jpg at repo root)
+widgets/                    standalone dependency-free browser widgets
+api/commits.js              optional Vercel serverless commit endpoint
 ```
 
-Root-level `bg.jpg`, `me.jpg`, `robots.txt`, `sitemap.xml`, `llms.txt`,
-`skills.md`, and `widgets/` are copied into `dist/` by a small Vite build
-plugin. Their existing URLs therefore continue to work after the React build.
+## SEO / GEO / AEO
 
-## Content and live data
-
-- Project and skills content is centralized in `src/data/site.ts`, based on the
-  repository's README, `llms.txt`, and `skills.md`.
-- The activity section calls the same-origin `/api/commits` endpoint first. On
-  GitHub Pages, where that endpoint is intentionally absent, a 404 is treated
-  as expected and the component falls back to GitHub's public commit-search
-  API. No credentials are exposed to the browser.
-- A skeleton-to-content cross-fade, retry state, and graceful error state keep
-  the section usable when GitHub is rate-limited or offline.
-- The footer clock only ticks while the footer is visible.
-
-## Accessibility and performance
-
-- `MotionConfig reducedMotion="user"` plus component-level reduced-motion checks
-  keep the site usable for people who prefer less animation.
-- Every interactive effect has a non-animated state; hover-only effects are not
-  required on touch devices.
-- Canvas spark effects are scoped to the hero, and the footer clock uses
-  `IntersectionObserver`.
-- Semantic landmarks, labelled sections, a skip link, focus-visible rings,
-  keyboard-operable tabs/accordions/menu, and descriptive link labels are kept
-  throughout.
-- Static widget pages remain lightweight, standalone HTML/CSS/JS.
+- Unique title, meta description, canonical, Open Graph, Twitter cards,
+  `theme-color #F7F4EC`, `lang="en"`, `robots` with `max-snippet:-1`.
+- JSON-LD graph: `Person` (worksFor → `Organization`: The Ace Base),
+  `WebSite`, `ProfilePage`, `SoftwareSourceCode`, `FAQPage` —
+  all visible-content-matched.
+- `llms.txt` and `llms-full.txt` for AI answer engines; question-first FAQ
+  ("Who is Ace Yash?", "Who is the CEO of The Ace Base?", …) repeated verbatim
+  in llms-full.txt and JSON-LD.
+- `robots.txt` welcomes AI crawlers explicitly; `sitemap.xml` lists `/`,
+  `/widgets/`, `llms.txt`, `llms-full.txt`.
+- **Prerendered static HTML**: `<div id="root">` ships with full markup, so
+  non-JS crawlers and answer engines see the complete page; React hydrates it
+  in the browser. A rich `<noscript>` fallback covers the rest.
+- Semantic landmarks, one `h1`, logical heading order, labelled sections,
+  descriptive `alt` text, skip link, visible focus rings, keyboard-operable
+  navigation/menu/FAQ, Escape/focus-restore/trap in the mobile menu,
+  scroll-spy with `aria-current`, and `prefers-reduced-motion` support.
 
 ## Deployment
 
 ### GitHub Pages (canonical)
 
-`.github/workflows/deploy-pages.yml` builds the Vite app and deploys `dist/`
-with the official Pages actions. In repository settings, set **Pages → Build
-and deployment → Source** to **GitHub Actions**.
+`.github/workflows/deploy-pages.yml` builds the app and deploys `dist/` with
+the official Pages actions on pushes to `main` (or `workflow_dispatch`).
+In repository settings, set **Pages → Build and deployment → Source → GitHub Actions**.
 
 The canonical URL remains:
 
 - <https://aceyash-dev.github.io/>
 
-Only `main` triggers automatic deployment; `workflow_dispatch` can be used for
-manual runs.
-
 ### Vercel (optional API host)
 
-Vercel auto-detects the Vite framework and additionally runs `api/commits.js`,
-the authenticated commit feed declared in `vercel.json`. It is deliberately not
-canonical, so it is not indexed. On that host the React app uses
-`/api/commits`; on GitHub Pages it uses the public fallback.
-
-If the Vercel deployment is ever retired, delete `vercel.json` and `api/` and
-leave the fallback in place — that is the only change needed.
+Vercel auto-detects the Vite framework and also runs `api/commits.js`, the
+authenticated commit feed declared in `vercel.json`. It is deliberately not
+canonical, so it is not indexed. On that host the app uses `/api/commits`; on
+GitHub Pages a 404 is expected and the app falls back to GitHub's public
+commit-search API. No credentials are exposed to the browser.
 
 ## Contact
 
