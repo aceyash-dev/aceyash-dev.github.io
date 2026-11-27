@@ -1,3 +1,5 @@
+export type PageId = 'work' | 'about' | 'skills' | 'contact';
+
 export type ProjectLink = {
   label: string;
   href: string;
@@ -19,6 +21,7 @@ export type Project = {
 };
 
 export type NavLink = {
+  id: PageId;
   label: string;
   href: string;
 };
@@ -76,11 +79,10 @@ export const site = {
 } as const;
 
 export const navLinks: NavLink[] = [
-  { label: 'Work', href: '#work' },
-  { label: 'Activity', href: '#activity' },
-  { label: 'About', href: '#about' },
-  { label: 'Skills', href: '#skills' },
-  { label: 'Contact', href: '#contact' }
+  { id: 'work', label: 'Work', href: '#work' },
+  { id: 'about', label: 'About', href: '#about' },
+  { id: 'skills', label: 'Skills', href: '#skills' },
+  { id: 'contact', label: 'Contact', href: '#contact' }
 ];
 
 export const projects: Project[] = [
@@ -272,7 +274,7 @@ export const faqs: FaqItem[] = [
 
 export const footerColumns: FooterColumn[] = [
   {
-    title: 'Sections',
+    title: 'Pages',
     links: navLinks.map((link) => ({ label: link.label, href: link.href }))
   },
   {

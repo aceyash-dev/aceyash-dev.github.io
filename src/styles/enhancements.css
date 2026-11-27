@@ -1,4 +1,4 @@
-/* Dribbble-inspired Bento, MagicUI, Animate UI & Glisse Enhancements */
+/* Multi-Page Views, Glisse 4-Tab Dock, Immersive 3D Cards & MagicUI/Animate UI */
 .magic-scroll-progress {
   position: fixed;
   top: 0;
@@ -10,6 +10,225 @@
   z-index: 90;
   pointer-events: none;
 }
+
+/* --- Top Header Current Page Pill --- */
+.site-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.site-page-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.3rem 0.78rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  border: 1px solid var(--line-strong);
+  font-size: 0.76rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+  backdrop-filter: blur(10px);
+}
+.site-page-pill__dot {
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 999px;
+  background: var(--orange);
+}
+
+/* --- Multi-Page View Transitions --- */
+.page-shell {
+  min-height: calc(100svh - 10rem);
+}
+.page-view--hidden {
+  display: none !important;
+}
+.page-view--active {
+  animation: page-enter 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.page-view--sub {
+  padding-top: clamp(3.5rem, 6vw, 5.2rem);
+}
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- 4-Tab Glisse Liquid Glass Bottom Dock --- */
+.glisse-dock {
+  border-radius: 999px;
+  padding: 0.38rem;
+  background: color-mix(in srgb, var(--paper) 78%, transparent);
+  border: 1px solid color-mix(in srgb, var(--line-strong) 85%, white);
+  box-shadow: 0 18px 42px -18px rgba(36, 34, 31, 0.28);
+  --lg-accent: var(--orange);
+}
+.glisse-dock__list {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.glisse-dock__item {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  height: 2.75rem;
+  min-width: 2.75rem;
+  padding: 0 0.75rem;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.84rem;
+  font-weight: 650;
+  transition: color 0.2s var(--ease), padding 0.25s var(--ease);
+}
+.glisse-dock__item:hover {
+  color: var(--ink);
+}
+.glisse-dock__item[data-active="true"] {
+  color: var(--milk);
+  padding: 0 1.1rem;
+}
+.glisse-dock__pill {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--orange-deep), var(--orange));
+  box-shadow: 0 6px 18px -6px rgba(240, 120, 54, 0.65);
+  z-index: 0;
+}
+.glisse-dock__icon,
+.glisse-dock__label {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+}
+.glisse-dock__label {
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+/* --- Immersive 3D Reactive Cards --- */
+.immersive-card {
+  position: relative;
+  transform-style: preserve-3d;
+  transform: perspective(1100px) rotateX(var(--ic-rx, 0deg)) rotateY(var(--ic-ry, 0deg));
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.28s var(--ease),
+              box-shadow 0.35s var(--ease);
+  will-change: transform;
+}
+.immersive-card[data-hover="true"] {
+  border-color: color-mix(in srgb, var(--orange) 65%, var(--line));
+  box-shadow:
+    0 28px 60px -28px rgba(36, 34, 31, 0.36),
+    0 0 0 1px color-mix(in srgb, var(--orange) 22%, transparent);
+}
+.immersive-card__glow {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  background: radial-gradient(
+    420px circle at var(--ic-x, 50%) var(--ic-y, 50%),
+    var(--ic-spot, rgba(240, 120, 54, 0.24)),
+    transparent 65%
+  );
+  transition: opacity 0.28s var(--ease);
+  z-index: 1;
+}
+.immersive-card__glare {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  background: radial-gradient(
+    260px circle at var(--ic-x, 50%) var(--ic-y, 50%),
+    rgba(255, 255, 255, 0.42),
+    transparent 60%
+  );
+  mix-blend-mode: soft-light;
+  transition: opacity 0.28s var(--ease);
+  z-index: 2;
+}
+.immersive-card[data-hover="true"] .immersive-card__glow,
+.immersive-card[data-hover="true"] .immersive-card__glare {
+  opacity: 1;
+}
+.immersive-card__content {
+  position: relative;
+  z-index: 3;
+  display: contents;
+}
+
+/* --- Spatial 3D Preview Widget (Mahto Real Estate) --- */
+.spatial-preview {
+  position: relative;
+  overflow: hidden;
+  min-height: 9.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: linear-gradient(145deg, #24221f 0%, #2f2a24 100%);
+  color: var(--milk);
+  border-color: rgba(240, 120, 54, 0.28);
+}
+.spatial-preview__grid {
+  position: absolute;
+  inset: -20%;
+  background-image:
+    linear-gradient(rgba(240, 120, 54, 0.22) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(240, 120, 54, 0.22) 1px, transparent 1px);
+  background-size: 24px 24px;
+  transform: perspective(360px) rotateX(55deg) translateY(12%);
+  opacity: 0.65;
+  pointer-events: none;
+}
+.spatial-preview__badge {
+  position: relative;
+  z-index: 1;
+  align-self: flex-start;
+  padding: 0.26rem 0.68rem;
+  border-radius: 999px;
+  background: rgba(240, 120, 54, 0.2);
+  border: 1px solid rgba(240, 120, 54, 0.48);
+  color: #fde2cc;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.spatial-preview__meta {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-size: 0.76rem;
+  color: #d8d3c8;
+}
+.spatial-preview__meta b {
+  color: var(--milk);
+  font-weight: 650;
+}
+
+/* --- Hero, Metrics, Glisse Portrait & Dither --- */
 .status-dot {
   display: inline-block;
   width: 0.5rem;
@@ -70,6 +289,8 @@
   mask-image: linear-gradient(100deg, transparent 15%, black 85%) !important;
   -webkit-mask-image: linear-gradient(100deg, transparent 15%, black 85%) !important;
 }
+
+/* --- MagicUI Marquee, BorderBeam, DotPattern & Terminal --- */
 .magic-marquee-shell {
   position: relative;
   border-top: 1px solid var(--line);
@@ -117,7 +338,6 @@
   font-weight: 600;
   color: var(--ink-soft);
   white-space: nowrap;
-  transition: border-color 0.2s var(--ease), color 0.2s var(--ease);
 }
 .marquee-pill::before {
   content: '';
@@ -144,7 +364,7 @@
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   mask-composite: exclude;
   animation: border-beam-spin var(--beam-duration, 10s) linear var(--beam-delay, 0s) infinite;
-  z-index: 2;
+  z-index: 4;
 }
 @property --beam-angle {
   syntax: '<angle>';
@@ -185,7 +405,8 @@
   background: var(--milk);
   padding: 1rem;
 }
-.project--featured .project-bento-visual {
+.project--featured .project-bento-visual,
+.project--wide .project-bento-visual {
   margin-top: 0;
 }
 .ecosystem-nodes {
@@ -274,9 +495,10 @@
   position: absolute;
   top: 0.32rem;
   right: 0.45rem;
-  z-index: 3;
+  z-index: 5;
 }
-/* Animate UI CopyButton */
+
+/* --- Animate UI CopyButton & Tabs --- */
 .animate-copy-btn {
   display: inline-grid;
   place-items: center;
@@ -318,7 +540,6 @@
   gap: 0.65rem;
   flex-wrap: wrap;
 }
-/* Animate UI Tabs */
 .animate-tabs {
   display: flex;
   flex-direction: column;
@@ -411,4 +632,6 @@
   .magic-marquee__track { animation: none; }
   .magic-border-beam { animation: none; opacity: 0.45; }
   .status-dot { animation: none; }
+  .immersive-card { transform: none !important; }
+  .page-view--active { animation: none; }
 }

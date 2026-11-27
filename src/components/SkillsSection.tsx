@@ -1,4 +1,4 @@
-import SpotlightCard from './vendor/reactbits/SpotlightCard';
+import { ImmersiveCard } from './ImmersiveCard';
 import { DotPattern } from './vendor/magicui/DotPattern';
 import { BlurFade } from './vendor/magicui/BlurFade';
 import { AnimatedTabs } from './vendor/animate-ui/Tabs';
@@ -20,13 +20,10 @@ function GroupCard({ group, index }: { group: SkillGroup; index: number }) {
 
   return (
     <BlurFade delay={index * 0.06} yOffset={12}>
-      <SpotlightCard
+      <ImmersiveCard
         className="skill-group"
-        theme="light"
         spotlightColor="rgba(240, 120, 54, 0.22)"
-        spotlightSize={280}
-        ambient={false}
-        flare={false}
+        maxTilt={5}
       >
         <div className="skill-group__head">
           <span className="skill-group__icon" aria-hidden="true">
@@ -43,7 +40,7 @@ function GroupCard({ group, index }: { group: SkillGroup; index: number }) {
             </li>
           ))}
         </ul>
-      </SpotlightCard>
+      </ImmersiveCard>
     </BlurFade>
   );
 }

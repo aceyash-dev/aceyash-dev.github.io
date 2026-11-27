@@ -1,72 +1,92 @@
-import { useEffect, useState } from 'react';
-import { ArrowRightUpIcon } from '@solar-icons/react/linear/arrow-right-up';
+import { Glass } from 'glisse';
+import { motion } from 'motion/react';
 import { Buildings3Icon } from '@solar-icons/react/linear/buildings-3';
 import { CodeIcon } from '@solar-icons/react/linear/code';
 import { LetterOpenedIcon } from '@solar-icons/react/linear/letter-opened';
 import { TextBoldIcon } from '@solar-icons/react/linear/text-bold';
-import Dock from './vendor/reactbits/Dock';
-import { navLinks } from '../data/site';
+import { navLinks, type PageId } from '../data/site';
 
-/** Floating React Bits navigation with section tracking and keyboard support. */
-export function SiteHeader() {
-  const [active, setActive] = useState('#work');
+type SiteHeaderProps = {
+  activePage: PageId;
+  onSelectPage: (page: PageId) => void;
+};
 
-  useEffect(() => {
-    const sections = navLinks
-      .map((link) => document.getElementById(link.href.slice(1)))
-      .filter((section): section is HTMLElement => section instanceof HTMLElement);
-    if (!sections.length) return undefined;
+const icons: Record<PageId, JSX.Element> = {
+  work: <CodeIcon size={20} aria-hidden="true" />,
+  about: <Buildings3Icon size={20} aria-hidden="true" />,
+  skills: <TextBoldIcon size={20} aria-hidden="true" />,
+  contact: <LetterOpenedIcon size={20} aria-hidden="true" />
+};
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (visible) setActive(`#${visible.target.id}`);
-      },
-      { rootMargin: '-24% 0px -58% 0px', threshold: [0, 0.15, 0.35, 0.6] }
-    );
-    sections.forEach((section) => observer.observe(section));
-    return () => observer.disconnect();
-  }, []);
-
-  const items = navLinks.map((link) => ({
-    label: link.label,
-    href: link.href,
-    icon:
-      link.href === '#work' ? <CodeIcon size={22} aria-hidden="true" /> :
-      link.href === '#activity' ? <ArrowRightUpIcon size={22} aria-hidden="true" /> :
-      link.href === '#about' ? <Buildings3Icon size={22} aria-hidden="true" /> :
-      link.href === '#skills' ? <TextBoldIcon size={22} aria-hidden="true" /> :
-      <LetterOpenedIcon size={22} aria-hidden="true" />,
-    active: active === link.href
-  }));
+/**
+ * Top bar with current page indicator + floating 4-tab Glisse Liquid Glass
+ * bottom dock that expands to display the active tab's name.
+ */
+export function SiteHeader({ activePage, onSelectPage }: SiteHeaderProps) {
+  const currentTab = navLinks.find((link) => link.id === activePage) ?? navLinks[0];
 
   return (
     <>
       <header className="site-header">
         <div className="site-nav">
-          <a className="wordmark" href="#top" aria-label="Ace Yash, home">Ace&nbsp;Yash<sup>©</sup></a>
+          <a
+            className="wordmark"
+            href="#work"
+            aria-label="Ace Yash, home"
+            onClick={(e) => {
+              e.preventDefault();
+              onSelectPage('work');
+            }}
+          >
+            Ace&nbsp;Yash<sup>©</sup>
+          </a>
+          <span className="site-page-pill" aria-live="polite">
+            <span className="site-page-pill__dot" aria-hidden="true" />
+            {currentTab.label}
+          </span>
         </div>
       </header>
+
       <nav className="floating-dock-shell" aria-label="Primary navigation">
-        <Dock
-          items={items}
-          position="bottom"
-          theme="light"
-          baseItemSize={44}
-          magnification={56}
-          distance={140}
-          panelHeight={62}
-          gap={8}
-          roundness={0.72}
-          accentColor="#f07836"
-          showLabels
-          showIndicators
-          tiles
-          autoHide={false}
-          className="site-dock"
-        />
+        <Glass className="glisse-dock">
+          <div className="glisse-dock__list" role="tablist" aria-label="Portfolio pages">
+            {navLinks.map((link) => {
+              const isActive = activePage === link.id;
+              return (
+                <button
+                  key={link.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={isActive}
+                  aria-label={link.label}
+                  data-active={isActive ? 'true' : 'false'}
+                  className="glisse-dock__item"
+                  onClick={() => onSelectPage(link.id)}
+                >
+                  {isActive ? (
+                    <motion.span
+                      layoutId="glisse-dock-active-pill"
+                      className="glisse-dock__pill"
+                      transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+                    />
+                  ) : null}
+                  <span className="glisse-dock__icon">{icons[link.id]}</span>
+                  {isActive ? (
+                    <motion.span
+                      key={link.id}
+                      initial={{ opacity: 0, x: -4 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                      className="glisse-dock__label"
+                    >
+                      {link.label}
+                    </motion.span>
+                  ) : null}
+                </button>
+              );
+            })}
+          </div>
+        </Glass>
       </nav>
     </>
   );

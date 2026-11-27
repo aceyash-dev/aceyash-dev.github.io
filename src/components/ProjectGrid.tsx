@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { SegmentedControl } from 'glisse';
-import SpotlightCard from './vendor/reactbits/SpotlightCard';
+import { ImmersiveCard } from './ImmersiveCard';
 import { BorderBeam } from './vendor/magicui/BorderBeam';
 import { BlurFade } from './vendor/magicui/BlurFade';
 import { Terminal } from './vendor/magicui/Terminal';
@@ -90,12 +90,25 @@ function ProjectVisual({ id }: { id: string }) {
     );
   }
 
+  if (id === 'mahto-real-estate') {
+    return (
+      <div className="project-bento-visual spatial-preview">
+        <div className="spatial-preview__grid" aria-hidden="true" />
+        <div className="spatial-preview__badge">Interactive 3D Walkthrough</div>
+        <div className="spatial-preview__meta">
+          <span>Spatial Property Discovery</span>
+          <b>Cloudflare Edge</b>
+        </div>
+      </div>
+    );
+  }
+
   return null;
 }
 
 function ProjectBody({ project, index }: { project: Project; index: number }) {
   const number = String(index + 1).padStart(2, '0');
-  const isSplitLayout = project.id === 'ace-base';
+  const isSplitLayout = project.id === 'ace-base' || project.id === 'mahto-real-estate';
 
   return (
     <>
@@ -151,9 +164,8 @@ function ProjectBody({ project, index }: { project: Project; index: number }) {
 }
 
 /**
- * Selected public work in a Dribbble-inspired Bento grid with Glisse
- * SegmentedControl filtering, ReactBits SpotlightCard, MagicUI BorderBeam/BlurFade,
- * and Animate UI CopyButton.
+ * Selected public work with Glisse SegmentedControl filtering and
+ * pointer-reactive 3D ImmersiveCards + MagicUI BorderBeam/BlurFade.
  */
 export function ProjectGrid() {
   const [filter, setFilter] = useState('all');
@@ -188,19 +200,16 @@ export function ProjectGrid() {
               yOffset={14}
               className={filter === 'all' ? (layoutClass[project.id] ?? 'project--half') : 'project--featured'}
             >
-              <SpotlightCard
+              <ImmersiveCard
                 className={`project ${filter === 'all' ? (layoutClass[project.id] ?? 'project--half') : 'project--featured'}`}
-                theme="light"
-                spotlightColor="rgba(240, 120, 54, 0.30)"
-                spotlightSize={360}
-                ambient={false}
-                flare={false}
+                spotlightColor="rgba(240, 120, 54, 0.28)"
+                maxTilt={4.5}
               >
                 {project.featured || filter !== 'all' ? (
                   <BorderBeam size={280} duration={11} colorFrom="#f07836" colorTo="#fde2cc" />
                 ) : null}
                 <ProjectBody project={project} index={index} />
-              </SpotlightCard>
+              </ImmersiveCard>
             </BlurFade>
           ))}
         </div>
