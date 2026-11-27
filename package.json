@@ -14,6 +14,7 @@
     "postbuild": "npm run verify"
   },
   "dependencies": {
+    "glisse": "^0.6.0",
     "lenis": "^1.3.28",
     "motion": "^12.23.12",
     "react": "^18.3.1",
