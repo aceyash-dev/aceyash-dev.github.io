@@ -176,57 +176,6 @@
   display: contents;
 }
 
-/* --- Spatial 3D Preview Widget (Mahto Real Estate) --- */
-.spatial-preview {
-  position: relative;
-  overflow: hidden;
-  min-height: 9.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  background: linear-gradient(145deg, #24221f 0%, #2f2a24 100%);
-  color: var(--milk);
-  border-color: rgba(240, 120, 54, 0.28);
-}
-.spatial-preview__grid {
-  position: absolute;
-  inset: -20%;
-  background-image:
-    linear-gradient(rgba(240, 120, 54, 0.22) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(240, 120, 54, 0.22) 1px, transparent 1px);
-  background-size: 24px 24px;
-  transform: perspective(360px) rotateX(55deg) translateY(12%);
-  opacity: 0.65;
-  pointer-events: none;
-}
-.spatial-preview__badge {
-  position: relative;
-  z-index: 1;
-  align-self: flex-start;
-  padding: 0.26rem 0.68rem;
-  border-radius: 999px;
-  background: rgba(240, 120, 54, 0.2);
-  border: 1px solid rgba(240, 120, 54, 0.48);
-  color: #fde2cc;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-.spatial-preview__meta {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 0.75rem;
-  font-size: 0.76rem;
-  color: #d8d3c8;
-}
-.spatial-preview__meta b {
-  color: var(--milk);
-  font-weight: 650;
-}
 
 /* --- Hero, Metrics, Glisse Portrait & Dither --- */
 .status-dot {

@@ -12,16 +12,14 @@ import { projects, site, type Project } from '../data/site';
 const layoutClass: Record<string, string> = {
   'ace-base': 'project--featured',
   'ace-id': 'project--half',
-  typace: 'project--half',
-  'mahto-real-estate': 'project--wide'
+  typace: 'project--half'
 };
 
 const filterItems = [
   { value: 'all', label: 'All' },
   { value: 'ace-base', label: 'Studio' },
   { value: 'ace-id', label: 'Identity' },
-  { value: 'typace', label: 'Typography' },
-  { value: 'mahto-real-estate', label: 'Web & 3D' }
+  { value: 'typace', label: 'Typography' }
 ];
 
 const ecosystemNodes = [
@@ -90,25 +88,12 @@ function ProjectVisual({ id }: { id: string }) {
     );
   }
 
-  if (id === 'mahto-real-estate') {
-    return (
-      <div className="project-bento-visual spatial-preview">
-        <div className="spatial-preview__grid" aria-hidden="true" />
-        <div className="spatial-preview__badge">Interactive 3D Walkthrough</div>
-        <div className="spatial-preview__meta">
-          <span>Spatial Property Discovery</span>
-          <b>Cloudflare Edge</b>
-        </div>
-      </div>
-    );
-  }
-
   return null;
 }
 
 function ProjectBody({ project, index }: { project: Project; index: number }) {
   const number = String(index + 1).padStart(2, '0');
-  const isSplitLayout = project.id === 'ace-base' || project.id === 'mahto-real-estate';
+  const isSplitLayout = project.id === 'ace-base';
 
   return (
     <>

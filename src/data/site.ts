@@ -73,7 +73,6 @@ export const site = {
   aceConsole: 'https://console.ace-base.cc/',
   docs: 'https://docs.ace-base.cc/',
   typace: 'https://typace.ace-base.cc/',
-  mahto: 'https://mahto-real-estate-agency.pages.dev/',
   canonical: 'https://aceyash-dev.github.io/',
   portfolioRepo: 'https://github.com/aceyash-dev/aceyash-dev.github.io'
 } as const;
@@ -135,19 +134,7 @@ export const projects: Project[] = [
       { label: 'GitHub', href: 'https://github.com/aceyash-dev/Typace', external: true }
     ]
   },
-  {
-    id: 'mahto-real-estate',
-    name: 'Mahto Real Estate',
-    category: 'Web & 3D platform',
-    tagline: 'Property discovery with interactive 3D walkthroughs.',
-    description:
-      'Full-featured real estate platform connecting buyers and brokers with responsive property search and 3D spatial previews.',
-    role: 'Lead Engineer',
-    stack: ['JavaScript', '3D Walkthrough', 'Cloudflare Pages'],
-    href: site.mahto,
-    external: true,
-    links: [{ label: 'mahto-real-estate-agency.pages.dev', href: site.mahto, external: true }]
-  }
+
 ];
 
 export const profileFacts: ProfileFact[] = [
@@ -253,7 +240,7 @@ export const faqs: FaqItem[] = [
     id: 'projects',
     question: 'What projects has Ace Yash developed?',
     answer:
-      'Public work includes The Ace Base, AceID, Typace, and Mahto Real Estate. The Ace Base is his software studio; Typace is its typography organizer.',
+      'Public work includes The Ace Base, AceID, and Typace. The Ace Base is his software studio; Typace is its typography organizer.',
     links: [
       { label: 'The Ace Base', href: site.aceBase, external: true },
       { label: 'AceID', href: site.aceId, external: true },
