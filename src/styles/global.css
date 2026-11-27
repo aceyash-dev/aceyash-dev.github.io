@@ -1070,18 +1070,6 @@ html {
   overflow: hidden;
   isolation: isolate;
 }
-.footer-emoji { position: absolute; inset: 0; z-index: -1; pointer-events: none; user-select: none; }
-.footer-emoji span {
-  position: absolute;
-  opacity: 0.55;
-  line-height: 1;
-  filter: drop-shadow(0 6px 10px rgba(36, 34, 31, 0.25));
-  animation: footer-float 7s ease-in-out infinite;
-}
-@keyframes footer-float {
-  0%, 100% { transform: translate3d(0, 0, 0) rotate(-4deg); }
-  50% { transform: translate3d(0, -14px, 0) rotate(6deg); }
-}
 .footer-grid {
   position: relative;
   display: grid;
@@ -1151,4 +1139,30 @@ html {
 }
 .footer-bottom a { color: var(--milk); }
 .footer-bottom .to-top { display: inline-flex; gap: 0.3rem; align-items: center; font-weight: 600; }
-@media (prefers-reduced-motion: reduce) { .footer-emoji span { animation: none; } }
+
+/* Site-wide duotone icon layer (ReactiveIcons) */
+.reactive-icons {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  --px: 0;
+  --py: 0;
+}
+main, .site-footer { position: relative; z-index: 1; }
+.reactive-icon {
+  position: absolute;
+  color: var(--orange-deep);
+  opacity: 0.2;
+  transform: translate3d(calc(var(--px) * var(--depth) * 1px), calc(var(--py) * var(--depth) * 1px), 0) rotate(var(--spin));
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  animation: reactive-float 9s ease-in-out infinite;
+  animation-delay: var(--delay);
+  line-height: 0;
+}
+@keyframes reactive-float {
+  0%, 100% { margin-top: 0; }
+  50% { margin-top: -12px; }
+}
+@media (prefers-reduced-motion: reduce) { .reactive-icon { animation: none; transition: none; } }
