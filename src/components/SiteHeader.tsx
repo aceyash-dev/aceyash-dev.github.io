@@ -1,9 +1,11 @@
+import { lazy, Suspense } from 'react';
 import { Buildings3Icon } from '@solar-icons/react/linear/buildings-3';
 import { CodeIcon } from '@solar-icons/react/linear/code';
 import { LetterOpenedIcon } from '@solar-icons/react/linear/letter-opened';
 import { TextBoldIcon } from '@solar-icons/react/linear/text-bold';
-import Dock from './vendor/reactbits/Dock';
 import { navLinks, type PageId } from '../data/site';
+
+const Dock = lazy(() => import('./vendor/reactbits/Dock'));
 
 type SiteHeaderProps = {
   activePage: PageId;
@@ -19,6 +21,7 @@ const icons: Record<PageId, JSX.Element> = {
 
 /**
  * Site identity and the React Bits floating dock used as the primary navigation.
+ * The dock is split into its own chunk to keep the initial bundle within budget.
  */
 export function SiteHeader({ activePage, onSelectPage }: SiteHeaderProps) {
   const items = navLinks.map((link) => ({
@@ -52,24 +55,26 @@ export function SiteHeader({ activePage, onSelectPage }: SiteHeaderProps) {
       </header>
 
       <nav className="floating-dock-shell" aria-label="Primary navigation">
-        <Dock
-          items={items}
-          position="bottom"
-          theme="light"
-          baseItemSize={48}
-          magnification={64}
-          distance={128}
-          panelHeight={68}
-          gap={8}
-          roundness={0.58}
-          bounce
-          autoHide={false}
-          showLabels
-          showIndicators
-          showBadges={false}
-          accentColor="var(--orange-deep)"
-          className="portfolio-dock"
-        />
+        <Suspense fallback={null}>
+          <Dock
+            items={items}
+            position="bottom"
+            theme="light"
+            baseItemSize={48}
+            magnification={64}
+            distance={128}
+            panelHeight={68}
+            gap={8}
+            roundness={0.58}
+            bounce
+            autoHide={false}
+            showLabels
+            showIndicators
+            showBadges={false}
+            accentColor="var(--orange-deep)"
+            className="portfolio-dock"
+          />
+        </Suspense>
       </nav>
     </>
   );
