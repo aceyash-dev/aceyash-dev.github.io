@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, type ComponentType, type CSSProperties } from 'react';
 import { RocketIcon } from '@solar-icons/react/bold-duotone/rocket';
 import { CodeSquareIcon } from '@solar-icons/react/bold-duotone/code-square';
 import { CupIcon } from '@solar-icons/react/bold-duotone/cup';
@@ -21,7 +21,7 @@ import { MusicNoteIcon } from '@solar-icons/react/bold-duotone/music-note';
 import { Ufo3Icon } from '@solar-icons/react/bold-duotone/ufo-3';
 import { StarsMinimalisticIcon } from '@solar-icons/react/bold-duotone/stars-minimalistic';
 
-type Glyph = { Icon: (props: { size?: number; 'aria-hidden'?: boolean }) => JSX.Element; x: number; y: number; size: number; depth: number; spin: number };
+type Glyph = { Icon: ComponentType<any>; x: number; y: number; size: number; depth: number; spin: number };
 
 /** Duotone icons scattered across the viewport. Each one drifts toward the pointer by its own depth. */
 const glyphs: Glyph[] = [
@@ -96,7 +96,7 @@ export function ReactiveIcons() {
               '--spin': `${spin}deg`,
               '--delay': `${-(index * 1.3) % 9}s`,
               fontSize: `${size}rem`
-            } as React.CSSProperties
+            } as CSSProperties
           }
         >
           <Icon size={1} aria-hidden={true} />
