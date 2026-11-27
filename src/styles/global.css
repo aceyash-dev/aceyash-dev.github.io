@@ -1183,3 +1183,24 @@ main, .site-footer { position: relative; z-index: 1; }
 @media (prefers-reduced-motion: reduce) {
   .reactive-icon__inner { animation: none; opacity: 0.32; transform: rotate(var(--spin)); }
 }
+
+/* Desktop header + dock placement, active page label */
+.site-nav { justify-content: space-between; }
+.site-page-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.95rem;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--milk);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+.site-page-pill__dot { background: var(--orange); }
+@media (min-width: 62rem) {
+  .site-nav { max-width: var(--maxw); margin: 0 auto; padding-inline: var(--pad); }
+  .site-page-pill { font-size: 1rem; padding: 0.5rem 1.1rem; }
+  .floating-dock-shell { bottom: 1.5rem; left: 50%; transform: translateX(-50%); width: min(44rem, calc(100% - 3rem)); }
+}
