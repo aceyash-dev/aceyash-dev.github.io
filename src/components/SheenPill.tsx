@@ -1,16 +1,14 @@
 import type { ReactNode } from 'react';
+import ShinyText from './vendor/reactbits/ShinyText';
 
-/**
- * A quiet dark pill with a periodic sheen sweep.
- * Recreated from the documented "shiny pill" pattern on originkit.dev
- * (their registry was unreachable from this environment, so no code was copied).
- * The sheen is disabled under prefers-reduced-motion via CSS.
- */
+/** Dark pill with the ReactBits ShinyText sheen (replaces the hand-rolled sheen). */
 export function SheenPill({ children }: { children: ReactNode }) {
   return (
     <span className="sheen-pill">
       <span className="dot" aria-hidden="true" />
-      {children}
+      <ShinyText color="#f7f4ec" shineColor="#f07836" speed={3} delay={2}>
+        {children}
+      </ShinyText>
     </span>
   );
 }
