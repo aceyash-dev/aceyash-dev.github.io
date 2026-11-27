@@ -1,6 +1,8 @@
 import ClickSpark from './vendor/reactbits/ClickSpark';
 import ShinyText from './vendor/reactbits/ShinyText';
 import CRTWarp from './vendor/reactbits/CRTWarp';
+import { NumberTicker } from './vendor/magicui/NumberTicker';
+import { BorderBeam } from './vendor/magicui/BorderBeam';
 import { ArrowDownIcon } from '@solar-icons/react/linear/arrow-down';
 import { ArrowRightUpIcon } from '@solar-icons/react/linear/arrow-right-up';
 import { Buildings3Icon } from '@solar-icons/react/linear/buildings-3';
@@ -11,8 +13,8 @@ import { site } from '../data/site';
 
 /**
  * Editorial hero: milk canvas, oversized Instrument Serif headline,
- * Solar-icon meta row, framed portrait, and a click-spark interaction
- * (React Bits) for those who want to poke at it.
+ * Solar-icon meta row, MagicUI NumberTicker metrics, framed portrait
+ * with BorderBeam, and ReactBits ClickSpark + CRTWarp + ShinyText.
  */
 export function Hero() {
   return (
@@ -31,19 +33,27 @@ export function Hero() {
         </div>
         <div className="hero-inner">
           <div className="hero-copy">
-            <SheenPill>Founder &amp; CEO, The Ace Base</SheenPill>
+            <SheenPill>
+              <span className="status-dot" aria-hidden="true" />
+              Founder &amp; CEO, The Ace Base
+            </SheenPill>
 
             <h1>
               I build
               <br />
-              <em><ShinyText color="#c95720" shineColor="#fde2cc" speed={3} delay={1.5} shineWidth={60}>software.</ShinyText></em>
+              <em>
+                <ShinyText color="#c95720" shineColor="#fde2cc" speed={3} delay={1.5} shineWidth={60}>
+                  software.
+                </ShinyText>
+              </em>
             </h1>
 
             <p className="hero-sub">
               <strong>Ace Yash</strong> is a developer and founder of{' '}
               <a className="inline-link" href={site.aceBase} target="_blank" rel="noopener noreferrer">
                 The Ace Base
-              </a>. I build web products and Android software.
+              </a>
+              . I build web products, identity tools, and Android software.
             </p>
 
             <div className="hero-ctas">
@@ -64,24 +74,46 @@ export function Hero() {
               </span>
               <span>
                 <Buildings3Icon size={16} aria-hidden="true" />
-                Founder & CEO, The Ace Base
+                Founder &amp; CEO, The Ace Base
               </span>
               <span>
                 <CodeIcon size={16} aria-hidden="true" />
                 React · TypeScript · Node.js
               </span>
             </div>
+
+            <div className="hero-metrics" aria-label="Studio highlights">
+              <div className="hero-metric">
+                <span className="hero-metric__val">
+                  <NumberTicker value={4} suffix="+" />
+                </span>
+                <span className="hero-metric__label">Shipped products</span>
+              </div>
+              <div className="hero-metric">
+                <span className="hero-metric__val">
+                  <NumberTicker value={100} suffix="%" />
+                </span>
+                <span className="hero-metric__label">Type-safe &amp; SSR</span>
+              </div>
+              <div className="hero-metric">
+                <span className="hero-metric__val">
+                  <NumberTicker value={2026} />
+                </span>
+                <span className="hero-metric__label">Active studio</span>
+              </div>
+            </div>
           </div>
 
           <div className="portrait-wrap">
             <span className="portrait-ring" aria-hidden="true" />
-            <figure className="portrait-arch">
+            <figure className="portrait-arch" style={{ position: 'relative' }}>
               <img
                 src="/me.jpg"
                 width={460}
                 height={460}
                 alt="White flame emblem — Ace Yash's personal mark for The Ace Base"
               />
+              <BorderBeam size={200} duration={12} colorFrom="#f07836" colorTo="#fde2cc" />
             </figure>
             <div className="portrait-card">
               <b>The Ace Base</b>

@@ -66,8 +66,11 @@ export const site = {
   instagram: 'https://instagram.com/yash.hits',
   instagramHandle: '@yash.hits',
   aceBase: 'https://ace-base.cc/',
+  aceId: 'https://identity.ace-base.cc/',
+  aceConsole: 'https://console.ace-base.cc/',
   docs: 'https://docs.ace-base.cc/',
   typace: 'https://typace.ace-base.cc/',
+  mahto: 'https://mahto-real-estate-agency.pages.dev/',
   canonical: 'https://aceyash-dev.github.io/',
   portfolioRepo: 'https://github.com/aceyash-dev/aceyash-dev.github.io'
 } as const;
@@ -86,9 +89,10 @@ export const projects: Project[] = [
     name: 'The Ace Base',
     category: 'Software studio',
     tagline: 'Software studio founded by Ace Yash.',
-    description: 'The Ace Base builds web applications, typography tools, and developer software.',
+    description:
+      'The Ace Base builds web applications, identity infrastructure, typography tools, and developer software.',
     role: 'Founder & CEO',
-    stack: ['Web applications', 'Typography', 'Developer tools'],
+    stack: ['Web applications', 'Identity', 'Typography', 'Developer tools'],
     href: site.aceBase,
     external: true,
     featured: true,
@@ -98,16 +102,49 @@ export const projects: Project[] = [
     ]
   },
   {
+    id: 'ace-id',
+    name: 'AceID',
+    category: 'Identity & Auth',
+    tagline: 'Fast & secure authentication for non-Googlers.',
+    description:
+      'An independent OIDC identity provider with a developer console (AIDC), TypeScript SDK, and Rust CLI.',
+    role: 'Creator & Architect',
+    stack: ['TypeScript', 'Go', 'Rust', 'OIDC'],
+    href: site.aceId,
+    external: true,
+    links: [
+      { label: 'identity.ace-base.cc', href: site.aceId, external: true },
+      { label: 'Console', href: site.aceConsole, external: true }
+    ]
+  },
+  {
     id: 'typace',
     name: 'Typace',
     category: 'Typography tool',
-    tagline: 'A typography organizer.',
-    description: 'Typace is a typography organizer developed within The Ace Base ecosystem.',
+    tagline: 'Typography, beautifully organized.',
+    description:
+      'Open-source typography organizer and font discovery tool developed within The Ace Base ecosystem.',
     role: 'Designer & developer',
-    stack: ['TypeScript', 'React', 'Typography'],
+    stack: ['JavaScript', 'React', 'Typography'],
     href: site.typace,
     external: true,
-    links: [{ label: 'typace.ace-base.cc', href: site.typace, external: true }]
+    links: [
+      { label: 'typace.ace-base.cc', href: site.typace, external: true },
+      { label: 'GitHub', href: 'https://github.com/aceyash-dev/Typace', external: true }
+    ]
+  },
+  {
+    id: 'mahto-real-estate',
+    name: 'Mahto Real Estate',
+    category: 'Web & 3D platform',
+    tagline: 'Property discovery with interactive 3D walkthroughs.',
+    description:
+      'Full-featured real estate platform connecting buyers and brokers with responsive property search and 3D spatial previews.',
+    role: 'Lead Engineer',
+    stack: ['JavaScript', '3D Walkthrough', 'Cloudflare Pages'],
+    href: site.mahto,
+    external: true,
+    links: [{ label: 'mahto-real-estate-agency.pages.dev', href: site.mahto, external: true }]
   }
 ];
 
@@ -125,30 +162,52 @@ export const skillsRail = [
   'HTML5',
   'CSS3',
   'Node.js',
-  'Tailwind CSS'
+  'Tailwind CSS',
+  'Vite',
+  'Go',
+  'Rust',
+  'Android SDK'
 ] as const;
 
 export const skillGroups: SkillGroup[] = [
   {
     id: 'web',
-    label: 'Web',
-    note: 'Web interfaces and applications.',
+    label: 'Web & Interfaces',
+    note: 'Editorial layouts, motion, and accessible web apps.',
     items: [
-      'HTML5',
-      'CSS3',
-      'JavaScript',
+      'HTML5 & Semantic Markup',
+      'CSS3 & Design Systems',
+      'JavaScript (ES2024+)',
       'TypeScript',
-      'React',
+      'React & Vite',
       'Tailwind CSS',
-      'Vite',
-      'Responsive, accessible UI'
+      'Motion & Lenis'
+    ]
+  },
+  {
+    id: 'native',
+    label: 'Systems & Mobile',
+    note: 'Identity backends, CLIs, and native Android software.',
+    items: [
+      'Node.js',
+      'Go (OIDC & APIs)',
+      'Rust (CLI tooling)',
+      'Native Android SDK',
+      'REST & OAuth / OIDC'
     ]
   },
   {
     id: 'tools',
-    label: 'Tools & craft',
-    note: 'Tools for building, testing, and shipping.',
-    items: ['Git', 'GitHub', 'GitHub Actions', 'VS Code', 'Postman', 'Figma', 'Node.js']
+    label: 'Tools & Craft',
+    note: 'Tools for designing, testing, and shipping fast.',
+    items: [
+      'Git & GitHub',
+      'GitHub Actions CI/CD',
+      'Cloudflare & Vercel',
+      'Figma',
+      'VS Code',
+      'Postman'
+    ]
   }
 ];
 
@@ -192,9 +251,10 @@ export const faqs: FaqItem[] = [
     id: 'projects',
     question: 'What projects has Ace Yash developed?',
     answer:
-      'Public work includes The Ace Base, Typace, and this portfolio. The Ace Base is his software studio; Typace is its typography organizer.',
+      'Public work includes The Ace Base, AceID, Typace, and Mahto Real Estate. The Ace Base is his software studio; Typace is its typography organizer.',
     links: [
       { label: 'The Ace Base', href: site.aceBase, external: true },
+      { label: 'AceID', href: site.aceId, external: true },
       { label: 'Typace', href: site.typace, external: true }
     ]
   },
@@ -221,7 +281,7 @@ export const footerColumns: FooterColumn[] = [
       { label: 'The Ace Base', href: site.aceBase, external: true },
       { label: 'Documentation', href: site.docs, external: true },
       { label: 'GitHub', href: site.github, external: true },
-      { label: 'Instagram', href: site.instagram, external: true },
+      { label: 'Instagram', href: site.instagram, external: true }
     ]
   },
   {
