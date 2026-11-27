@@ -68,7 +68,6 @@ export const site = {
   aceBase: 'https://ace-base.cc/',
   docs: 'https://docs.ace-base.cc/',
   typace: 'https://typace.ace-base.cc/',
-  aceMail: 'https://github.com/tab-gl/AceMail',
   canonical: 'https://aceyash-dev.github.io/',
   portfolioRepo: 'https://github.com/aceyash-dev/aceyash-dev.github.io'
 } as const;
@@ -85,12 +84,11 @@ export const projects: Project[] = [
   {
     id: 'ace-base',
     name: 'The Ace Base',
-    category: 'Product studio — Web & infrastructure',
-    tagline: 'The software studio I founded and run.',
-    description:
-      'The Ace Base builds software and digital infrastructure across web applications, typography, developer tools, and user interfaces. It is the umbrella for my public products and internal tooling — from the website and documentation to Typace, the typography organizer.',
-    role: 'Founder & CEO — product, engineering, and interface direction',
-    stack: ['Web applications', 'Developer tools', 'Typography', 'User interfaces'],
+    category: 'Software studio',
+    tagline: 'Software studio founded by Ace Yash.',
+    description: 'The Ace Base builds web applications, typography tools, and developer software.',
+    role: 'Founder & CEO',
+    stack: ['Web applications', 'Typography', 'Developer tools'],
     href: site.aceBase,
     external: true,
     featured: true,
@@ -102,41 +100,14 @@ export const projects: Project[] = [
   {
     id: 'typace',
     name: 'Typace',
-    category: 'Typography — Organizer',
-    tagline: 'A focused typography organizer.',
-    description:
-      'Typace is a focused typography organizer and the flagship public product in The Ace Base ecosystem. It exists to make building with type calmer and more deliberate — one of the things I care about most at the intersection of interface design and engineering.',
+    category: 'Typography tool',
+    tagline: 'A typography organizer.',
+    description: 'Typace is a typography organizer developed within The Ace Base ecosystem.',
     role: 'Designer & developer',
-    stack: ['TypeScript', 'React', 'Typography tooling'],
+    stack: ['TypeScript', 'React', 'Typography'],
     href: site.typace,
     external: true,
     links: [{ label: 'typace.ace-base.cc', href: site.typace, external: true }]
-  },
-  {
-    id: 'acemail',
-    name: 'AceMail',
-    category: 'Native Android — Email client',
-    tagline: 'A native email client for Android.',
-    description:
-      'AceMail is an SMTP/IMAP email client built for native Android. It is the clearest example of my native work — deliberate performance, platform-idiomatic UI, and a focus on the everyday mechanics of email rather than reinventing it.',
-    role: 'Developer — native Android',
-    stack: ['Android SDK'],
-    href: site.aceMail,
-    external: true,
-    links: [{ label: 'tab-gl/AceMail on GitHub', href: site.aceMail, external: true }]
-  },
-  {
-    id: 'widgets',
-    name: 'Browser widgets',
-    category: 'Utilities — Standalone',
-    tagline: 'Small, dependency-free browser utilities.',
-    description:
-      'A set of small, standalone browser widgets for live weather, local time, and a calendar. Built with plain HTML, CSS, and JavaScript — no framework, no build step — as a deliberate exercise in keeping things simple and fast.',
-    role: 'Designer & developer',
-    stack: ['HTML', 'CSS', 'JavaScript'],
-    href: '/widgets/',
-    external: false,
-    links: [{ label: 'Open the widgets', href: '/widgets/' }]
   }
 ];
 
@@ -161,7 +132,7 @@ export const skillGroups: SkillGroup[] = [
   {
     id: 'web',
     label: 'Web',
-    note: 'Close to the platform — typed React when the interface earns it.',
+    note: 'Web interfaces and applications.',
     items: [
       'HTML5',
       'CSS3',
@@ -176,7 +147,7 @@ export const skillGroups: SkillGroup[] = [
   {
     id: 'tools',
     label: 'Tools & craft',
-    note: 'A practical workflow for designing, shipping, and debugging.',
+    note: 'Tools for building, testing, and shipping.',
     items: ['Git', 'GitHub', 'GitHub Actions', 'VS Code', 'Postman', 'Figma', 'Node.js']
   }
 ];
@@ -192,7 +163,7 @@ export const faqs: FaqItem[] = [
     id: 'what-does-ace-yash-do',
     question: 'What does Ace Yash do?',
     answer:
-      'Ace Yash designs and builds software across the web and native Android: React and TypeScript web applications, native Android apps such as AceMail, typography tooling such as Typace, and small dependency-free web utilities.'
+      'Ace Yash builds web applications and native Android software. He is the founder and CEO of The Ace Base, where he leads product and engineering.'
   },
   {
     id: 'ceo-of-the-ace-base',
@@ -221,10 +192,10 @@ export const faqs: FaqItem[] = [
     id: 'projects',
     question: 'What projects has Ace Yash developed?',
     answer:
-      'Public work includes The Ace Base itself, Typace (a typography organizer), AceMail (a native Android email client), a set of standalone browser widgets, and this portfolio — a React, TypeScript and Vite site hosted on GitHub Pages.',
+      'Public work includes The Ace Base, Typace, and this portfolio. The Ace Base is his software studio; Typace is its typography organizer.',
     links: [
       { label: 'The Ace Base', href: site.aceBase, external: true },
-      { label: 'AceMail on GitHub', href: site.aceMail, external: true }
+      { label: 'Typace', href: site.typace, external: true }
     ]
   },
   {
@@ -251,7 +222,6 @@ export const footerColumns: FooterColumn[] = [
       { label: 'Documentation', href: site.docs, external: true },
       { label: 'GitHub', href: site.github, external: true },
       { label: 'Instagram', href: site.instagram, external: true },
-      { label: 'Browser widgets', href: '/widgets/' }
     ]
   },
   {

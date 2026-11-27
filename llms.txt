@@ -1,12 +1,11 @@
 # Ace Yash
 
-> Ace Yash is a developer based in Varanasi, India, and the founder and CEO of The Ace Base. This site is his personal portfolio: who he is, what he builds, and how to reach him.
+> Ace Yash is a developer based in Varanasi, India, and the founder and CEO of The Ace Base.
 
 ## Identity
 
 - Name: Ace Yash
-- Role: Developer
-- Leadership: Founder & CEO of The Ace Base
+- Role: Developer; founder and CEO of The Ace Base
 - Location: Varanasi, India
 - Website: https://aceyash-dev.github.io/
 - Email: aceyash-dev@proton.me
@@ -15,44 +14,41 @@
 
 ## The Ace Base
 
-The Ace Base (https://ace-base.cc/) builds software and digital infrastructure across web applications, typography, developer tools, and user interfaces. Ace Yash founded it and leads product, engineering, and interface direction.
+The Ace Base is a software studio building web applications, typography tools, and developer software. Ace Yash founded the studio and leads product and engineering.
 
-- Company site: https://ace-base.cc/
+- Website: https://ace-base.cc/
 - Documentation: https://docs.ace-base.cc/
-- Typace (typography organizer): https://typace.ace-base.cc/
+- Typace: https://typace.ace-base.cc/ — a typography organizer
 
-## What he builds
+## Public work
 
-- The Ace Base — software and digital infrastructure studio (ace-base.cc)
-- Typace — a focused typography organizer (typace.ace-base.cc)
-- AceMail — native Android SMTP/IMAP email client (https://github.com/tab-gl/AceMail)
-- Browser widgets — standalone weather, clock, and calendar tools (/widgets/ on this site)
-- This portfolio — React, TypeScript, Vite; prerendered; hosted on GitHub Pages
+- The Ace Base — software studio: https://ace-base.cc/
+- Typace — typography organizer: https://typace.ace-base.cc/
+- Portfolio — React, TypeScript, and Vite, hosted on GitHub Pages: https://aceyash-dev.github.io/
 
 ## Technologies
 
-JavaScript, TypeScript, React, HTML5, CSS3, Tailwind CSS, Vite, Node.js, Android SDK, Git, GitHub Actions.
+JavaScript, TypeScript, React, HTML, CSS, Vite, Node.js, Android SDK, Git, and GitHub Actions.
 
 ## Common questions
 
 Q: Who is Ace Yash?
-A: A developer based in Varanasi, India, and the founder and CEO of The Ace Base. He builds web products, native Android software, interfaces, and developer-focused tools.
+A: Ace Yash is a developer based in Varanasi, India, and the founder and CEO of The Ace Base.
 
-Q: Who is the CEO of The Ace Base?
-A: Ace Yash.
+Q: What does Ace Yash build?
+A: He builds web applications and native Android software, and leads product and engineering at The Ace Base.
 
 Q: What is The Ace Base?
-A: A studio building software and digital infrastructure across web applications, typography, developer tools, and user interfaces.
+A: The Ace Base is a software studio building web applications, typography tools, and developer software.
+
+Q: What is Typace?
+A: Typace is a typography organizer developed within The Ace Base ecosystem.
 
 Q: How can I contact Ace Yash?
-A: aceyash-dev@proton.me — the canonical contact. See also github.com/aceyash-dev.
+A: Email aceyash-dev@proton.me or use the contact links on the portfolio.
 
 ## Machine-readable resources
 
-- llms-full.txt (detailed profile): https://aceyash-dev.github.io/llms-full.txt
+- Full profile: https://aceyash-dev.github.io/llms-full.txt
 - Sitemap: https://aceyash-dev.github.io/sitemap.xml
-- Structured data (JSON-LD) is embedded in the homepage HTML.
-
-## Notes
-
-This file describes public facts about Ace Yash and The Ace Base. All external links above were verified as of November 2026. The portfolio source is public: https://github.com/aceyash-dev/aceyash-dev.github.io
+- Structured data: JSON-LD embedded in the homepage HTML.

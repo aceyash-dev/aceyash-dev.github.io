@@ -14,8 +14,7 @@ export function SiteFooter() {
             Ace&nbsp;Yash<sup>©</sup>
           </a>
           <p>
-            Developer and CEO of The Ace Base — building web products, native Android software,
-            and deliberate interfaces from Varanasi, India.
+            Developer and founder of The Ace Base. Based in Varanasi, India.
           </p>
         </div>
 

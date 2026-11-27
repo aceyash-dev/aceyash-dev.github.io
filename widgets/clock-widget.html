@@ -1,4 +1,0 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="A live local clock."><title>Clock Widget</title><link rel="stylesheet" href="./widget.css"></head>
-<body><section class="widget widget--clock" aria-live="off"><h1 class="widget__title">Local time</h1><p class="widget__value" id="clock">Loading…</p><p class="widget__meta" id="clock-date"></p></section>
-<script>const clock=document.querySelector('#clock');const date=document.querySelector('#clock-date');const options={hour:'2-digit',minute:'2-digit',second:'2-digit'};function updateClock(){const now=new Date();clock.textContent=now.toLocaleTimeString('en-IN',options);date.textContent=now.toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});}updateClock();setInterval(updateClock,1000);</script></body></html>

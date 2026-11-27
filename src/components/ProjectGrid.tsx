@@ -5,9 +5,7 @@ import { projects, type Project } from '../data/site';
 
 const layoutClass: Record<string, string> = {
   'ace-base': 'project--featured',
-  typace: 'project--half',
-  acemail: 'project--half',
-  widgets: 'project--wide'
+  typace: 'project--half'
 };
 
 function ProjectBody({ project, index }: { project: Project; index: number }) {
@@ -61,9 +59,7 @@ function ProjectBody({ project, index }: { project: Project; index: number }) {
 }
 
 /**
- * Selected work as an asymmetric editorial grid. Each tile is a
- * React Bits SpotlightCard (light theme, orange spotlight) so the
- * pointer gets a quiet, purposeful moment.
+ * Selected public work in an asymmetric editorial grid.
  */
 export function ProjectGrid() {
   const [featured, ...rest] = projects;
@@ -77,7 +73,7 @@ export function ProjectGrid() {
           label="Work"
           title="Selected"
           accent="work"
-          meta="Products, tools and experiments — public where it matters."
+          meta="Selected products and work."
         />
 
         <div className="projects">

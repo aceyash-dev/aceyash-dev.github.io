@@ -13,7 +13,7 @@ This page is kept consistent with the portfolio, llms.txt, and JSON-LD.
 - **Vite** — development and production builds
 
 ## Native
-- **Android SDK** — native applications (see AceMail)
+- **Android SDK** — native Android applications
 
 ## Tools & craft
 - **Git / GitHub** — version control, pull requests, GitHub Actions, Pages

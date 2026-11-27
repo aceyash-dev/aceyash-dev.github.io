@@ -1,8 +1,7 @@
-import BlurText from './vendor/reactbits/BlurText';
 import { Faq } from './Faq';
 import { Reveal } from './Reveal';
 import { SectionHeading } from './SectionHeading';
-import { faqs, profileFacts, site } from '../data/site';
+import { faqs, profileFacts } from '../data/site';
 
 /**
  * About — the human layer: portrait, plain-spoken bio, fast facts,
@@ -39,29 +38,13 @@ export function AboutSection() {
           </div>
 
           <div className="about-copy">
-            <BlurText
-              className="about-lead"
-              text="I build interfaces that are fast, quiet, and considered — and that hold up under real use."
-              animateBy="words"
-              direction="top"
-              effect="focus"
-              trigger="view"
-              threshold={0.15}
-              stepDuration={0.32}
-              blur={8}
-              distance={14}
-              delay={24}
-              focusOnHover={false}
-            />
+            <p className="about-lead">Developer and founder of The Ace Base, based in Varanasi, India.</p>
             <p style={{ fontSize: 'var(--step-0)', color: 'var(--ink-soft)' }}>
-              My stack stays deliberately close to the platform — HTML5, CSS, JavaScript,
-              TypeScript, React on the web; native Android on mobile; Node.js on the backend —
-              with Tailwind for utility styling and Motion when choreography earns its keep.
+              I build web applications with HTML, CSS, JavaScript, TypeScript and React, plus
+              native Android software. I lead product and engineering at The Ace Base.
             </p>
             <p style={{ fontSize: 'var(--step-0)', color: 'var(--ink-soft)' }}>
-              Alongside my own projects, I run <em>The Ace Base</em>, where I build and ship
-              tools for the web — from Typace, a typography organizer, to the documentation
-              and this site itself. The through-line is taste: fewer features, deeper craft.
+              Public work includes The Ace Base and Typace, its typography organizer.
             </p>
 
             <dl className="about-facts">

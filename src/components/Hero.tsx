@@ -31,25 +31,24 @@ export function Hero() {
         </div>
         <div className="hero-inner">
           <div className="hero-copy">
-            <SheenPill>Founder &amp; CEO — The Ace Base</SheenPill>
+            <SheenPill>Founder &amp; CEO, The Ace Base</SheenPill>
 
             <h1>
-              Software,
+              I build
               <br />
-              built with <em><ShinyText color="#c95720" shineColor="#fde2cc" speed={3} delay={1.5} shineWidth={60}>intent.</ShinyText></em>
+              <em><ShinyText color="#c95720" shineColor="#fde2cc" speed={3} delay={1.5} shineWidth={60}>software.</ShinyText></em>
             </h1>
 
             <p className="hero-sub">
-              <strong>Ace Yash</strong> is a developer and the CEO of{' '}
+              <strong>Ace Yash</strong> is a developer and founder of{' '}
               <a className="inline-link" href={site.aceBase} target="_blank" rel="noopener noreferrer">
                 The Ace Base
-              </a>{' '}
-              — building web products, native Android software, and the tools in between.
+              </a>. I build web products and Android software.
             </p>
 
             <div className="hero-ctas">
               <a className="btn btn--solid" href="#work">
-                Explore the work
+                View work
                 <ArrowDownIcon size={17} aria-hidden="true" />
               </a>
               <a className="btn btn--ghost" href={`mailto:${site.email}`}>
@@ -65,7 +64,7 @@ export function Hero() {
               </span>
               <span>
                 <Buildings3Icon size={16} aria-hidden="true" />
-                CEO @ The Ace Base
+                Founder & CEO, The Ace Base
               </span>
               <span>
                 <CodeIcon size={16} aria-hidden="true" />

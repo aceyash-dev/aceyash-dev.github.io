@@ -70,17 +70,26 @@ if (faq) {
 }
 
 // 5. Static discovery files
-for (const file of ['llms.txt', 'llms-full.txt', 'robots.txt', 'sitemap.xml', 'favicon.svg', 'me.jpg', 'bg.jpg', 'widgets/index.html', '.nojekyll', 'skills.md']) {
+for (const file of ['llms.txt', 'llms-full.txt', 'robots.txt', 'sitemap.xml', 'favicon.svg', 'me.jpg', 'bg.jpg', '.nojekyll', 'skills.md']) {
   check(`dist/${file} exists`, existsSync(dist(file)));
 }
+
+check('retired widgets directory is absent', !existsSync(dist('widgets/index.html')));
+check('retired project references absent', !['AceMail', 'Browser widgets', '/widgets/'].some((term) => html.includes(term)));
 
 // 6. Sitemap + robots content
 const sitemap = existsSync(dist('sitemap.xml')) ? readFileSync(dist('sitemap.xml'), 'utf8') : '';
 check('sitemap well-formed urlset', sitemap.includes('<urlset') && sitemap.includes('</urlset>'));
 check('sitemap locs are canonical', [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].every((m) => m[1].startsWith('https://aceyash-dev.github.io/')));
+check('sitemap excludes retired widgets', !sitemap.includes('/widgets/'));
 const robots = existsSync(dist('robots.txt')) ? readFileSync(dist('robots.txt'), 'utf8') : '';
 check('robots.txt references sitemap', robots.includes('Sitemap: https://aceyash-dev.github.io/sitemap.xml'));
 check('robots.txt allows crawling', /User-agent: \*\s*\nAllow: \//.test(robots));
+
+for (const file of ['llms.txt', 'llms-full.txt']) {
+  const content = existsSync(dist(file)) ? readFileSync(dist(file), 'utf8') : '';
+  check(`${file} excludes retired projects`, !['AceMail', 'Browser widgets', '/widgets/'].some((term) => content.includes(term)));
+}
 
 // 7. No leaked local URLs or secrets
 check('no localhost URLs in artifact', !/localhost|127\.0\.0\.1/.test(html));

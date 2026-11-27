@@ -29,7 +29,7 @@ Canonical URL: <https://aceyash-dev.github.io/>
 ## Sections
 
 1. Hero — positioning, dual identity (developer + CEO of The Ace Base), portrait
-2. Selected work — asymmetric editorial grid (The Ace Base, Typace, AceMail, browser widgets)
+2. Selected work — asymmetric editorial grid (The Ace Base, Typace)
 3. The Ace Base — leadership panel (dark, full-bleed)
 4. Activity — latest public GitHub commits (same-origin `/api/commits` on Vercel; public GitHub search API fallback on Pages)
 5. About — bio, fast facts, and a question-first FAQ (mirrored in JSON-LD/FAQPage)
@@ -85,7 +85,6 @@ src/data/site.ts            content model (projects, skills, FAQ, footer)
 src/lib/commits.ts          commit feed (same-origin API + public fallback)
 scripts/prerender.mjs       bakes static markup into dist/index.html
 public/                     favicon.svg (+ me.jpg, bg.jpg at repo root)
-widgets/                    standalone dependency-free browser widgets
 api/commits.js              optional Vercel serverless commit endpoint
 ```
 
@@ -100,7 +99,7 @@ api/commits.js              optional Vercel serverless commit endpoint
   ("Who is Ace Yash?", "Who is the CEO of The Ace Base?", …) repeated verbatim
   in llms-full.txt and JSON-LD.
 - `robots.txt` welcomes AI crawlers explicitly; `sitemap.xml` lists `/`,
-  `/widgets/`, `llms.txt`, `llms-full.txt`.
+  `llms.txt`, `llms-full.txt`.
 - **Prerendered static HTML**: `<div id="root">` ships with full markup, so
   non-JS crawlers and answer engines see the complete page; React hydrates it
   in the browser. A rich `<noscript>` fallback covers the rest.

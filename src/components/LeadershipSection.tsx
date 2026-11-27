@@ -24,10 +24,8 @@ export function LeadershipSection() {
             </h2>
 
             <p>
-              The Ace Base builds software and digital infrastructure across web applications,
-              typography, developer tools, and user interfaces. Ace Yash founded it and serves
-              as its CEO — leading product, engineering, and interface direction, from the
-              public website and documentation to Typace, its typography organizer.
+              The Ace Base is a software studio founded by Ace Yash. It builds web applications,
+              typography tools, and developer software. Ace Yash leads product and engineering.
             </p>
 
             <div className="leadership__links">

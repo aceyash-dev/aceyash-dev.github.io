@@ -1,5 +1,4 @@
 import Magnet from './vendor/reactbits/Magnet';
-import Dock from './vendor/reactbits/Dock';
 import { ArrowRightUpIcon } from '@solar-icons/react/linear/arrow-right-up';
 import { LetterOpenedIcon } from '@solar-icons/react/linear/letter-opened';
 import { Buildings3Icon } from '@solar-icons/react/linear/buildings-3';
@@ -19,22 +18,21 @@ export function ContactSection() {
           label="Contact"
           title="Say"
           accent="hello"
-          meta="For projects, collaborations, or useful trouble"
+          meta="Projects and collaborations"
         />
 
         <Reveal>
           <p className="contact-head">
-            Let’s build
+            Have a project?
             <br />
-            <em>something good.</em>
+            <em>Let’s talk.</em>
           </p>
         </Reveal>
 
         <div className="contact-foot">
           <div>
             <p className="contact-note">
-              The fastest route is email. I read everything, reply to the serious stuff,
-              and never share addresses.
+              Email is the best way to reach me about projects and collaborations.
             </p>
             <div className="contact-alt">
               <a href={site.github} target="_blank" rel="noopener noreferrer">
@@ -68,18 +66,7 @@ export function ContactSection() {
             </a>
           </Magnet>
 
-          <div className="contact-dock">
-            <Dock
-              theme="light"
-              accentColor="#f07836"
-              items={[
-                { icon: <GithubIcon size={22} />, label: 'GitHub', onClick: () => window.open(site.github, '_blank', 'noopener,noreferrer') },
-                { icon: <InstagramIcon size={22} />, label: 'Instagram', onClick: () => window.open(site.instagram, '_blank', 'noopener,noreferrer') },
-                { icon: <LetterOpenedIcon size={22} />, label: 'Email', onClick: () => { window.location.href = `mailto:${site.email}`; } },
-                { icon: <Buildings3Icon size={22} />, label: 'The Ace Base', onClick: () => window.open(site.aceBase, '_blank', 'noopener,noreferrer') }
-              ]}
-            />
-          </div>
+
         </div>
       </div>
     </section>

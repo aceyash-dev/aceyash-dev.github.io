@@ -49,11 +49,14 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-bottom: 6rem;
   -webkit-text-size-adjust: 100%;
 }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
 body {
   margin: 0;
+  padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
   background: var(--milk);
   color: var(--ink);
   font-family: var(--font-sans);
@@ -67,6 +70,9 @@ body {
 img { max-width: 100%; height: auto; }
 a { color: inherit; }
 button { font: inherit; }
+a, button, [role="button"] { cursor: pointer; }
+a:active, button:active, [role="button"]:active { transition-duration: 80ms; }
+.btn:active { transform: translateY(0) scale(0.97); }
 
 html {
   -webkit-tap-highlight-color: transparent;
@@ -204,146 +210,27 @@ html {
 }
 .btn--on-dark:hover { border-color: var(--orange); color: #ffd9c2; transform: translateY(-2px); }
 
-/* ============ Header ============ */
-.site-header {
-  position: fixed;
-  inset: 0 0 auto 0;
-  z-index: 100;
-  background: color-mix(in srgb, var(--milk) 82%, transparent);
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
-  border-bottom: 1px solid transparent;
-  transition: border-color 0.3s var(--ease), background 0.3s var(--ease);
-}
-.site-header.is-scrolled { border-bottom-color: var(--line); }
-
-.site-nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  max-width: var(--maxw);
-  margin-inline: auto;
-  padding: 0.85rem var(--pad);
-}
-
-.wordmark {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.4rem;
-  font-family: var(--font-display);
-  font-size: 1.42rem;
-  letter-spacing: -0.01em;
-  color: var(--ink);
-  text-decoration: none;
-}
+/* ============ Floating dock navigation ============ */
+.site-header { position: absolute; inset: 0 0 auto; z-index: 100; pointer-events: none; }
+.site-nav { display: flex; align-items: center; max-width: var(--maxw); margin-inline: auto; padding: 1.1rem var(--pad); }
+.wordmark { display: inline-flex; align-items: baseline; gap: 0.4rem; color: var(--ink); font-family: var(--font-display); font-size: 1.42rem; letter-spacing: -0.01em; text-decoration: none; pointer-events: auto; }
 .wordmark sup { font-size: 0.5em; color: var(--orange-deep); }
-.wordmark:hover { color: #8f3d0c; }
-
-.nav-links {
-  display: none;
-  align-items: center;
-  gap: 0.15rem;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.nav-links a {
-  position: relative;
-  display: inline-block;
-  padding: 0.45rem 0.72rem;
-  border-radius: 999px;
-  font-size: var(--step--1);
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  color: var(--ink-soft);
-  text-decoration: none;
-  transition: color 0.2s var(--ease), background 0.2s var(--ease);
-}
-.nav-links a:hover { color: var(--orange-ink); background: var(--milk-2); }
-.nav-links a[aria-current='true'] {
-  color: var(--orange-ink);
-  background: color-mix(in srgb, var(--orange) 16%, transparent);
-}
-.nav-cta { display: none; }
-
-.nav-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.55rem 0.85rem;
-  border: 1px solid var(--line-strong);
-  background: var(--paper);
-  border-radius: 999px;
-  color: var(--ink);
-  cursor: pointer;
-  font-size: var(--step--1);
-  font-weight: 650;
-  transition: border-color 0.2s var(--ease);
-}
-.nav-toggle:hover { border-color: var(--orange-deep); }
-
-.nav-progress {
-  position: absolute;
-  left: 0; right: 0; bottom: -1px;
-  height: 2px;
-  overflow: hidden;
-}
-.nav-progress span {
-  display: block;
-  height: 100%;
-  background: linear-gradient(90deg, var(--orange-deep), var(--orange));
-  transform-origin: 0 50%;
-  transform: scaleX(0);
-}
-
-/* Mobile menu overlay */
-.mobile-menu {
-  position: fixed;
-  inset: 0;
-  z-index: 90;
-  background: var(--milk);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 5.5rem var(--pad) 2rem;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-2%);
-  transition: opacity 0.3s var(--ease), transform 0.3s var(--ease), visibility 0.3s;
-}
-.mobile-menu.is-open { opacity: 1; visibility: visible; transform: none; }
-.mobile-menu nav { display: flex; flex-direction: column; gap: 0.2rem; }
-.mobile-menu a.menu-link {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.9rem 0.25rem;
-  border-bottom: 1px solid var(--line);
-  text-decoration: none;
-  font-family: var(--font-display);
-  font-size: clamp(1.9rem, 7vw, 2.6rem);
-  letter-spacing: -0.01em;
-  color: var(--ink);
-  transition: color 0.2s var(--ease), padding-left 0.3s var(--ease);
-}
-.mobile-menu a.menu-link:hover { color: var(--orange-deep); padding-left: 0.75rem; }
-.mobile-menu .menu-foot {
-  margin-top: 1.75rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  align-items: center;
-  justify-content: space-between;
-  font-size: var(--step--1);
-  color: var(--muted);
-}
-
-@media (min-width: 52rem) {
-  .nav-links { display: flex; }
-  .nav-cta { display: inline-flex; padding: 0.55rem 1.1rem; font-size: var(--step--1); }
-  .nav-toggle { display: none; }
+.wordmark:hover { color: var(--orange-ink); }
+.floating-dock-shell { position: fixed; inset: auto 0 calc(env(safe-area-inset-bottom, 0px) + 0.65rem); z-index: 120; height: 0; pointer-events: none; }
+.floating-dock-shell .dock {
+  --dock-panel: rgba(255, 255, 255, 0.88);
+  --dock-panel-edge: rgba(36, 34, 31, 0.12);
+  --dock-panel-highlight: rgba(255, 255, 255, 0.96);
+  --dock-panel-shadow: 0 18px 42px -20px rgba(36, 34, 31, 0.35);
+  --dock-tile: linear-gradient(180deg, #ffffff 0%, #f7f4ec 100%);
+  --dock-tile-edge: rgba(36, 34, 31, 0.08);
+  --dock-tile-highlight: rgba(255, 255, 255, 0.95);
+  --dock-tile-shadow: 0 3px 8px -4px rgba(36, 34, 31, 0.24);
+  --dock-ink: var(--ink);
+  --dock-label: #ffffff;
+  --dock-label-ink: var(--ink);
+  --dock-dot: var(--orange-deep);
+  pointer-events: auto;
 }
 
 /* ============ Hero ============ */
@@ -1152,12 +1039,4 @@ html {
   overflow: hidden;
 }
 .hero-inner { position: relative; z-index: 1; }
-.contact-dock { display: flex; justify-content: center; margin-top: 2rem; }
-.contact-dock [aria-label="Dock"] {
-  --dock-panel: rgba(255, 255, 255, 0.82) !important;
-  --dock-panel-edge: rgba(36, 34, 31, 0.1) !important;
-  --dock-tile: linear-gradient(180deg, #ffffff 0%, #f7f4ec 100%) !important;
-  --dock-ink: var(--ink) !important;
-  --dock-accent: var(--orange) !important;
-}
 @media (prefers-reduced-motion: reduce) { .hero-crt { display: none; } }
