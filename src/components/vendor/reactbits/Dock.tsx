@@ -954,18 +954,20 @@ function Dock({
         ...style
       }}
     >
-      {items.map((item, index) =>
-        item?.separator ? (
-          <span key={index} className="dock-separator" aria-hidden="true" />
-        ) : (
-          <button
+      {items.map((item, index) => {
+        if (item?.separator) return <span key={index} className="dock-separator" aria-hidden="true" />;
+        const Tag = item.href ? 'a' : 'button';
+        return (
+          <Tag
             key={index}
             ref={node => {
               itemRefs.current[index] = node;
             }}
-            type="button"
+            href={item.href}
+            type={item.href ? undefined : 'button'}
             className={`dock-item${item.className ? ` ${item.className}` : ''}`}
             aria-label={item.label}
+            aria-current={item.href && item.active ? 'location' : undefined}
             aria-haspopup={item.menu?.length ? 'menu' : undefined}
             aria-expanded={item.menu?.length ? openIndex === index : undefined}
             data-open={openIndex === index ? '' : undefined}
@@ -1012,9 +1014,9 @@ function Dock({
                 {item.label}
               </span>
             ) : null}
-          </button>
-        )
-      )}
+          </Tag>
+        );
+      })}
       {menu ? (
         <DockMenu
           key={menu.id}

@@ -32,20 +32,14 @@ export function SiteHeader() {
 
   const items = navLinks.map((link) => ({
     label: link.label,
+    href: link.href,
     icon:
       link.href === '#work' ? <CodeIcon size={22} aria-hidden="true" /> :
       link.href === '#activity' ? <ArrowRightUpIcon size={22} aria-hidden="true" /> :
       link.href === '#about' ? <Buildings3Icon size={22} aria-hidden="true" /> :
       link.href === '#skills' ? <TextBoldIcon size={22} aria-hidden="true" /> :
       <LetterOpenedIcon size={22} aria-hidden="true" />,
-    active: active === link.href,
-    onClick: () => {
-      const target = document.getElementById(link.href.slice(1));
-      if (!target) return;
-      window.history.pushState(null, '', link.href);
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
-    }
+    active: active === link.href
   }));
 
   return (

@@ -120,6 +120,8 @@
 }
 
 .dock-item {
+  display: block;
+  text-decoration: none;
   position: relative;
   flex: none;
   width: var(--dock-base);
