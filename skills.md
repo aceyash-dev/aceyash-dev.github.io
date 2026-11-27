@@ -13,17 +13,10 @@ This page is kept consistent with the portfolio, llms.txt, and JSON-LD.
 - **Vite** — development and production builds
 
 ## Native
-- **Kotlin** — primary language for Android development
-- **Java** — Android foundations
 - **Android SDK** — native applications (see AceMail)
-- **Jetpack Compose** — modern declarative UI for Android
-- **Capacitor** — web-to-native bridges when appropriate
-- **C++** — systems and algorithms
-- **Python** — scripting and automation
 
 ## Tools & craft
 - **Git / GitHub** — version control, pull requests, GitHub Actions, Pages
-- **Go** — backend and tooling experiments
 - **VS Code** — editing, debugging, extensions
 - **Postman** — API testing and documentation
 - **Figma** — design, prototyping, design systems
@@ -36,5 +29,5 @@ This page is kept consistent with the portfolio, llms.txt, and JSON-LD.
 
 ## Current focus
 - Building The Ace Base and its public products (Typace)
-- Native Android work with Kotlin
+- Native Android work
 - Deliberate, accessible interface craft

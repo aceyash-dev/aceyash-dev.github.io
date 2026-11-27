@@ -68,7 +68,30 @@ img { max-width: 100%; height: auto; }
 a { color: inherit; }
 button { font: inherit; }
 
+html {
+  -webkit-tap-highlight-color: transparent;
+  scrollbar-width: thin;
+  scrollbar-color: var(--orange) var(--milk-2);
+}
+
+*,
+*::before,
+*::after {
+  -webkit-tap-highlight-color: transparent;
+}
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--milk-2); }
+::-webkit-scrollbar-thumb {
+  background: var(--orange);
+  border-radius: 999px;
+  border: 2px solid var(--milk-2);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--orange-deep); }
+::-webkit-scrollbar-corner { background: var(--milk-2); }
+
 ::selection { background: var(--orange); color: var(--ink); }
+::-moz-selection { background: var(--orange); color: var(--ink); }
 
 :focus-visible {
   outline: 2.5px solid var(--orange-deep);
@@ -958,7 +981,7 @@ button { font: inherit; }
   display: grid;
   gap: 0.9rem;
 }
-@media (min-width: 62rem) { .skills-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 62rem) { .skills-grid { grid-template-columns: repeat(2, 1fr); } }
 .skill-group {
   background: var(--paper);
   border: 1px solid var(--line);

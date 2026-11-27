@@ -55,7 +55,7 @@ export function AboutSection() {
             />
             <p style={{ fontSize: 'var(--step-0)', color: 'var(--ink-soft)' }}>
               My stack stays deliberately close to the platform — HTML5, CSS, JavaScript,
-              TypeScript, React on the web; Kotlin on Android; Go and Node.js on the backend —
+              TypeScript, React on the web; native Android on mobile; Node.js on the backend —
               with Tailwind for utility styling and Motion when choreography earns its keep.
             </p>
             <p style={{ fontSize: 'var(--step-0)', color: 'var(--ink-soft)' }}>

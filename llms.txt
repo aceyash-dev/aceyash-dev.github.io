@@ -25,13 +25,13 @@ The Ace Base (https://ace-base.cc/) builds software and digital infrastructure a
 
 - The Ace Base — software and digital infrastructure studio (ace-base.cc)
 - Typace — a focused typography organizer (typace.ace-base.cc)
-- AceMail — native Android SMTP/IMAP email client in Kotlin and Java (https://github.com/tab-gl/AceMail)
+- AceMail — native Android SMTP/IMAP email client (https://github.com/tab-gl/AceMail)
 - Browser widgets — standalone weather, clock, and calendar tools (/widgets/ on this site)
 - This portfolio — React, TypeScript, Vite; prerendered; hosted on GitHub Pages
 
 ## Technologies
 
-JavaScript, TypeScript, React, HTML5, CSS3, Tailwind CSS, Vite, Go, Node.js, Kotlin, Java, Android SDK, Jetpack Compose, C++, Python, Git, GitHub Actions.
+JavaScript, TypeScript, React, HTML5, CSS3, Tailwind CSS, Vite, Node.js, Android SDK, Git, GitHub Actions.
 
 ## Common questions
 

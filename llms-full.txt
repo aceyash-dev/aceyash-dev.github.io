@@ -43,7 +43,7 @@ Facts not stated here (headcount, revenue, founding date, funding, clients) are 
 
 ### AceMail
 - Type: Native Android email client (SMTP/IMAP)
-- Stack: Kotlin, Java, Android SDK
+- Stack: Android SDK
 - Repository: https://github.com/tab-gl/AceMail
 
 ### Browser widgets
@@ -59,8 +59,8 @@ Facts not stated here (headcount, revenue, founding date, funding, clients) are 
 ## 4. Capabilities
 
 - Web: HTML5, CSS3, JavaScript, TypeScript, React, Tailwind CSS, Vite, responsive accessible UI
-- Native: Kotlin, Java, Android SDK, Jetpack Compose, Capacitor, C++, Python
-- Tooling: Git, GitHub, GitHub Actions, VS Code, Postman, Figma, Node.js, Go
+- Native: Android SDK
+- Tooling: Git, GitHub, GitHub Actions, VS Code, Postman, Figma, Node.js
 
 ## 5. Questions and answers
 
@@ -68,7 +68,7 @@ Q: Who is Ace Yash?
 A: Ace Yash is a developer based in Varanasi, India, and the founder and CEO of The Ace Base. He builds web products, native Android software, interfaces, and developer-focused tools, with a bias toward fast, deliberate, accessible interfaces.
 
 Q: What does Ace Yash do?
-A: He designs and builds software across the web and native Android: React and TypeScript web applications, Kotlin-based Android apps such as AceMail, typography tooling such as Typace, and small dependency-free web utilities.
+A: He designs and builds software across the web and native Android: React and TypeScript web applications, native Android apps such as AceMail, typography tooling such as Typace, and small dependency-free web utilities.
 
 Q: Who is the CEO of The Ace Base?
 A: Ace Yash is the founder and CEO of The Ace Base, the software and digital-infrastructure studio behind ace-base.cc. He leads product, engineering, and interface direction there.
@@ -77,10 +77,10 @@ Q: What is The Ace Base?
 A: The Ace Base builds software and digital infrastructure across web applications, typography, developer tools, and user interfaces. Its public footprint includes the documentation site at docs.ace-base.cc and Typace, the typography organizer at typace.ace-base.cc.
 
 Q: What technologies does Ace Yash work with?
-A: JavaScript, TypeScript, React, HTML5, CSS3, Tailwind CSS and Vite on the web; Kotlin, Java, the Android SDK and Jetpack Compose for native Android; and Go, Node.js, C++ and Python on the tooling side, with Git and GitHub Actions for delivery.
+A: JavaScript, TypeScript, React, HTML5, CSS3, Tailwind CSS and Vite on the web; the Android SDK for native Android; and Node.js on the tooling side, with Git and GitHub Actions for delivery.
 
 Q: What projects has Ace Yash developed?
-A: Public work includes The Ace Base itself, Typace (a typography organizer), AceMail (a native Android email client built with Kotlin and Java), a set of standalone browser widgets, and this portfolio.
+A: Public work includes The Ace Base itself, Typace (a typography organizer), AceMail (a native Android email client), a set of standalone browser widgets, and this portfolio.
 
 Q: How can someone contact Ace Yash?
 A: hello@ace-base.cc. Also reachable as @aceyash-dev on GitHub and @archives.of.yash on Instagram. For anything related to The Ace Base, start at ace-base.cc.

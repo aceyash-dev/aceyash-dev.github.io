@@ -1,4 +1,5 @@
 import ClickSpark from './vendor/reactbits/ClickSpark';
+import ShinyText from './vendor/reactbits/ShinyText';
 import { ArrowDownIcon } from '@solar-icons/react/linear/arrow-down';
 import { ArrowRightUpIcon } from '@solar-icons/react/linear/arrow-right-up';
 import { Buildings3Icon } from '@solar-icons/react/linear/buildings-3';
@@ -31,7 +32,7 @@ export function Hero() {
             <h1>
               Software,
               <br />
-              built with <em>intent.</em>
+              built with <em><ShinyText color="#c95720" shineColor="#fde2cc" speed={3} delay={1.5} shineWidth={60}>intent.</ShinyText></em>
             </h1>
 
             <p className="hero-sub">
@@ -64,7 +65,7 @@ export function Hero() {
               </span>
               <span>
                 <CodeIcon size={16} aria-hidden="true" />
-                React · TypeScript · Go
+                React · TypeScript · Node.js
               </span>
             </div>
           </div>

@@ -42,7 +42,7 @@ Canonical URL: <https://aceyash-dev.github.io/>
 - **Motion** for scroll-linked reveals and reduced-motion-aware transitions
 - **Lenis** for inertial scrolling on capable pointers
 - **React Bits** source-owned components: `BlurText`, `ClickSpark`, `Magnet`,
-  `SpotlightCard` (light theme, orange spotlight)
+  `ShinyText` (hero accent), `SpotlightCard` (light theme, orange spotlight)
 - **Solar Icons** — Linear icons via `@solar-icons/react`
 - A single hand-written stylesheet (`src/styles/global.css`) — no CSS framework
 

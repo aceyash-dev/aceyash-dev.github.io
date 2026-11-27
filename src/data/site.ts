@@ -118,9 +118,9 @@ export const projects: Project[] = [
     category: 'Native Android — Email client',
     tagline: 'A native email client for Android.',
     description:
-      'AceMail is an SMTP/IMAP email client built for native Android with Kotlin and Java. It is the clearest example of my native work — deliberate performance, platform-idiomatic UI, and a focus on the everyday mechanics of email rather than reinventing it.',
+      'AceMail is an SMTP/IMAP email client built for native Android. It is the clearest example of my native work — deliberate performance, platform-idiomatic UI, and a focus on the everyday mechanics of email rather than reinventing it.',
     role: 'Developer — native Android',
-    stack: ['Kotlin', 'Java', 'Android SDK'],
+    stack: ['Android SDK'],
     href: site.aceMail,
     external: true,
     links: [{ label: 'tab-gl/AceMail on GitHub', href: site.aceMail, external: true }]
@@ -151,11 +151,9 @@ export const skillsRail = [
   'JavaScript',
   'TypeScript',
   'React',
-  'Go',
   'HTML5',
   'CSS3',
   'Node.js',
-  'Kotlin',
   'Tailwind CSS'
 ] as const;
 
@@ -176,12 +174,6 @@ export const skillGroups: SkillGroup[] = [
     ]
   },
   {
-    id: 'native',
-    label: 'Native',
-    note: 'Native Android for the things that need to feel native.',
-    items: ['Kotlin', 'Java', 'Android SDK', 'Jetpack Compose', 'Capacitor', 'C++', 'Python']
-  },
-  {
     id: 'tools',
     label: 'Tools & craft',
     note: 'A practical workflow for designing, shipping, and debugging.',
@@ -200,7 +192,7 @@ export const faqs: FaqItem[] = [
     id: 'what-does-ace-yash-do',
     question: 'What does Ace Yash do?',
     answer:
-      'Ace Yash designs and builds software across the web and native Android: React and TypeScript web applications, Kotlin-based Android apps such as AceMail, typography tooling such as Typace, and small dependency-free web utilities.'
+      'Ace Yash designs and builds software across the web and native Android: React and TypeScript web applications, native Android apps such as AceMail, typography tooling such as Typace, and small dependency-free web utilities.'
   },
   {
     id: 'ceo-of-the-ace-base',
@@ -223,13 +215,13 @@ export const faqs: FaqItem[] = [
     id: 'technologies',
     question: 'What technologies does Ace Yash work with?',
     answer:
-      'Ace Yash works with JavaScript, TypeScript, React, HTML5, CSS3, Tailwind CSS and Vite on the web; Kotlin, Java, the Android SDK and Jetpack Compose for native Android; and Go, Node.js, C++ and Python on the tooling side, with Git and GitHub Actions for delivery.'
+      'Ace Yash works with JavaScript, TypeScript, React, HTML5, CSS3, Tailwind CSS and Vite on the web, the Android SDK for native Android, and Node.js on the tooling side, with Git and GitHub Actions for delivery.'
   },
   {
     id: 'projects',
     question: 'What projects has Ace Yash developed?',
     answer:
-      'Public work includes The Ace Base itself, Typace (a typography organizer), AceMail (a native Android email client built with Kotlin and Java), a set of standalone browser widgets, and this portfolio — a React, TypeScript and Vite site hosted on GitHub Pages.',
+      'Public work includes The Ace Base itself, Typace (a typography organizer), AceMail (a native Android email client), a set of standalone browser widgets, and this portfolio — a React, TypeScript and Vite site hosted on GitHub Pages.',
     links: [
       { label: 'The Ace Base', href: site.aceBase, external: true },
       { label: 'AceMail on GitHub', href: site.aceMail, external: true }

@@ -9,7 +9,7 @@ Files in `src/components/vendor/reactbits/` are adapted from
 [React Bits](https://reactbits.dev/) by David Haz
 ([source repository](https://github.com/DavidHDev/react-bits)).
 
-Components used: `BlurText`, `ClickSpark`, `Magnet`, and `SpotlightCard`.
+Components used: `BlurText`, `ClickSpark`, `Magnet`, `ShinyText`, and `SpotlightCard`.
 
 License: **MIT + Commons Clause License Condition v1.0**
 
@@ -76,3 +76,9 @@ are distributed with the installed packages in `node_modules`.
 - `me.jpg` — Ace Yash's personal mark (white flame emblem), used as portrait/OG image.
 - `bg.jpg` — abstract orange accretion-disk artwork, used behind the
   "The Ace Base" leadership panel.
+
+## React Bits — ShinyText
+
+`src/components/vendor/reactbits/ShinyText.tsx` and `ShinyText.css` are adapted
+from React Bits (see the React Bits section above; same MIT + Commons Clause
+terms). The upstream source is JavaScript; it is vendored with `@ts-nocheck`.
