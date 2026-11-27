@@ -1,9 +1,12 @@
+import { useState } from 'react';
+import { SegmentedControl } from 'glisse';
 import SpotlightCard from './vendor/reactbits/SpotlightCard';
 import { BorderBeam } from './vendor/magicui/BorderBeam';
+import { BlurFade } from './vendor/magicui/BlurFade';
 import { Terminal } from './vendor/magicui/Terminal';
+import { CopyButton } from './vendor/animate-ui/CopyButton';
 import { ArrowRightUpIcon } from '@solar-icons/react/linear/arrow-right-up';
 import { SectionHeading } from './SectionHeading';
-import { Reveal } from './Reveal';
 import { projects, site, type Project } from '../data/site';
 
 const layoutClass: Record<string, string> = {
@@ -12,6 +15,14 @@ const layoutClass: Record<string, string> = {
   typace: 'project--half',
   'mahto-real-estate': 'project--wide'
 };
+
+const filterItems = [
+  { value: 'all', label: 'All' },
+  { value: 'ace-base', label: 'Studio' },
+  { value: 'ace-id', label: 'Identity' },
+  { value: 'typace', label: 'Typography' },
+  { value: 'mahto-real-estate', label: 'Web & 3D' }
+];
 
 const ecosystemNodes = [
   { name: 'AceID', meta: 'OIDC & Passkeys', href: site.aceId },
@@ -47,7 +58,10 @@ function ProjectVisual({ id }: { id: string }) {
 
   if (id === 'ace-id') {
     return (
-      <div style={{ marginTop: '1.15rem' }}>
+      <div className="terminal-wrap" style={{ marginTop: '1.15rem', position: 'relative' }}>
+        <div className="terminal-copy-float">
+          <CopyButton content="npm i ace-id-sdk" label="Copy npm install command" />
+        </div>
         <Terminal
           title="ace-id-sdk"
           lines={[
@@ -137,10 +151,14 @@ function ProjectBody({ project, index }: { project: Project; index: number }) {
 }
 
 /**
- * Selected public work in a Dribbble-inspired Bento grid with
- * ReactBits SpotlightCard + MagicUI BorderBeam & Terminal previews.
+ * Selected public work in a Dribbble-inspired Bento grid with Glisse
+ * SegmentedControl filtering, ReactBits SpotlightCard, MagicUI BorderBeam/BlurFade,
+ * and Animate UI CopyButton.
  */
 export function ProjectGrid() {
+  const [filter, setFilter] = useState('all');
+  const visibleProjects = filter === 'all' ? projects : projects.filter((p) => p.id === filter);
+
   return (
     <section className="section" id="work" aria-labelledby="work-title">
       <div className="container">
@@ -153,28 +171,37 @@ export function ProjectGrid() {
           meta="Products, infrastructure, and studio craft."
         />
 
+        <div className="glisse-filter-row">
+          <SegmentedControl
+            aria-label="Filter projects by category"
+            items={filterItems}
+            value={filter}
+            onValueChange={(val) => setFilter(val || 'all')}
+          />
+        </div>
+
         <div className="projects">
-          {projects.map((project, index) => (
-            <Reveal
+          {visibleProjects.map((project, index) => (
+            <BlurFade
               key={project.id}
               delay={index * 0.06}
-              y={18}
-              className={layoutClass[project.id] ?? 'project--half'}
+              yOffset={14}
+              className={filter === 'all' ? (layoutClass[project.id] ?? 'project--half') : 'project--featured'}
             >
               <SpotlightCard
-                className={`project ${layoutClass[project.id] ?? 'project--half'}`}
+                className={`project ${filter === 'all' ? (layoutClass[project.id] ?? 'project--half') : 'project--featured'}`}
                 theme="light"
                 spotlightColor="rgba(240, 120, 54, 0.30)"
                 spotlightSize={360}
                 ambient={false}
                 flare={false}
               >
-                {project.featured ? (
+                {project.featured || filter !== 'all' ? (
                   <BorderBeam size={280} duration={11} colorFrom="#f07836" colorTo="#fde2cc" />
                 ) : null}
                 <ProjectBody project={project} index={index} />
               </SpotlightCard>
-            </Reveal>
+            </BlurFade>
           ))}
         </div>
       </div>

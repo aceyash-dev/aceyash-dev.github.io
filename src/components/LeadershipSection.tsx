@@ -1,3 +1,4 @@
+import Dither from './vendor/reactbits/Dither';
 import { BorderBeam } from './vendor/magicui/BorderBeam';
 import { ArrowRightUpIcon } from '@solar-icons/react/linear/arrow-right-up';
 import { Buildings3Icon } from '@solar-icons/react/linear/buildings-3';
@@ -7,9 +8,8 @@ import { TextBoldIcon } from '@solar-icons/react/linear/text-bold';
 import { site } from '../data/site';
 
 /**
- * Leadership — The Ace Base. The one dark, full-bleed moment on the page:
- * background imagery is the accretion-disk mark (bg.jpg) under a heavy
- * ink gradient, framed with a subtle MagicUI BorderBeam.
+ * Leadership — The Ace Base. Dark full-bleed moment backed by
+ * ReactBits Dither waves and framed with MagicUI BorderBeam.
  */
 export function LeadershipSection() {
   return (
@@ -17,7 +17,19 @@ export function LeadershipSection() {
       <div className="container">
         <div className="leadership">
           <BorderBeam size={320} duration={14} colorFrom="#f07836" colorTo="#ffb286" />
-          <div className="leadership__bg" role="img" aria-label="Abstract orange accretion disk glowing against deep black space" />
+          <div className="leadership__bg leadership__dither" aria-hidden="true">
+            <Dither
+              waveColor="#f07836"
+              backgroundColor="#24221f"
+              ditherMode="bayer"
+              pixelSize={3}
+              waveSpeed={0.03}
+              waveAmplitude={0.36}
+              enableMouseInteraction
+              mouseEffect="reveal"
+              clickRipple
+            />
+          </div>
           <div className="leadership__inner">
             <p className="eyebrow"><b style={{ color: '#ffb286' }}>03</b> — Leadership</p>
 

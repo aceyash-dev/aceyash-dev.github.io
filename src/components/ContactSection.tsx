@@ -1,4 +1,5 @@
 import Magnet from './vendor/reactbits/Magnet';
+import { CopyButton } from './vendor/animate-ui/CopyButton';
 import { ArrowRightUpIcon } from '@solar-icons/react/linear/arrow-right-up';
 import { LetterOpenedIcon } from '@solar-icons/react/linear/letter-opened';
 import { Buildings3Icon } from '@solar-icons/react/linear/buildings-3';
@@ -7,7 +8,7 @@ import { Reveal } from './Reveal';
 import { GithubIcon, InstagramIcon } from './icons';
 import { site } from '../data/site';
 
-/** Contact — one clear ask, one large action, honest alternates. */
+/** Contact — one clear ask, magnetic email CTA, and Animate UI CopyButton. */
 export function ContactSection() {
   return (
     <section className="section contact-section" id="contact" aria-labelledby="contact-title">
@@ -50,23 +51,24 @@ export function ContactSection() {
             </div>
           </div>
 
-          <Magnet
-            padding={90}
-            magnetStrength={2.2}
-            maxOffset={14}
-            exclusive
-            axis="both"
-            wrapperClassName="magnet-wrap"
-            innerClassName="magnet-inner"
-          >
-            <a className="btn btn--solid" style={{ fontSize: '1.05rem', padding: '1rem 1.6rem' }} href={`mailto:${site.email}`}>
-              <LetterOpenedIcon size={20} aria-hidden="true" />
-              {site.email}
-              <ArrowRightUpIcon size={17} aria-hidden="true" />
-            </a>
-          </Magnet>
-
-
+          <div className="contact-actions">
+            <Magnet
+              padding={90}
+              magnetStrength={2.2}
+              maxOffset={14}
+              exclusive
+              axis="both"
+              wrapperClassName="magnet-wrap"
+              innerClassName="magnet-inner"
+            >
+              <a className="btn btn--solid" style={{ fontSize: '1.05rem', padding: '1rem 1.6rem' }} href={`mailto:${site.email}`}>
+                <LetterOpenedIcon size={20} aria-hidden="true" />
+                {site.email}
+                <ArrowRightUpIcon size={17} aria-hidden="true" />
+              </a>
+            </Magnet>
+            <CopyButton content={site.email} label="Copy email address" className="animate-copy-btn--lg" />
+          </div>
         </div>
       </div>
     </section>

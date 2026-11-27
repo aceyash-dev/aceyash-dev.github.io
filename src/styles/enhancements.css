@@ -1,4 +1,15 @@
-/* Dribbble-inspired Bento & MagicUI Enhancements */
+/* Dribbble-inspired Bento, MagicUI, Animate UI & Glisse Enhancements */
+.magic-scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--orange-deep), var(--orange), #fde2cc);
+  transform-origin: 0% 50%;
+  z-index: 90;
+  pointer-events: none;
+}
 .status-dot {
   display: inline-block;
   width: 0.5rem;
@@ -40,6 +51,24 @@
   font-weight: 600;
   letter-spacing: 0.04em;
   color: var(--muted);
+}
+.glisse-portrait-card {
+  border-radius: 1rem;
+  padding: 0.7rem 0.95rem;
+}
+.glisse-filter-row {
+  margin-bottom: 1.35rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  --lg-accent: var(--orange);
+}
+.leadership__dither {
+  background-image: none !important;
+  opacity: 0.45 !important;
+  mask-image: linear-gradient(100deg, transparent 15%, black 85%) !important;
+  -webkit-mask-image: linear-gradient(100deg, transparent 15%, black 85%) !important;
 }
 .magic-marquee-shell {
   position: relative;
@@ -224,6 +253,7 @@
   font-size: 0.68rem;
   color: #b8b2a6;
   letter-spacing: 0.04em;
+  padding-right: 2rem;
 }
 .magic-terminal__body {
   padding: 0.85rem 0.95rem;
@@ -240,6 +270,97 @@
 .magic-terminal__check { color: #4ade80; font-weight: 700; }
 .magic-terminal__line--out { color: #b8b2a6; }
 .magic-terminal__line--success { color: #f7f4ec; }
+.terminal-copy-float {
+  position: absolute;
+  top: 0.32rem;
+  right: 0.45rem;
+  z-index: 3;
+}
+/* Animate UI CopyButton */
+.animate-copy-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 1.85rem;
+  height: 1.85rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.08);
+  color: #f7f4ec;
+  transition: border-color 0.2s var(--ease), background 0.2s var(--ease);
+}
+.animate-copy-btn:hover {
+  border-color: var(--orange);
+  background: rgba(240, 120, 54, 0.2);
+}
+.animate-copy-btn__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.animate-copy-btn__icon--ok {
+  color: #4ade80;
+}
+.animate-copy-btn--lg {
+  width: 3.1rem;
+  height: 3.1rem;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: var(--paper);
+  color: var(--ink);
+}
+.animate-copy-btn--lg:hover {
+  border-color: var(--orange);
+  background: var(--milk-2);
+}
+.contact-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+/* Animate UI Tabs */
+.animate-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+.animate-tabs__list {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  padding: 0.3rem;
+  border-radius: 999px;
+  background: var(--milk-2);
+  border: 1px solid var(--line-strong);
+  align-self: flex-start;
+}
+.animate-tabs__trigger {
+  position: relative;
+  border: none;
+  background: transparent;
+  padding: 0.45rem 0.95rem;
+  border-radius: 999px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--muted);
+  transition: color 0.2s var(--ease);
+}
+.animate-tabs__trigger[data-state="active"] {
+  color: var(--ink);
+}
+.animate-tabs__pill {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  box-shadow: 0 2px 8px -2px rgba(36, 34, 31, 0.12);
+  z-index: 0;
+}
+.animate-tabs__label {
+  position: relative;
+  z-index: 1;
+}
 .type-specimen {
   display: flex;
   align-items: center;

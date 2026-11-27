@@ -1,8 +1,9 @@
 import ClickSpark from './vendor/reactbits/ClickSpark';
 import ShinyText from './vendor/reactbits/ShinyText';
-import CRTWarp from './vendor/reactbits/CRTWarp';
+import Dither from './vendor/reactbits/Dither';
 import { NumberTicker } from './vendor/magicui/NumberTicker';
 import { BorderBeam } from './vendor/magicui/BorderBeam';
+import { Glass } from 'glisse';
 import { ArrowDownIcon } from '@solar-icons/react/linear/arrow-down';
 import { ArrowRightUpIcon } from '@solar-icons/react/linear/arrow-right-up';
 import { Buildings3Icon } from '@solar-icons/react/linear/buildings-3';
@@ -12,9 +13,9 @@ import { SheenPill } from './SheenPill';
 import { site } from '../data/site';
 
 /**
- * Editorial hero: milk canvas, oversized Instrument Serif headline,
- * Solar-icon meta row, MagicUI NumberTicker metrics, framed portrait
- * with BorderBeam, and ReactBits ClickSpark + CRTWarp + ShinyText.
+ * Editorial hero: milk canvas, ReactBits Dither wave backdrop, oversized
+ * Instrument Serif headline, MagicUI NumberTicker metrics, and a Glisse
+ * Liquid Glass portrait badge.
  */
 export function Hero() {
   return (
@@ -29,9 +30,19 @@ export function Hero() {
     >
       <header className="hero" id="top">
         <div className="hero-crt" aria-hidden="true">
-          <CRTWarp color="#f07836" backgroundColor="#f7f4ec" lightMode speed={0.3} />
+          <Dither
+            waveColor="#f07836"
+            backgroundColor="transparent"
+            ditherMode="bayer"
+            pixelSize={3}
+            waveSpeed={0.04}
+            waveAmplitude={0.32}
+            enableMouseInteraction
+            mouseEffect="ripple"
+            clickRipple
+          />
         </div>
-        <div className="hero-inner">
+        <div className="hero-inner" data-glisse-backdrop>
           <div className="hero-copy">
             <SheenPill>
               <span className="status-dot" aria-hidden="true" />
@@ -115,7 +126,7 @@ export function Hero() {
               />
               <BorderBeam size={200} duration={12} colorFrom="#f07836" colorTo="#fde2cc" />
             </figure>
-            <div className="portrait-card">
+            <Glass className="portrait-card glisse-portrait-card">
               <b>The Ace Base</b>
               <span>
                 <a href={site.aceBase} target="_blank" rel="noopener noreferrer">
@@ -123,7 +134,7 @@ export function Hero() {
                 </a>
                 <ArrowRightUpIcon size={13} aria-hidden="true" />
               </span>
-            </div>
+            </Glass>
           </div>
         </div>
 
