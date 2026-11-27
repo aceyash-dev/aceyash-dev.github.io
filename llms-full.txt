@@ -13,9 +13,9 @@ The Ace Base in accurate, first-party facts.
 - Leadership position: Founder & CEO of The Ace Base
 - Base: Varanasi, India
 - Canonical site: https://aceyash-dev.github.io/
-- Email: hello@ace-base.cc
+- Email: aceyash-dev@proton.me
 - GitHub: https://github.com/aceyash-dev
-- Instagram: https://www.instagram.com/archives.of.yash
+- Instagram: https://www.instagram.com/yash.hits
 
 ## 2. The Ace Base
 
@@ -83,7 +83,7 @@ Q: What projects has Ace Yash developed?
 A: Public work includes The Ace Base itself, Typace (a typography organizer), AceMail (a native Android email client), a set of standalone browser widgets, and this portfolio.
 
 Q: How can someone contact Ace Yash?
-A: hello@ace-base.cc. Also reachable as @aceyash-dev on GitHub and @archives.of.yash on Instagram. For anything related to The Ace Base, start at ace-base.cc.
+A: aceyash-dev@proton.me. Also reachable as @aceyash-dev on GitHub and @yash.hits on Instagram. For anything related to The Ace Base, start at ace-base.cc.
 
 ## 6. Consistency contract
 

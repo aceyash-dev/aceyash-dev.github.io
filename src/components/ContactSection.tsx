@@ -1,4 +1,5 @@
 import Magnet from './vendor/reactbits/Magnet';
+import Dock from './vendor/reactbits/Dock';
 import { ArrowRightUpIcon } from '@solar-icons/react/linear/arrow-right-up';
 import { LetterOpenedIcon } from '@solar-icons/react/linear/letter-opened';
 import { Buildings3Icon } from '@solar-icons/react/linear/buildings-3';
@@ -42,7 +43,7 @@ export function ContactSection() {
               </a>
               <a href={site.instagram} target="_blank" rel="noopener noreferrer">
                 <InstagramIcon size={16} />
-                @archives.of.yash
+                @yash.hits
               </a>
               <a href={site.aceBase} target="_blank" rel="noopener noreferrer">
                 <Buildings3Icon size={16} aria-hidden="true" />
@@ -66,6 +67,19 @@ export function ContactSection() {
               <ArrowRightUpIcon size={17} aria-hidden="true" />
             </a>
           </Magnet>
+
+          <div className="contact-dock">
+            <Dock
+              theme="light"
+              accentColor="#f07836"
+              items={[
+                { icon: <GithubIcon size={22} />, label: 'GitHub', onClick: () => window.open(site.github, '_blank', 'noopener,noreferrer') },
+                { icon: <InstagramIcon size={22} />, label: 'Instagram', onClick: () => window.open(site.instagram, '_blank', 'noopener,noreferrer') },
+                { icon: <LetterOpenedIcon size={22} />, label: 'Email', onClick: () => { window.location.href = `mailto:${site.email}`; } },
+                { icon: <Buildings3Icon size={22} />, label: 'The Ace Base', onClick: () => window.open(site.aceBase, '_blank', 'noopener,noreferrer') }
+              ]}
+            />
+          </div>
         </div>
       </div>
     </section>

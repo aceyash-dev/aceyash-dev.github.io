@@ -1,5 +1,6 @@
 import ClickSpark from './vendor/reactbits/ClickSpark';
 import ShinyText from './vendor/reactbits/ShinyText';
+import CRTWarp from './vendor/reactbits/CRTWarp';
 import { ArrowDownIcon } from '@solar-icons/react/linear/arrow-down';
 import { ArrowRightUpIcon } from '@solar-icons/react/linear/arrow-right-up';
 import { Buildings3Icon } from '@solar-icons/react/linear/buildings-3';
@@ -25,6 +26,9 @@ export function Hero() {
       duration={480}
     >
       <header className="hero" id="top">
+        <div className="hero-crt" aria-hidden="true">
+          <CRTWarp color="#f07836" backgroundColor="#f7f4ec" lightMode speed={0.3} />
+        </div>
         <div className="hero-inner">
           <div className="hero-copy">
             <SheenPill>Founder &amp; CEO — The Ace Base</SheenPill>

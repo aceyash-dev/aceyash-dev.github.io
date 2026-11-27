@@ -61,10 +61,10 @@ export const site = {
   role: 'Developer',
   jobTitle: 'Developer',
   location: 'Varanasi, India',
-  email: 'hello@ace-base.cc',
+  email: 'aceyash-dev@proton.me',
   github: 'https://github.com/aceyash-dev',
-  instagram: 'https://instagram.com/archives.of.yash',
-  instagramHandle: '@archives.of.yash',
+  instagram: 'https://instagram.com/yash.hits',
+  instagramHandle: '@yash.hits',
   aceBase: 'https://ace-base.cc/',
   docs: 'https://docs.ace-base.cc/',
   typace: 'https://typace.ace-base.cc/',
@@ -231,9 +231,9 @@ export const faqs: FaqItem[] = [
     id: 'contact',
     question: 'How can someone contact Ace Yash?',
     answer:
-      'The most direct route is email at hello@ace-base.cc. He is also reachable as @aceyash-dev on GitHub and @archives.of.yash on Instagram. For anything related to The Ace Base, the company site at ace-base.cc is the canonical starting point.',
+      'The most direct route is email at aceyash-dev@proton.me. He is also reachable as @aceyash-dev on GitHub and @yash.hits on Instagram. For anything related to The Ace Base, the company site at ace-base.cc is the canonical starting point.',
     links: [
-      { label: 'hello@ace-base.cc', href: `mailto:${site.email}` },
+      { label: 'aceyash-dev@proton.me', href: `mailto:${site.email}` },
       { label: 'GitHub', href: site.github, external: true }
     ]
   }

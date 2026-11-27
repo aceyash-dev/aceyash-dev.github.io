@@ -133,4 +133,4 @@ commit-search API. No credentials are exposed to the browser.
 
 - GitHub: [@aceyash-dev](https://github.com/aceyash-dev)
 - Portfolio: [aceyash-dev.github.io](https://aceyash-dev.github.io)
-- Email: <hello@ace-base.cc>
+- Email: <aceyash-dev@proton.me>

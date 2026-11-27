@@ -9,9 +9,9 @@
 - Leadership: Founder & CEO of The Ace Base
 - Location: Varanasi, India
 - Website: https://aceyash-dev.github.io/
-- Email: hello@ace-base.cc
+- Email: aceyash-dev@proton.me
 - GitHub: https://github.com/aceyash-dev
-- Instagram: https://www.instagram.com/archives.of.yash
+- Instagram: https://www.instagram.com/yash.hits
 
 ## The Ace Base
 
@@ -45,7 +45,7 @@ Q: What is The Ace Base?
 A: A studio building software and digital infrastructure across web applications, typography, developer tools, and user interfaces.
 
 Q: How can I contact Ace Yash?
-A: hello@ace-base.cc — the canonical contact. See also github.com/aceyash-dev.
+A: aceyash-dev@proton.me — the canonical contact. See also github.com/aceyash-dev.
 
 ## Machine-readable resources
 

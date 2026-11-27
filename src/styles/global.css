@@ -1141,3 +1141,23 @@ html {
   .commit-side { grid-column: 2; text-align: left; flex-direction: row; gap: 0.75rem; align-items: baseline; }
   .fact { grid-template-columns: 1fr; gap: 0.1rem; padding: 0.6rem 0; }
 }
+
+/* ReactBits: CRT warp backdrop behind the hero, Dock in contact (milk/orange) */
+.hero-crt {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.22;
+  pointer-events: none;
+  overflow: hidden;
+}
+.hero-inner { position: relative; z-index: 1; }
+.contact-dock { display: flex; justify-content: center; margin-top: 2rem; }
+.contact-dock [aria-label="Dock"] {
+  --dock-panel: rgba(255, 255, 255, 0.82) !important;
+  --dock-panel-edge: rgba(36, 34, 31, 0.1) !important;
+  --dock-tile: linear-gradient(180deg, #ffffff 0%, #f7f4ec 100%) !important;
+  --dock-ink: var(--ink) !important;
+  --dock-accent: var(--orange) !important;
+}
+@media (prefers-reduced-motion: reduce) { .hero-crt { display: none; } }

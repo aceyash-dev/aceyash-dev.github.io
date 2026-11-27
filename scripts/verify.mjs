@@ -59,7 +59,7 @@ const org = graph.find((n) => n['@type'] === 'Organization');
 if (person && org) {
   check('Person.worksFor points at The Ace Base', person.worksFor?.['@id'] === org['@id']);
   check('Organization.founder points at person', org.founder?.['@id'] === person['@id']);
-  check('Person sameAs verified profiles', ['https://github.com/aceyash-dev', 'https://www.instagram.com/archives.of.yash', 'https://ace-base.cc/'].every((s) => person.sameAs?.includes(s)));
+  check('Person sameAs verified profiles', ['https://github.com/aceyash-dev', 'https://www.instagram.com/yash.hits', 'https://ace-base.cc/'].every((s) => person.sameAs?.includes(s)));
 }
 const faq = graph.find((n) => n['@type'] === 'FAQPage');
 check('FAQPage has 7 questions', faq?.mainEntity?.length === 7);
